@@ -6,7 +6,7 @@
 //  Copyright © 2018年 LemonIT.CN. All rights reserved.
 //
 
-#import "NSURLProtocol+Lemage.h"
+#import "NSUrlProtocol+Lemage.h"
 #import <WebKit/WebKit.h>
 
 @implementation NSURLProtocol (Lemage)
@@ -32,13 +32,13 @@ FOUNDATION_STATIC_INLINE SEL UnregisterSchemeSelector() {
  
  @param protocol 协议头字符串
  */
-+ (void)registerToWKWebviewWithProtocol: (NSString *)protocol {
++ (void)registerToWKWebviewWithScheme: (NSString *)scheme {
     Class cls = ContextControllerClass();
     SEL sel = RegisterSchemeSelector();
     if ([(id)cls respondsToSelector:sel]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        [(id)cls performSelector:sel withObject:protocol];
+        [(id)cls performSelector:sel withObject:scheme];
 #pragma clang diagnostic pop
     }
 }
@@ -48,13 +48,13 @@ FOUNDATION_STATIC_INLINE SEL UnregisterSchemeSelector() {
  
  @param protocol 协议头字符串
  */
-+ (void)unregisterToWKWebviewWithProtocol: (NSString *)protocol {
++ (void)unregisterToWKWebviewWithScheme: (NSString *)scheme {
     Class cls = ContextControllerClass();
     SEL sel = UnregisterSchemeSelector();
     if ([(id)cls respondsToSelector:sel]) {
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        [(id)cls performSelector:sel withObject:protocol];
+        [(id)cls performSelector:sel withObject:scheme];
 #pragma clang diagnostic pop
     }
 }

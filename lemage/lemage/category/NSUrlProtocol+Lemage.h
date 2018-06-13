@@ -15,16 +15,16 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  注册监听WKWebview中的指定协议头的网络请求
 
- @param protocol 协议头字符串
+ @param scheme 协议头字符串
  */
-+ (void)registerToWKWebviewWithProtocol: (NSString *)protocol;
++ (void)registerToWKWebviewWithScheme: (NSString *)scheme;
 
 /**
  解除监听WKWebview中的指定协议头的网络请求
 
- @param protocol 协议头字符串
+ @param scheme 协议头字符串
  */
-+ (void)unregisterToWKWebviewWithProtocol: (NSString *)protocol;
++ (void)unregisterToWKWebviewWithScheme: (NSString *)scheme;
 
 @end
 

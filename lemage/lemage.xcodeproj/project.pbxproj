@@ -1,0 +1,555 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5208BDFE20CFA48500622D23 /* lemage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; };
+		52287B8420D0AB6800B3C841 /* Lemage.m in Sources */ = {isa = PBXBuildFile; fileRef = 52287B8320D0AB6800B3C841 /* Lemage.m */; };
+		52287B8D20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h in Headers */ = {isa = PBXBuildFile; fileRef = 52287B8B20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h */; };
+		52287B8E20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.m in Sources */ = {isa = PBXBuildFile; fileRef = 52287B8C20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.m */; };
+		52287B9220D0C2B200B3C841 /* LemageURLProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 52287B9020D0C2B200B3C841 /* LemageURLProtocol.h */; };
+		52287B9320D0C2B200B3C841 /* LemageURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 52287B9120D0C2B200B3C841 /* LemageURLProtocol.m */; };
+		52287B9720D0E04100B3C841 /* LemageUrlInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = 52287B9520D0E04100B3C841 /* LemageUrlInfo.h */; };
+		52287B9820D0E04100B3C841 /* LemageUrlInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 52287B9620D0E04100B3C841 /* LemageUrlInfo.m */; };
+		52B3C90E20CF5B1400CA3977 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 52B3C90D20CF5B1400CA3977 /* AppDelegate.m */; };
+		52B3C91120CF5B1400CA3977 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 52B3C91020CF5B1400CA3977 /* ViewController.m */; };
+		52B3C91420CF5B1400CA3977 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52B3C91220CF5B1400CA3977 /* Main.storyboard */; };
+		52B3C91620CF5B1600CA3977 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 52B3C91520CF5B1600CA3977 /* Assets.xcassets */; };
+		52B3C91920CF5B1600CA3977 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52B3C91720CF5B1600CA3977 /* LaunchScreen.storyboard */; };
+		52B3C91C20CF5B1600CA3977 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 52B3C91B20CF5B1600CA3977 /* main.m */; };
+		52BDF45D20CE10130072FEF1 /* Lemage.h in Headers */ = {isa = PBXBuildFile; fileRef = 52BDF45B20CE10130072FEF1 /* Lemage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		5208BDFF20CFA49E00622D23 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 52BDF44F20CE10130072FEF1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 52BDF45720CE10130072FEF1;
+			remoteInfo = lemage;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		52287B8320D0AB6800B3C841 /* Lemage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lemage.m; sourceTree = "<group>"; };
+		52287B8B20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSUrlProtocol+Lemage.h"; sourceTree = "<group>"; };
+		52287B8C20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSUrlProtocol+Lemage.m"; sourceTree = "<group>"; };
+		52287B9020D0C2B200B3C841 /* LemageURLProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LemageURLProtocol.h; sourceTree = "<group>"; };
+		52287B9120D0C2B200B3C841 /* LemageURLProtocol.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LemageURLProtocol.m; sourceTree = "<group>"; };
+		52287B9520D0E04100B3C841 /* LemageUrlInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LemageUrlInfo.h; sourceTree = "<group>"; };
+		52287B9620D0E04100B3C841 /* LemageUrlInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LemageUrlInfo.m; sourceTree = "<group>"; };
+		52B3C90A20CF5B1400CA3977 /* lemage-example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "lemage-example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		52B3C90C20CF5B1400CA3977 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		52B3C90D20CF5B1400CA3977 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		52B3C90F20CF5B1400CA3977 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		52B3C91020CF5B1400CA3977 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		52B3C91320CF5B1400CA3977 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		52B3C91520CF5B1600CA3977 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		52B3C91820CF5B1600CA3977 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		52B3C91A20CF5B1600CA3977 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		52B3C91B20CF5B1600CA3977 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		52BDF45820CE10130072FEF1 /* lemage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = lemage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		52BDF45B20CE10130072FEF1 /* Lemage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lemage.h; sourceTree = "<group>"; };
+		52BDF45C20CE10130072FEF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		52B3C90720CF5B1400CA3977 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5208BDFE20CFA48500622D23 /* lemage.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52BDF45420CE10130072FEF1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		5208BDFD20CFA48500622D23 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		52287B8A20D0BB5500B3C841 /* category */ = {
+			isa = PBXGroup;
+			children = (
+				52287B8B20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h */,
+				52287B8C20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.m */,
+			);
+			path = category;
+			sourceTree = "<group>";
+		};
+		52287B8F20D0BF2D00B3C841 /* urlProtocol */ = {
+			isa = PBXGroup;
+			children = (
+				52287B9020D0C2B200B3C841 /* LemageURLProtocol.h */,
+				52287B9120D0C2B200B3C841 /* LemageURLProtocol.m */,
+			);
+			path = urlProtocol;
+			sourceTree = "<group>";
+		};
+		52287B9420D0E01300B3C841 /* bean */ = {
+			isa = PBXGroup;
+			children = (
+				52287B9520D0E04100B3C841 /* LemageUrlInfo.h */,
+				52287B9620D0E04100B3C841 /* LemageUrlInfo.m */,
+			);
+			path = bean;
+			sourceTree = "<group>";
+		};
+		52B3C90B20CF5B1400CA3977 /* lemage-example */ = {
+			isa = PBXGroup;
+			children = (
+				52B3C90C20CF5B1400CA3977 /* AppDelegate.h */,
+				52B3C90D20CF5B1400CA3977 /* AppDelegate.m */,
+				52B3C90F20CF5B1400CA3977 /* ViewController.h */,
+				52B3C91020CF5B1400CA3977 /* ViewController.m */,
+				52B3C91220CF5B1400CA3977 /* Main.storyboard */,
+				52B3C91520CF5B1600CA3977 /* Assets.xcassets */,
+				52B3C91720CF5B1600CA3977 /* LaunchScreen.storyboard */,
+				52B3C91A20CF5B1600CA3977 /* Info.plist */,
+				52B3C91B20CF5B1600CA3977 /* main.m */,
+			);
+			path = "lemage-example";
+			sourceTree = "<group>";
+		};
+		52BDF44E20CE10130072FEF1 = {
+			isa = PBXGroup;
+			children = (
+				52BDF45A20CE10130072FEF1 /* lemage */,
+				52B3C90B20CF5B1400CA3977 /* lemage-example */,
+				52BDF45920CE10130072FEF1 /* Products */,
+				5208BDFD20CFA48500622D23 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		52BDF45920CE10130072FEF1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				52BDF45820CE10130072FEF1 /* lemage.framework */,
+				52B3C90A20CF5B1400CA3977 /* lemage-example.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		52BDF45A20CE10130072FEF1 /* lemage */ = {
+			isa = PBXGroup;
+			children = (
+				52287B9420D0E01300B3C841 /* bean */,
+				52287B8F20D0BF2D00B3C841 /* urlProtocol */,
+				52287B8A20D0BB5500B3C841 /* category */,
+				52BDF45B20CE10130072FEF1 /* Lemage.h */,
+				52287B8320D0AB6800B3C841 /* Lemage.m */,
+				52BDF45C20CE10130072FEF1 /* Info.plist */,
+			);
+			path = lemage;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		52BDF45520CE10130072FEF1 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52287B8D20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h in Headers */,
+				52287B9220D0C2B200B3C841 /* LemageURLProtocol.h in Headers */,
+				52BDF45D20CE10130072FEF1 /* Lemage.h in Headers */,
+				52287B9720D0E04100B3C841 /* LemageUrlInfo.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		52B3C90920CF5B1400CA3977 /* lemage-example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 52B3C91F20CF5B1600CA3977 /* Build configuration list for PBXNativeTarget "lemage-example" */;
+			buildPhases = (
+				52B3C90620CF5B1400CA3977 /* Sources */,
+				52B3C90720CF5B1400CA3977 /* Frameworks */,
+				52B3C90820CF5B1400CA3977 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5208BE0020CFA49E00622D23 /* PBXTargetDependency */,
+			);
+			name = "lemage-example";
+			productName = "lemage-example";
+			productReference = 52B3C90A20CF5B1400CA3977 /* lemage-example.app */;
+			productType = "com.apple.product-type.application";
+		};
+		52BDF45720CE10130072FEF1 /* lemage */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 52BDF46020CE10130072FEF1 /* Build configuration list for PBXNativeTarget "lemage" */;
+			buildPhases = (
+				52BDF45320CE10130072FEF1 /* Sources */,
+				52BDF45420CE10130072FEF1 /* Frameworks */,
+				52BDF45520CE10130072FEF1 /* Headers */,
+				52BDF45620CE10130072FEF1 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = lemage;
+			productName = lemage;
+			productReference = 52BDF45820CE10130072FEF1 /* lemage.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		52BDF44F20CE10130072FEF1 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0940;
+				ORGANIZATIONNAME = LemonIT.CN;
+				TargetAttributes = {
+					52B3C90920CF5B1400CA3977 = {
+						CreatedOnToolsVersion = 9.4;
+					};
+					52BDF45720CE10130072FEF1 = {
+						CreatedOnToolsVersion = 9.4;
+					};
+				};
+			};
+			buildConfigurationList = 52BDF45220CE10130072FEF1 /* Build configuration list for PBXProject "lemage" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 52BDF44E20CE10130072FEF1;
+			productRefGroup = 52BDF45920CE10130072FEF1 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				52BDF45720CE10130072FEF1 /* lemage */,
+				52B3C90920CF5B1400CA3977 /* lemage-example */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		52B3C90820CF5B1400CA3977 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52B3C91920CF5B1600CA3977 /* LaunchScreen.storyboard in Resources */,
+				52B3C91620CF5B1600CA3977 /* Assets.xcassets in Resources */,
+				52B3C91420CF5B1400CA3977 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52BDF45620CE10130072FEF1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		52B3C90620CF5B1400CA3977 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52B3C91120CF5B1400CA3977 /* ViewController.m in Sources */,
+				52B3C91C20CF5B1600CA3977 /* main.m in Sources */,
+				52B3C90E20CF5B1400CA3977 /* AppDelegate.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52BDF45320CE10130072FEF1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52287B9820D0E04100B3C841 /* LemageUrlInfo.m in Sources */,
+				52287B8420D0AB6800B3C841 /* Lemage.m in Sources */,
+				52287B9320D0C2B200B3C841 /* LemageURLProtocol.m in Sources */,
+				52287B8E20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		5208BE0020CFA49E00622D23 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 52BDF45720CE10130072FEF1 /* lemage */;
+			targetProxy = 5208BDFF20CFA49E00622D23 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		52B3C91220CF5B1400CA3977 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				52B3C91320CF5B1400CA3977 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		52B3C91720CF5B1600CA3977 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				52B3C91820CF5B1600CA3977 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		52B3C91D20CF5B1600CA3977 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7XU74H895V;
+				INFOPLIST_FILE = "lemage-example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "cn.lemonit.lemage-example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		52B3C91E20CF5B1600CA3977 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 7XU74H895V;
+				INFOPLIST_FILE = "lemage-example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "cn.lemonit.lemage-example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		52BDF45E20CE10130072FEF1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		52BDF45F20CE10130072FEF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		52BDF46120CE10130072FEF1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 7XU74H895V;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = lemage/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = cn.lemonit.lemage;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		52BDF46220CE10130072FEF1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 7XU74H895V;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = lemage/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = cn.lemonit.lemage;
+				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		52B3C91F20CF5B1600CA3977 /* Build configuration list for PBXNativeTarget "lemage-example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52B3C91D20CF5B1600CA3977 /* Debug */,
+				52B3C91E20CF5B1600CA3977 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		52BDF45220CE10130072FEF1 /* Build configuration list for PBXProject "lemage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52BDF45E20CE10130072FEF1 /* Debug */,
+				52BDF45F20CE10130072FEF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		52BDF46020CE10130072FEF1 /* Build configuration list for PBXNativeTarget "lemage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52BDF46120CE10130072FEF1 /* Debug */,
+				52BDF46220CE10130072FEF1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 52BDF44F20CE10130072FEF1 /* Project object */;
+}
