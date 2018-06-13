@@ -22,6 +22,22 @@
 		52B3C91920CF5B1600CA3977 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 52B3C91720CF5B1600CA3977 /* LaunchScreen.storyboard */; };
 		52B3C91C20CF5B1600CA3977 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 52B3C91B20CF5B1600CA3977 /* main.m */; };
 		52BDF45D20CE10130072FEF1 /* Lemage.h in Headers */ = {isa = PBXBuildFile; fileRef = 52BDF45B20CE10130072FEF1 /* Lemage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5714879620D102AA009C2069 /* BrowseImageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5714879020D102AA009C2069 /* BrowseImageController.m */; };
+		5714879720D102AA009C2069 /* ZoomViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5714879120D102AA009C2069 /* ZoomViewController.h */; };
+		5714879820D102AA009C2069 /* AlbumViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5714879220D102AA009C2069 /* AlbumViewController.m */; };
+		5714879920D102AA009C2069 /* BrowseImageController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5714879320D102AA009C2069 /* BrowseImageController.h */; };
+		5714879A20D102AA009C2069 /* ZoomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5714879420D102AA009C2069 /* ZoomViewController.m */; };
+		5714879B20D102AA009C2069 /* AlbumViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5714879520D102AA009C2069 /* AlbumViewController.h */; };
+		5714879F20D102B4009C2069 /* CameraImgManagerTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 5714879D20D102B4009C2069 /* CameraImgManagerTool.m */; };
+		571487A020D102B4009C2069 /* CameraImgManagerTool.h in Headers */ = {isa = PBXBuildFile; fileRef = 5714879E20D102B4009C2069 /* CameraImgManagerTool.h */; };
+		571487A420D102BF009C2069 /* DrawingSingle.m in Sources */ = {isa = PBXBuildFile; fileRef = 571487A220D102BF009C2069 /* DrawingSingle.m */; };
+		571487A520D102BF009C2069 /* DrawingSingle.h in Headers */ = {isa = PBXBuildFile; fileRef = 571487A320D102BF009C2069 /* DrawingSingle.h */; };
+		571487A920D102C6009C2069 /* MediaAssetModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 571487A720D102C6009C2069 /* MediaAssetModel.m */; };
+		571487AA20D102C6009C2069 /* MediaAssetModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 571487A820D102C6009C2069 /* MediaAssetModel.h */; };
+		571487B020D102CF009C2069 /* ImageSelectedCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 571487AC20D102CF009C2069 /* ImageSelectedCell.m */; };
+		571487B120D102CF009C2069 /* AlbumCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 571487AD20D102CF009C2069 /* AlbumCell.h */; };
+		571487B220D102CF009C2069 /* ImageSelectedCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 571487AE20D102CF009C2069 /* ImageSelectedCell.h */; };
+		571487B320D102CF009C2069 /* AlbumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 571487AF20D102CF009C2069 /* AlbumCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +71,22 @@
 		52BDF45820CE10130072FEF1 /* lemage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = lemage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		52BDF45B20CE10130072FEF1 /* Lemage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Lemage.h; sourceTree = "<group>"; };
 		52BDF45C20CE10130072FEF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5714879020D102AA009C2069 /* BrowseImageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BrowseImageController.m; sourceTree = "<group>"; };
+		5714879120D102AA009C2069 /* ZoomViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZoomViewController.h; sourceTree = "<group>"; };
+		5714879220D102AA009C2069 /* AlbumViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumViewController.m; sourceTree = "<group>"; };
+		5714879320D102AA009C2069 /* BrowseImageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BrowseImageController.h; sourceTree = "<group>"; };
+		5714879420D102AA009C2069 /* ZoomViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZoomViewController.m; sourceTree = "<group>"; };
+		5714879520D102AA009C2069 /* AlbumViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumViewController.h; sourceTree = "<group>"; };
+		5714879D20D102B4009C2069 /* CameraImgManagerTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraImgManagerTool.m; sourceTree = "<group>"; };
+		5714879E20D102B4009C2069 /* CameraImgManagerTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraImgManagerTool.h; sourceTree = "<group>"; };
+		571487A220D102BF009C2069 /* DrawingSingle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DrawingSingle.m; sourceTree = "<group>"; };
+		571487A320D102BF009C2069 /* DrawingSingle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DrawingSingle.h; sourceTree = "<group>"; };
+		571487A720D102C6009C2069 /* MediaAssetModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MediaAssetModel.m; sourceTree = "<group>"; };
+		571487A820D102C6009C2069 /* MediaAssetModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MediaAssetModel.h; sourceTree = "<group>"; };
+		571487AC20D102CF009C2069 /* ImageSelectedCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageSelectedCell.m; sourceTree = "<group>"; };
+		571487AD20D102CF009C2069 /* AlbumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumCell.h; sourceTree = "<group>"; };
+		571487AE20D102CF009C2069 /* ImageSelectedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageSelectedCell.h; sourceTree = "<group>"; };
+		571487AF20D102CF009C2069 /* AlbumCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +180,11 @@
 		52BDF45A20CE10130072FEF1 /* lemage */ = {
 			isa = PBXGroup;
 			children = (
+				571487AB20D102CF009C2069 /* cell */,
+				571487A620D102C6009C2069 /* model */,
+				571487A120D102BF009C2069 /* single */,
+				5714879C20D102B4009C2069 /* tool */,
+				5714878F20D102A9009C2069 /* viewController */,
 				52287B9420D0E01300B3C841 /* bean */,
 				52287B8F20D0BF2D00B3C841 /* urlProtocol */,
 				52287B8A20D0BB5500B3C841 /* category */,
@@ -158,6 +195,57 @@
 			path = lemage;
 			sourceTree = "<group>";
 		};
+		5714878F20D102A9009C2069 /* viewController */ = {
+			isa = PBXGroup;
+			children = (
+				5714879020D102AA009C2069 /* BrowseImageController.m */,
+				5714879120D102AA009C2069 /* ZoomViewController.h */,
+				5714879220D102AA009C2069 /* AlbumViewController.m */,
+				5714879320D102AA009C2069 /* BrowseImageController.h */,
+				5714879420D102AA009C2069 /* ZoomViewController.m */,
+				5714879520D102AA009C2069 /* AlbumViewController.h */,
+			);
+			path = viewController;
+			sourceTree = "<group>";
+		};
+		5714879C20D102B4009C2069 /* tool */ = {
+			isa = PBXGroup;
+			children = (
+				5714879D20D102B4009C2069 /* CameraImgManagerTool.m */,
+				5714879E20D102B4009C2069 /* CameraImgManagerTool.h */,
+			);
+			path = tool;
+			sourceTree = "<group>";
+		};
+		571487A120D102BF009C2069 /* single */ = {
+			isa = PBXGroup;
+			children = (
+				571487A220D102BF009C2069 /* DrawingSingle.m */,
+				571487A320D102BF009C2069 /* DrawingSingle.h */,
+			);
+			path = single;
+			sourceTree = "<group>";
+		};
+		571487A620D102C6009C2069 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				571487A720D102C6009C2069 /* MediaAssetModel.m */,
+				571487A820D102C6009C2069 /* MediaAssetModel.h */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		571487AB20D102CF009C2069 /* cell */ = {
+			isa = PBXGroup;
+			children = (
+				571487AC20D102CF009C2069 /* ImageSelectedCell.m */,
+				571487AE20D102CF009C2069 /* ImageSelectedCell.h */,
+				571487AD20D102CF009C2069 /* AlbumCell.h */,
+				571487AF20D102CF009C2069 /* AlbumCell.m */,
+			);
+			path = cell;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -165,10 +253,18 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5714879920D102AA009C2069 /* BrowseImageController.h in Headers */,
 				52287B8D20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h in Headers */,
 				52287B9220D0C2B200B3C841 /* LemageURLProtocol.h in Headers */,
+				571487A520D102BF009C2069 /* DrawingSingle.h in Headers */,
+				571487A020D102B4009C2069 /* CameraImgManagerTool.h in Headers */,
+				571487B220D102CF009C2069 /* ImageSelectedCell.h in Headers */,
 				52BDF45D20CE10130072FEF1 /* Lemage.h in Headers */,
 				52287B9720D0E04100B3C841 /* LemageUrlInfo.h in Headers */,
+				5714879720D102AA009C2069 /* ZoomViewController.h in Headers */,
+				571487B120D102CF009C2069 /* AlbumCell.h in Headers */,
+				571487AA20D102C6009C2069 /* MediaAssetModel.h in Headers */,
+				5714879B20D102AA009C2069 /* AlbumViewController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -282,10 +378,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5714879F20D102B4009C2069 /* CameraImgManagerTool.m in Sources */,
 				52287B9820D0E04100B3C841 /* LemageUrlInfo.m in Sources */,
+				571487B020D102CF009C2069 /* ImageSelectedCell.m in Sources */,
 				52287B8420D0AB6800B3C841 /* Lemage.m in Sources */,
+				571487A920D102C6009C2069 /* MediaAssetModel.m in Sources */,
+				571487A420D102BF009C2069 /* DrawingSingle.m in Sources */,
+				5714879820D102AA009C2069 /* AlbumViewController.m in Sources */,
+				5714879620D102AA009C2069 /* BrowseImageController.m in Sources */,
+				5714879A20D102AA009C2069 /* ZoomViewController.m in Sources */,
 				52287B9320D0C2B200B3C841 /* LemageURLProtocol.m in Sources */,
 				52287B8E20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.m in Sources */,
+				571487B320D102CF009C2069 /* AlbumCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
