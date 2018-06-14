@@ -440,19 +440,19 @@
 - (void)finishSelectedImg:(UIButton *)btn{
     NSMutableArray *imageArr = [NSMutableArray new];
     for (NSInteger i = 0; i<_selectedImgArr.count; i++) {
-        PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[_selectedImgArr[i]] options:nil][0];
         __weak typeof(self) weakSelf = self;
-        [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-            
-            
+        [CameraImgManagerTool fetchCostumMediaAssetModel:nil localIdentifier:_selectedImgArr[i] handler:^(NSData *imageData) {
             if (weakSelf.originalImageBtn.selected) {
                 [imageArr addObject:imageData];
             }else{
                 //压缩图片
-                [imageArr addObject:[CameraImgManagerTool compressImageSize:imageData toKB:200]];
+                [imageArr addObject:[CameraImgManagerTool compressImageSize:imageData toKB:400]];
                 
             }
-        
+            if (imageArr.count == weakSelf.selectedImgArr.count) {
+                NSLog(@"%ld",imageArr.count);
+            }
+            
         }];
     }
     

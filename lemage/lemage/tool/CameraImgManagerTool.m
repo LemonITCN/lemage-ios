@@ -102,6 +102,9 @@
     PHImageRequestOptions *imageRequestOption = [self configImageRequestOption];
     [[PHImageManager defaultManager] requestImageDataForAsset:asset options:imageRequestOption resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
         if (handler) {
+            if (model) {
+                model.imageClear = [UIImage imageWithData:imageData];
+            }
             handler(imageData);
         }
     }];
