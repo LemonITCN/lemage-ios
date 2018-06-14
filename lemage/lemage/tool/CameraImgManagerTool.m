@@ -23,7 +23,6 @@
     for (PHAsset *asset in [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:[[self class] configImageOptions]]) {
         
         [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(100, 100) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-//            NSLog(@"%@",info);
             MediaAssetModel *object = [[MediaAssetModel alloc] init];
             object.localIdentifier = asset.localIdentifier;
             object.imageThumbnail = result;
@@ -50,14 +49,11 @@
     // 获取系统设置的相册信息(没有<照片流>等)
     PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
     
-    NSLog(@"系统相册的数目 = %lu",(unsigned long)smartAlbums.count);
     for (PHAssetCollection *collection in smartAlbums) {
         PHFetchResult *results = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
 
-        NSLog(@"相册名:%@，有%ld张图片",collection.localizedTitle,results.count);
         NSMutableArray *tempPHF = [NSMutableArray new];
         for (PHAsset *tempAsset in results) {
-//            NSLog(@"%ld",tempAsset.mediaType);
             if (tempAsset.mediaType ==PHAssetMediaTypeImage) {
                 [[PHImageManager defaultManager] requestImageForAsset:tempAsset targetSize:CGSizeMake(100, 100) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                     MediaAssetModel *object = [[MediaAssetModel alloc] init];
@@ -66,7 +62,7 @@
                     object.asset = tempAsset;
                     [tempPHF addObject:object];
                 }];
-//                NSLog(@"%@",tempAsset.localIdentifier);
+
             }
         }
         [nameArr addObject:collection.localizedTitle];//存储assets's名字
@@ -89,7 +85,6 @@
                     object.asset = tempAsset;
                     [tempPHF addObject:object];
                 }];
-//                NSLog(@"%@",tempAsset.localIdentifier);
             }
         }
         [nameArr addObject:collection.localizedTitle];

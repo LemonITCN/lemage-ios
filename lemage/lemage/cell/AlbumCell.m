@@ -13,8 +13,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        //        self.contentView.layer.borderWidth = 1.0;
-        //        self.contentView.layer.borderColor = [UIColor blackColor].CGColor;
         _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.width)];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
         _imageView.backgroundColor = [UIColor blueColor];
@@ -36,13 +34,7 @@
         _assetModel = assetModel;
         self.selectButton.selected = _assetModel.selected;
         self.imageView.image = _assetModel.imageThumbnail;
-//        if (_assetModel.imageThumbnail) {
-//        } else {
-//            __weak typeof(self) weakSelf = self;
-//            [_assetModel fetchThumbnailImageSynchronous:false handler:^(UIImage *image,NSDictionary *info) {
-//                weakSelf.imageView.image = image;
-//            }];
-//        }
+
     }else{
         _assetModel = assetModel;
         self.selectButton.selected = NO;
@@ -56,10 +48,6 @@
         CGFloat selectedBtnHW = 24;
         _selectButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - selectedBtnHW , 0, selectedBtnHW, selectedBtnHW)];
         [self.contentView addSubview:_selectButton];
-//        _selectButton.layer.borderWidth = 2;
-//        _selectButton.layer.borderColor = [UIColor colorWithRed:188/255.0 green:188/255.0 blue:188/255.0 alpha:1].CGColor;
-//        [_selectButton setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:1]];
-//        _selectButton.layer.cornerRadius = 12.0;
         [_selectButton setImage:[[DrawingSingle shareDrawingSingle] getCircularSize:CGSizeMake(24, 24) color:[UIColor whiteColor] insideColor:[UIColor clearColor] solid:NO] forState:UIControlStateNormal];
         [_selectButton setImage:[[DrawingSingle shareDrawingSingle] getCircularSize:CGSizeMake(24, 24) color:[UIColor greenColor] insideColor:[UIColor whiteColor] solid:YES] forState:UIControlStateSelected];
         [_selectButton addTarget:self action:@selector(clickedBtn:) forControlEvents:UIControlEventTouchUpInside];

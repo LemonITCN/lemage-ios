@@ -42,6 +42,10 @@
  @brief 底部的BG
  */
 @property UIView *footerBarBGView;
+/**
+ @brief 顶部title
+ */
+@property UILabel *titleLabel;
 @end
 
 @implementation BrowseImageController
@@ -150,8 +154,6 @@
         weakSelf.titleBarBGView.alpha = 1-weakSelf.titleBarBGView.alpha;
         weakSelf.titleBarBGView.frame = CGRectMake(0, -64-weakSelf.titleBarBGView.frame.origin.y, weakSelf.titleBarBGView.frame.size.width, 64);
         weakSelf.finishBtn.alpha = 1-weakSelf.finishBtn.alpha;
-//        weakSelf.footerBarBGView.frame = CGRectMake(0, weakSelf.view.frame.size.height*2-50- weakSelf.footerBarBGView.frame.origin.y, weakSelf.footerBarBGView.frame.size.width, 50);
-//        NSLog(@"%f",weakSelf.view.frame.size.height- weakSelf.footerBarBGView.frame.origin.y);
     }];
     
 }
@@ -272,11 +274,7 @@
     _selectButton.layer.cornerRadius = 12.0;
     [_selectButton addTarget:self action:@selector(selectedImg:) forControlEvents:UIControlEventTouchUpInside];
     [_titleBarBGView addSubview:_selectButton];
-//    if (_restrictNumber > 0){
-//    }else{
-//        [_selectButton removeFromSuperview];
-//    }
-    
+
     
     UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [backBtn setTitle:@"返回" forState:UIControlStateNormal];
@@ -286,19 +284,15 @@
     backBtn.titleLabel.font = [UIFont systemFontOfSize: 14.0];
     [_titleBarBGView addSubview:backBtn];
 
-    UILabel *titleLabel = [[UILabel alloc]init];
-    titleLabel.frame = CGRectMake(80, 30, self.view.frame.size.width-160, 24);
-    titleLabel.text = _titleStr;
-    titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.textAlignment = NSTextAlignmentCenter;
-    [_titleBarBGView addSubview:titleLabel];
+    _titleLabel = [[UILabel alloc]init];
+    _titleLabel.frame = CGRectMake(80, 30, self.view.frame.size.width-160, 24);
+    _titleLabel.text = _titleStr;
+    _titleLabel.textColor = [UIColor whiteColor];
+    _titleLabel.textAlignment = NSTextAlignmentCenter;
+    [_titleBarBGView addSubview:_titleLabel];
 }
 
 - (void)createFooterBar{
-//    _footerBarBGView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height-50, self.view.frame.size.width, 50)];
-//    _footerBarBGView.backgroundColor = [UIColor colorWithRed:53/255.0 green:53/255.0 blue:53/255.0 alpha:0.8];
-//    [self.view addSubview:_footerBarBGView];
-//    [self.view bringSubviewToFront:_footerBarBGView];
     _finishBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_finishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_finishBtn setTitle:@"完成" forState:UIControlStateNormal];
@@ -347,6 +341,14 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    _titleBarBGView.frame=CGRectMake(0, 0, size.width, KIsiPhoneX?84:64);
+    _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-20, 24+20);
+    _titleLabel.frame = CGRectMake(80, 30, size.width-160, 24);
+    _finishBtn.center = CGPointMake(size.width/2, size.height-40);
 }
 
 /*

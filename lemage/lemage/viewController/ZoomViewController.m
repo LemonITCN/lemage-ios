@@ -26,10 +26,10 @@
         self.scrollView.delegate = self;
         self.scrollView.minimumZoomScale = 1;
         self.scrollView.maximumZoomScale = 3;
-//        [self.scrollView setZoomScale:0.5 animated:YES];
+        self.scrollView.showsHorizontalScrollIndicator = NO;
+        self.scrollView.showsVerticalScrollIndicator = NO;
         
         [self.view addSubview:self.scrollView];
-        //
         self.imageView = [[UIImageView alloc] init];
         self.imageView.image = [UIImage imageNamed:@"1.jpg"];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
@@ -39,26 +39,10 @@
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-//    NSLog(@"%@",scrollView);
-//    NSLog(@"%@",self.imageView);
     return self.imageView;
 }
 
 
-- (void)initImageViewFrame{
-    UIImage *image = self.imageView.image;
-    CGFloat picHeight = self.view.frame.size.width * image.size.height/image.size.width;
-    CGFloat picWidth = self.view.frame.size.width;
-    if (picHeight>self.view.frame.size.height) {
-        picHeight = self.view.frame.size.height;
-        picWidth = picHeight * image.size.width/image.size.height;
-    }
-    self.scrollView.frame = CGRectMake(0, 0, picWidth, picHeight);
-    //    self.scrollView.frame = CGRectMake(self.view.frame.size.width/2-picWidth/2, self.view.frame.size.height/2-picHeight/2, picWidth, picHeight);
-    self.imageView.frame = CGRectMake(0, 0, picWidth, picHeight);
-    self.scrollView.center = self.view.center;
-    self.scrollView.backgroundColor  = [UIColor cyanColor];
-}
 
 - (void)setImageFrame{
     UIImage *image = self.imageView.image;
@@ -68,15 +52,10 @@
         picHeight = self.view.frame.size.height;
         picWidth = picHeight * image.size.width/image.size.height;
     }
-//    self.scrollView.frame = CGRectMake(0, 0, picWidth, picHeight);
-//    self.scrollView.frame = CGRectMake(self.view.frame.size.width/2-picWidth/2, self.view.frame.size.height/2-picHeight/2, picWidth, picHeight);
-    
     self.imageView.frame = CGRectMake(0, 0, picWidth, picHeight>0?picHeight:0);
     self.scrollView.center = self.view.center;
     [self matchImageViewCenter];
 }
-
-
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
     
@@ -106,6 +85,16 @@
     CGFloat verticalAdditon = verticalDiff > 0.0 ? verticalDiff : 0.0;
     //校正图片中心
     _imageView.center = CGPointMake((contentWidth + horizontalAddition) / 2.0, (contentHeight + verticalAdditon) / 2.0);
+}
+
+- (void)viewWillLayoutSubviews{
+    [super viewWillLayoutSubviews];
+    self.scrollView.frame = self.view.frame;
+    if (self.imageView.image) {
+        [self setImageFrame];
+        [self initScrollview];
+    }
+ 
 }
 
 

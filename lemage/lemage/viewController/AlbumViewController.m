@@ -75,6 +75,14 @@
  @brief assets 的localIdentifier数组
  */
 @property (nonatomic, strong) NSMutableArray *localIdentifierArr;
+/**
+ @brief 取消按钮
+ */
+@property (nonatomic, strong) UIButton *cancelBtn;
+/**
+ @brief 底部功能按钮背景
+ */
+@property (nonatomic, strong) UIView *functionBGView;
 
 @end
 
@@ -431,7 +439,6 @@
 
 - (void)finishSelectedImg:(UIButton *)btn{
     NSMutableArray *imageArr = [NSMutableArray new];
-    NSLog(@"%@",_selectedImgArr);
     for (NSInteger i = 0; i<_selectedImgArr.count; i++) {
         PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[_selectedImgArr[i]] options:nil][0];
         __weak typeof(self) weakSelf = self;
@@ -445,8 +452,7 @@
                 [imageArr addObject:[CameraImgManagerTool compressImageSize:imageData toKB:200]];
                 
             }
-            
-            NSLog(@"%@",imageArr);
+        
         }];
     }
     
@@ -464,7 +470,7 @@
     tempVC.showIndex = 0;
     tempVC.restrictNumber = _selectedImgArr.count;
     tempVC.delegate = self;
-    tempVC.titleStr = _titleBtn.titleLabel.text;
+    tempVC.titleStr = @"预览";
     
     NSMutableArray *tempArr = [NSMutableArray new];
     for (NSInteger i= 0; i<_mediaAssetArray.count;i++) {
@@ -602,10 +608,18 @@
     self.selectedImgArr = [NSMutableArray arrayWithArray:selectedArr];
     [self setFinishBtnTitle];
     [_collection reloadData];
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
+    _titleBarBGView.frame = CGRectMake(0, 0, size.width, _titleBarBGView.frame.size.height);
+    _cancelBtn.frame = CGRectMake(_titleBarBGView.frame.size.width-80, _titleBarBGView.frame.size.height-34, 80, 24);
+    _titleBtn.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);
+    _collection.frame = CGRectMake(0, 0, size.width, size.height);
     
-//    for (MediaAssetModel *tempModel in self.selectedImgArr) {
-//        NSLog(@"%@",tempModel.imageClear);
-//    }
+    CGFloat itemWH = size.width>size.height?(size.height/4-50/4):(size.width/4-50/4);
+    CGRect rect = CGRectMake(0.0,-itemWH+30-64, size.width, itemWH+30 );
+    _albumCollection.frame = rect;
+    _functionBGView.center = CGPointMake(size.width/2, size.height-60);
 }
 
 #pragma mark - Getters

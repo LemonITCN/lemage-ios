@@ -14,8 +14,6 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        //        self.contenFLAnimatedImagetView.layer.borderWidth = 1.0;
-        //        self.contentView.layer.borderColor = [UIColor blackColor].CGColor;
         _imageView = [[UIImageView alloc] initWithFrame:self.bounds];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
         _imageView.backgroundColor = [UIColor cyanColor];
@@ -84,7 +82,6 @@
         [self.contentView addSubview:_selectButton];
         _selectButton.layer.borderWidth = 2;
         _selectButton.layer.borderColor = [UIColor colorWithRed:188/255.0 green:188/255.0 blue:188/255.0 alpha:1].CGColor;
-//        [_selectButton setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:1]];
         _selectButton.layer.cornerRadius = 12.0;
         [_selectButton addTarget:self action:@selector(clickedBtn:) forControlEvents:UIControlEventTouchUpInside];
         _selectButton.titleLabel.font = [UIFont boldSystemFontOfSize:16.0];
@@ -93,15 +90,6 @@
         [_selectHideButton addTarget:self action:@selector(clickedBtn:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:_selectHideButton];
     }
-//    if (_assetModel.selected) {
-//        _selectButton.layer.borderWidth = 0;
-//        [_selectButton setTitle:_assetModel.imgNo forState:UIControlStateNormal];
-//        [_selectButton setBackgroundColor:[UIColor colorWithRed:107/255.0 green:192/255.0 blue:28/255.0 alpha:1]];
-//    }else{
-//        _selectButton.layer.borderWidth = 2;
-//        [_selectButton setTitle:@"" forState:UIControlStateNormal];
-//        [_selectButton setBackgroundColor:[UIColor clearColor]];
-//    }
 
     return _selectButton;
 }
