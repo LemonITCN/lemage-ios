@@ -27,7 +27,23 @@
  */
 + (NSString *)generateLemageUrl: (UIImage *)image
                        longTerm: (BOOL)longTerm {
-    return @"";
+    NSString *fileName;
+    if(longTerm){
+        fileName = @"long";
+    }else{
+        fileName = @"short";
+    }
+    NSString *filePath = [NSString  stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),fileName];
+    if([self creatFileWithPath:filePath]){
+        
+        NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath]?[NSMutableDictionary dictionaryWithContentsOfFile:filePath]:[NSMutableDictionary new];
+        //写入内容
+        NSString *key = [self randomStringWithLength:16];
+        [tempImgDic setObject:UIImageJPEGRepresentation(image, 0.8) forKey:key];
+        [tempImgDic writeToFile:filePath atomically:YES];
+        return [NSString stringWithFormat:@"lemage://sandbox/%@/%@",fileName,key];
+    }
+    return nil;
 }
 
 /**
@@ -39,6 +55,19 @@
  @return 根据LemageURL逆向转换回来的图片NSData数据对象，如果URL无效会返回nil
  */
 + (NSData *)loadImageDataByLemageUrl: (NSString *)lemageUrl {
+    NSString *key = [lemageUrl stringByReplacingOccurrencesOfString:@"lemage://" withString:@""];
+    NSArray *strArr = [key componentsSeparatedByString:@"/"];
+    if (strArr.count <3) {
+        return nil;//文件路径错误
+    }
+    if ([strArr[0] isEqualToString:@"sandbox"]) {
+        key = strArr[2];
+        NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),strArr[1]]];
+        return tempImgDic[key];//查询对应的key为空时自动返会nil;
+    }else{
+        //相册
+    }
+    
     return nil;
 }
 
@@ -50,6 +79,18 @@
  @return 根据LemageURL逆向转换回来的图片UIImage对象，如果URL无效会返回nil
  */
 + (UIImage *)loadImageByLemageUrl: (NSString *)lemageUrl {
+    NSString *key = [lemageUrl stringByReplacingOccurrencesOfString:@"lemage://" withString:@""];
+    NSArray *strArr = [key componentsSeparatedByString:@"/"];
+    if (strArr.count <3) {
+        return nil;
+    }
+    if ([strArr[0] isEqualToString:@"sandbox"]) {
+        key = strArr[2];
+        NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),strArr[1]]];
+        return [UIImage imageWithData:tempImgDic[key]];
+    }else{
+       //相册
+    }
     return nil;
 }
 
@@ -58,7 +99,9 @@
  原理：删除所有本地长期LemageURL对应的沙盒图片文件
  */
 + (void)expiredAllLongTermUrl {
-    
+    NSString *filePath = [NSString stringWithFormat:@"%@img/long",NSTemporaryDirectory()];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtPath:filePath error:nil];
 }
 
 /**
@@ -66,7 +109,9 @@
  原理：删除所有本地短期LemageURL对应的沙盒图片文件
  */
 + (void)expiredAllShortTermUrl {
-    
+    NSString *filePath = [NSString stringWithFormat:@"%@img/short",NSTemporaryDirectory()];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtPath:filePath error:nil];
 }
 
 /**
@@ -76,7 +121,69 @@
  @param lemageUrl 要使其过期的LemageURL
  */
 + (void)expiredUrl: (NSString *)lemageUrl {
+    NSString *key = [lemageUrl stringByReplacingOccurrencesOfString:@"lemage://" withString:@""];
+    NSArray *strArr = [key componentsSeparatedByString:@"/"];
+    if (strArr.count <3) {
+        NSLog(@"文件路径错误");
+    }
+    if ([strArr[0] isEqualToString:@"sandbox"]) {
+        key = strArr[2];
+        NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),strArr[1]]];
+        [tempImgDic removeObjectForKey:key];
+        [tempImgDic writeToFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),strArr[1]] atomically:YES];
+    }else{
+        //相册的东西
+    }
+    
     
 }
+
+
+
+/**
+ 创建图片NSData文件
+ 原理:先查询是否已经创建过文件夹,如果没有则创建一个相应的文件用来存储图片data
+ @param filePath 文件路径
+ @return 是否已经创建过
+ */
++(BOOL)creatFileWithPath:(NSString *)filePath
+{
+    BOOL isSuccess = YES;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL temp = [fileManager fileExistsAtPath:filePath];
+    if (temp) {
+        return YES;
+    }
+    NSError *error;
+    //stringByDeletingLastPathComponent:删除最后一个路径节点
+    NSString *dirPath = [filePath stringByDeletingLastPathComponent];
+    isSuccess = [fileManager createDirectoryAtPath:dirPath withIntermediateDirectories:YES attributes:nil error:&error];
+    if (error) {
+        NSLog(@"creat File Failed. errorInfo:%@",error);
+    }
+    if (!isSuccess) {
+        return isSuccess;
+    }
+    isSuccess = [fileManager createFileAtPath:filePath contents:nil attributes:nil];
+    return isSuccess;
+}
+
+
+/**
+ 根据传入的长度随机生成等长度的UUID字符串
+
+ @param len 字符串长度
+ @return 返回的字符串
+ */
++(NSString *)randomStringWithLength:(NSInteger)len {
+    
+    CFUUIDRef uuid_ref = CFUUIDCreate(NULL);
+    CFStringRef uuid_string_ref= CFUUIDCreateString(NULL, uuid_ref);
+    NSString *uuid = [NSString stringWithString:(__bridge NSString *)uuid_string_ref];
+    CFRelease(uuid_ref);
+    CFRelease(uuid_string_ref);
+    return [uuid lowercaseString];
+}
+
 
 @end
