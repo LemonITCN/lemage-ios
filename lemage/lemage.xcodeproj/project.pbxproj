@@ -198,12 +198,12 @@
 		5714878F20D102A9009C2069 /* viewController */ = {
 			isa = PBXGroup;
 			children = (
+				5714879320D102AA009C2069 /* BrowseImageController.h */,
 				5714879020D102AA009C2069 /* BrowseImageController.m */,
 				5714879120D102AA009C2069 /* ZoomViewController.h */,
-				5714879220D102AA009C2069 /* AlbumViewController.m */,
-				5714879320D102AA009C2069 /* BrowseImageController.h */,
 				5714879420D102AA009C2069 /* ZoomViewController.m */,
 				5714879520D102AA009C2069 /* AlbumViewController.h */,
+				5714879220D102AA009C2069 /* AlbumViewController.m */,
 			);
 			path = viewController;
 			sourceTree = "<group>";
@@ -211,8 +211,8 @@
 		5714879C20D102B4009C2069 /* tool */ = {
 			isa = PBXGroup;
 			children = (
-				5714879D20D102B4009C2069 /* CameraImgManagerTool.m */,
 				5714879E20D102B4009C2069 /* CameraImgManagerTool.h */,
+				5714879D20D102B4009C2069 /* CameraImgManagerTool.m */,
 			);
 			path = tool;
 			sourceTree = "<group>";
@@ -220,8 +220,8 @@
 		571487A120D102BF009C2069 /* single */ = {
 			isa = PBXGroup;
 			children = (
-				571487A220D102BF009C2069 /* DrawingSingle.m */,
 				571487A320D102BF009C2069 /* DrawingSingle.h */,
+				571487A220D102BF009C2069 /* DrawingSingle.m */,
 			);
 			path = single;
 			sourceTree = "<group>";
@@ -229,8 +229,8 @@
 		571487A620D102C6009C2069 /* model */ = {
 			isa = PBXGroup;
 			children = (
-				571487A720D102C6009C2069 /* MediaAssetModel.m */,
 				571487A820D102C6009C2069 /* MediaAssetModel.h */,
+				571487A720D102C6009C2069 /* MediaAssetModel.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -238,8 +238,8 @@
 		571487AB20D102CF009C2069 /* cell */ = {
 			isa = PBXGroup;
 			children = (
-				571487AC20D102CF009C2069 /* ImageSelectedCell.m */,
 				571487AE20D102CF009C2069 /* ImageSelectedCell.h */,
+				571487AC20D102CF009C2069 /* ImageSelectedCell.m */,
 				571487AD20D102CF009C2069 /* AlbumCell.h */,
 				571487AF20D102CF009C2069 /* AlbumCell.m */,
 			);
