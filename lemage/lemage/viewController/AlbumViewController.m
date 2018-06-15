@@ -473,9 +473,10 @@
     tempVC.titleStr = @"预览";
     
     NSMutableArray *tempArr = [NSMutableArray new];
-    for (NSInteger i= 0; i<_mediaAssetArray.count;i++) {
-        if ([_selectedImgArr containsObject:_mediaAssetArray[i].localIdentifier]) {
-            [tempArr addObject:_mediaAssetArray[i]];
+    NSArray <MediaAssetModel *>*allImgArr = _allAlbumArray[0][@"assetArr"];
+    for (NSInteger i= 0; i<allImgArr.count;i++) {
+        if ([_selectedImgArr containsObject:allImgArr[i].localIdentifier]) {
+            [tempArr addObject:allImgArr[i]];
         }
         if (tempArr.count == _selectedImgArr.count) {
             break;
