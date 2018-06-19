@@ -7,7 +7,8 @@
 //
 
 #import "Lemage.h"
-
+#import "LemageUrlInfo.h"
+#import <Photos/Photos.h>
 @implementation Lemage
 
 /**
@@ -35,7 +36,7 @@
     }
     NSString *filePath = [NSString  stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),fileName];
     if([self creatFileWithPath:filePath]){
-        
+
         NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath]?[NSMutableDictionary dictionaryWithContentsOfFile:filePath]:[NSMutableDictionary new];
         //写入内容
         NSString *key = [self randomStringWithLength:16];
@@ -43,6 +44,10 @@
         [tempImgDic writeToFile:filePath atomically:YES];
         return [NSString stringWithFormat:@"lemage://sandbox/%@/%@",fileName,key];
     }
+    
+    
+    
+    
     return nil;
 }
 
@@ -50,48 +55,66 @@
  根据LemageURL加载对应的图片的NSData数据，如果用户传入的LemageURL有误或已过期，会返回nil
  注意：此方法并不会处理图片的缩放参数，即LemageURL中的width参数和height参数会被忽略，若需要请调用[Lemage loadImageDataByLemageUrl]方法
  原理：根据LemageURL解析出沙盒对应的文件路径，然后从沙盒读取文件数据转换成NSData数据对象后返回
- 
+
  @param lemageUrl LemageURL字符串
- @return 根据LemageURL逆向转换回来的图片NSData数据对象，如果URL无效会返回nil
+ @param complete 根据LemageURL逆向转换回来的图片NSData数据对象，如果URL无效会返回nil
  */
-+ (NSData *)loadImageDataByLemageUrl: (NSString *)lemageUrl {
-    NSString *key = [lemageUrl stringByReplacingOccurrencesOfString:@"lemage://" withString:@""];
-    NSArray *strArr = [key componentsSeparatedByString:@"/"];
-    if (strArr.count <3) {
-        return nil;//文件路径错误
-    }
-    if ([strArr[0] isEqualToString:@"sandbox"]) {
-        key = strArr[2];
-        NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),strArr[1]]];
-        return tempImgDic[key];//查询对应的key为空时自动返会nil;
-    }else{
-        //相册
-    }
++ (void)loadImageDataByLemageUrl: (NSString *)lemageUrl complete:(void(^)(NSData *imageData))complete {
+
     
-    return nil;
+    LemageUrlInfo *urlInfo = [[LemageUrlInfo alloc]initWithLemageUrl:lemageUrl];
+    if (urlInfo) {
+        if ([urlInfo.source isEqualToString:@"sandbox"]) {
+            NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),urlInfo.type]];
+            
+                complete(tempImgDic[urlInfo.tag]);
+            
+        }else{
+            PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[urlInfo.tag] options:nil][0];
+            if(asset){
+                [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                    
+                        complete(imageData);
+                    
+                }];
+            }else{
+                
+                    complete(nil);
+                
+            }
+            
+        }
+    }
+
 }
+
 
 /**
  根据LemageURL加载对应的图片的UIImage对象，如果用户传入的LemageURL有误或已过期，会返回nil
  原理：根据LemageURL解析出沙盒对应的文件路径，然后从沙盒读取文件数据转换成NSData数据后转换成UIImage对象返回
- 
- @param lemageUrl LemageURL字符串
- @return 根据LemageURL逆向转换回来的图片UIImage对象，如果URL无效会返回nil
+
+ @param lemageUrl lemageUrl LemageURL字符串
+ @param complete 根据LemageURL逆向转换回来的图片UIImage对象，如果URL无效会返回nil
  */
-+ (UIImage *)loadImageByLemageUrl: (NSString *)lemageUrl {
-    NSString *key = [lemageUrl stringByReplacingOccurrencesOfString:@"lemage://" withString:@""];
-    NSArray *strArr = [key componentsSeparatedByString:@"/"];
-    if (strArr.count <3) {
-        return nil;
++ (void)loadImageByLemageUrl: (NSString *)lemageUrl complete:(void(^)(UIImage *image))complete  {
+
+    LemageUrlInfo *urlInfo = [[LemageUrlInfo alloc]initWithLemageUrl:lemageUrl];
+    if (urlInfo) {
+        if ([urlInfo.source isEqualToString:@"sandbox"]) {
+            NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),urlInfo.type]];
+            complete([UIImage imageWithData:tempImgDic[urlInfo.tag]]);
+        }else{
+            PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[urlInfo.tag] options:nil][0];
+            if(asset){
+                [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                    complete([UIImage imageWithData:imageData]);
+                }];
+            }else{
+                complete(nil);
+            }
+
+        }
     }
-    if ([strArr[0] isEqualToString:@"sandbox"]) {
-        key = strArr[2];
-        NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),strArr[1]]];
-        return [UIImage imageWithData:tempImgDic[key]];
-    }else{
-       //相册
-    }
-    return nil;
 }
 
 /**
@@ -121,18 +144,21 @@
  @param lemageUrl 要使其过期的LemageURL
  */
 + (void)expiredUrl: (NSString *)lemageUrl {
-    NSString *key = [lemageUrl stringByReplacingOccurrencesOfString:@"lemage://" withString:@""];
-    NSArray *strArr = [key componentsSeparatedByString:@"/"];
-    if (strArr.count <3) {
-        NSLog(@"文件路径错误");
-    }
-    if ([strArr[0] isEqualToString:@"sandbox"]) {
-        key = strArr[2];
-        NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),strArr[1]]];
-        [tempImgDic removeObjectForKey:key];
-        [tempImgDic writeToFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),strArr[1]] atomically:YES];
-    }else{
-        //相册的东西
+
+    LemageUrlInfo *urlInfo = [[LemageUrlInfo alloc]initWithLemageUrl:lemageUrl];
+    if (urlInfo) {
+         if ([urlInfo.source isEqualToString:@"sandbox"]) {
+             NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),urlInfo.type]];
+             [tempImgDic removeObjectForKey:urlInfo.tag];
+             [tempImgDic writeToFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),urlInfo.type] atomically:YES];
+         }else{
+             PHFetchResult *pAsset = [PHAsset fetchAssetsWithLocalIdentifiers:@[urlInfo.tag] options:nil];
+             if (pAsset) {
+                 [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
+                     [PHAssetChangeRequest deleteAssets:pAsset];
+                 } error:nil];
+             }
+         }
     }
     
     

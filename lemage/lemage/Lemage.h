@@ -34,18 +34,18 @@ NS_ASSUME_NONNULL_BEGIN
  原理：根据LemageURL解析出沙盒对应的文件路径，然后从沙盒读取文件数据转换成NSData数据对象后返回
  
  @param lemageUrl LemageURL字符串
- @return 根据LemageURL逆向转换回来的图片NSData数据对象，如果URL无效会返回nil
+ @param complete 根据LemageURL逆向转换回来的图片NSData数据对象，如果URL无效会返回nil
  */
-+ (NSData *)loadImageDataByLemageUrl: (NSString *)lemageUrl;
++ (void)loadImageDataByLemageUrl: (NSString *)lemageUrl complete:(void(^)(NSData *imageData))complete;
 
 /**
  根据LemageURL加载对应的图片的UIImage对象，如果用户传入的LemageURL有误或已过期，会返回nil
  原理：根据LemageURL解析出沙盒对应的文件路径，然后从沙盒读取文件数据转换成NSData数据后转换成UIImage对象返回
  
  @param lemageUrl LemageURL字符串
- @return 根据LemageURL逆向转换回来的图片UIImage对象，如果URL无效会返回nil
+ @param complete 根据LemageURL逆向转换回来的图片UIImage对象，如果URL无效会返回nil
  */
-+ (UIImage *)loadImageByLemageUrl: (NSString *)lemageUrl;
++ (void)loadImageByLemageUrl: (NSString *)lemageUrl complete:(void(^)(UIImage *image))complete;
 
 /**
  让所有长期的LemageURL失效
