@@ -434,7 +434,6 @@
     _finishBtn.alpha=0.6;//透明度
     [_finishBtn addTarget:self action:@selector(finishSelectedImg: ) forControlEvents:UIControlEventTouchUpInside];
     [functionBGView addSubview:_finishBtn];
-
 }
 
 - (void)finishSelectedImg:(UIButton *)btn{

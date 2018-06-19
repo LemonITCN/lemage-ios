@@ -34,6 +34,9 @@
  @brief 已选择的图片MediaAssetModel
  */
 @property (nonatomic, strong) NSMutableArray *selectedImgArr;
+/**
+ @brief 将选择照片的状态传递给首页
+ */
 @property (nonatomic, assign) id<BrowseImageControllerDelegate>delegate;
 /**
  @brief 当前展示的数组下标

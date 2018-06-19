@@ -346,9 +346,11 @@
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
     _titleBarBGView.frame=CGRectMake(0, 0, size.width, KIsiPhoneX?84:64);
+    _titleBarBGView.alpha = 1;
     _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-20, 24+20);
     _titleLabel.frame = CGRectMake(80, 30, size.width-160, 24);
     _finishBtn.center = CGPointMake(size.width/2, size.height-40);
+    _finishBtn.alpha = 1;
 }
 
 /*
