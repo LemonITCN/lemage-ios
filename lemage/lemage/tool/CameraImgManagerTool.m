@@ -9,6 +9,21 @@
 #import "CameraImgManagerTool.h"
 
 @implementation CameraImgManagerTool
+/**
+ 获取相册权限
+ @param handler 获取权限结果
+ */
++ (void)requestPhotosLibraryAuthorization:(void(^)(BOOL ownAuthorization))handler {
+    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+        if (handler) {
+            BOOL boolean = false;
+            if (status == PHAuthorizationStatusAuthorized) {
+                boolean = true;
+            }
+            handler(boolean);
+        }
+    }];
+}
 
 +(NSMutableArray <MediaAssetModel *>*)getAllImages{
     
@@ -156,6 +171,17 @@
     }
     
     return data;
+}
+
++ (UIImage *)compressImageSize:(NSData *)imageData toSize:(CGSize)size {
+
+    NSData *data = imageData;
+    UIImage *resultImage = [UIImage imageWithData:data];
+    UIGraphicsBeginImageContext(size);
+    [resultImage drawInRect:CGRectMake(0, 0, size.width, size.height)];
+    resultImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return resultImage;
 }
 
 @end

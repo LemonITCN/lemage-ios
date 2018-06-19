@@ -20,7 +20,7 @@
 @end
 @interface BrowseImageController : UIViewController
 /**
- @brief 最大选择照片数量(如果最大照片数量从上个界面未传认为是预览界面没有选择btn)
+ @brief 最大选择照片数量
  */
 @property (nonatomic, assign) NSUInteger restrictNumber;
 //@property (nonatomic, strong) UICollectionView *collection;

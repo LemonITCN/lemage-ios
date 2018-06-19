@@ -46,6 +46,10 @@
  @brief 顶部title
  */
 @property UILabel *titleLabel;
+/**
+ @brief 返回按钮
+ */
+@property UIButton *backBtn;
 @end
 
 @implementation BrowseImageController
@@ -211,7 +215,7 @@
     _showIndex = tempVC.showIndex;
     [self setSelectedButtonTitle:_showIndex];
     
-    if(_showIndex<_mediaAssetArray.count-1){
+    if(_showIndex<_localIdentifierArr.count-1){
         [_leftVC initScrollview];
         [_middleVC initScrollview];
         [_rightVC initScrollview];
@@ -267,8 +271,9 @@
     
     CGFloat selectedBtnHW = 24;
     _selectButton = [[UIButton alloc] initWithFrame:CGRectMake(0 , 0, selectedBtnHW, selectedBtnHW)];
-    _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-20, 24+20);
+    _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-20, _titleBarBGView.frame.size.height-22);
     _selectButton.layer.borderWidth = 2;
+    _selectButton.alpha = _restrictNumber>0;
     _selectButton.layer.borderColor = [UIColor colorWithRed:188/255.0 green:188/255.0 blue:188/255.0 alpha:1].CGColor;
     [_selectButton setBackgroundColor:[UIColor colorWithRed:200/255.0 green:200/255.0 blue:200/255.0 alpha:1]];
     _selectButton.layer.cornerRadius = 12.0;
@@ -276,16 +281,16 @@
     [_titleBarBGView addSubview:_selectButton];
 
     
-    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [backBtn setTitle:@"返回" forState:UIControlStateNormal];
-    [backBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [backBtn addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
-    backBtn.frame = CGRectMake(0, 30, 40, 24);
-    backBtn.titleLabel.font = [UIFont systemFontOfSize: 14.0];
-    [_titleBarBGView addSubview:backBtn];
+    _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_backBtn setTitle:@"返回" forState:UIControlStateNormal];
+    [_backBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_backBtn addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
+    _backBtn.frame = CGRectMake(0, _titleBarBGView.frame.size.height-34, 40, 24);
+    _backBtn.titleLabel.font = [UIFont systemFontOfSize: 14.0];
+    [_titleBarBGView addSubview:_backBtn];
 
     _titleLabel = [[UILabel alloc]init];
-    _titleLabel.frame = CGRectMake(80, 30, self.view.frame.size.width-160, 24);
+    _titleLabel.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, self.view.frame.size.width-160, 24);
     _titleLabel.text = _titleStr;
     _titleLabel.textColor = [UIColor whiteColor];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -306,7 +311,12 @@
 }
 
 - (void)back:(UIButton *)btn{
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.presentingViewController) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    
 }
 
 - (void)selectedImg:(UIButton *)btn{
@@ -344,13 +354,16 @@
 }
 
 
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    _titleBarBGView.frame=CGRectMake(0, 0, size.width, KIsiPhoneX?84:64);
+- (void)viewWillLayoutSubviews{
+    CGSize size = self.view.frame.size;
+    _titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
     _titleBarBGView.alpha = 1;
-    _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-20, 24+20);
-    _titleLabel.frame = CGRectMake(80, 30, size.width-160, 24);
+    _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-20, _titleBarBGView.frame.size.height-22);
+    _titleLabel.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);
     _finishBtn.center = CGPointMake(size.width/2, size.height-40);
     _finishBtn.alpha = 1;
+    _backBtn.frame = CGRectMake(0, _titleBarBGView.frame.size.height-34, 40,24);
+    
 }
 
 /*

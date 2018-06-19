@@ -294,7 +294,14 @@
             tempVC.showIndex = indexPath.row;
             tempVC.delegate = self;
             tempVC.titleStr = _titleBtn.titleLabel.text;
-            [self.navigationController pushViewController:tempVC animated:YES];
+            
+            if (self.presentingViewController) {
+                [self presentViewController:tempVC animated:YES completion:nil];
+            } else {
+                [self.navigationController pushViewController:tempVC animated:YES];
+            }
+            
+            
         }
     }else{
         [self initDisplayImage:indexPath.row];
@@ -348,13 +355,13 @@
     [self.view addSubview:_titleBarBGView];
     [self.view bringSubviewToFront:_titleBarBGView];
     
-    UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
-    [cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [cancelBtn addTarget:self action:@selector(cancelSelected:) forControlEvents:UIControlEventTouchUpInside];
-    cancelBtn.frame = CGRectMake(_titleBarBGView.frame.size.width-80, _titleBarBGView.frame.size.height-34, 80, 24);
-    cancelBtn.titleLabel.font = [UIFont systemFontOfSize: 14.0];
-    [_titleBarBGView addSubview:cancelBtn];
+    _cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [_cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_cancelBtn addTarget:self action:@selector(cancelSelected:) forControlEvents:UIControlEventTouchUpInside];
+    _cancelBtn.frame = CGRectMake(_titleBarBGView.frame.size.width-80, _titleBarBGView.frame.size.height-34, 80, 24);
+    _cancelBtn.titleLabel.font = [UIFont systemFontOfSize: 14.0];
+    [_titleBarBGView addSubview:_cancelBtn ];
     
    _titleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _titleBtn.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, self.view.frame.size.width-160, 24);
@@ -437,25 +444,26 @@
 }
 
 - (void)finishSelectedImg:(UIButton *)btn{
-    NSMutableArray *imageArr = [NSMutableArray new];
-    for (NSInteger i = 0; i<_selectedImgArr.count; i++) {
-        __weak typeof(self) weakSelf = self;
-        [CameraImgManagerTool fetchCostumMediaAssetModel:nil localIdentifier:_selectedImgArr[i] handler:^(NSData *imageData) {
-            if (weakSelf.originalImageBtn.selected) {
-                [imageArr addObject:imageData];
-            }else{
-                //压缩图片
-                [imageArr addObject:[CameraImgManagerTool compressImageSize:imageData toKB:400]];
-                
-            }
-            if (imageArr.count == weakSelf.selectedImgArr.count) {
-                NSLog(@"%ld",imageArr.count);
-            }
-            
-        }];
-    }
+//    NSMutableArray *imageArr = [NSMutableArray new];
+//    for (NSInteger i = 0; i<_selectedImgArr.count; i++) {
+//        __weak typeof(self) weakSelf = self;
+//        [CameraImgManagerTool fetchCostumMediaAssetModel:nil localIdentifier:_selectedImgArr[i] handler:^(NSData *imageData) {
+//            if (weakSelf.originalImageBtn.selected) {
+//                [imageArr addObject:imageData];
+//            }else{
+//                //压缩图片
+//                [imageArr addObject:[CameraImgManagerTool compressImageSize:imageData toKB:400]];
+//
+//            }
+//            if (imageArr.count == weakSelf.selectedImgArr.count) {
+//                NSLog(@"%ld",imageArr.count);
+//            }
+//
+//        }];
+//    }
     
-    
+    self.imgIDBlock(_selectedImgArr);
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 /**
@@ -470,20 +478,11 @@
     tempVC.restrictNumber = _selectedImgArr.count;
     tempVC.delegate = self;
     tempVC.titleStr = @"预览";
-    
-    NSMutableArray *tempArr = [NSMutableArray new];
-    NSArray <MediaAssetModel *>*allImgArr = _allAlbumArray[0][@"assetArr"];
-    for (NSInteger i= 0; i<allImgArr.count;i++) {
-        if ([_selectedImgArr containsObject:allImgArr[i].localIdentifier]) {
-            [tempArr addObject:allImgArr[i]];
-        }
-        if (tempArr.count == _selectedImgArr.count) {
-            break;
-        }
+    if (self.presentingViewController) {
+        [self presentViewController:tempVC animated:YES completion:nil];
+    } else {
+        [self.navigationController pushViewController:tempVC animated:YES];
     }
-    tempVC.mediaAssetArray = tempArr;
-    
-    [self.navigationController pushViewController:tempVC animated:YES];
 }
 
 
@@ -609,9 +608,9 @@
     [self setFinishBtnTitle];
     [_collection reloadData];
 }
-
-- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator {
-    _titleBarBGView.frame = CGRectMake(0, 0, size.width, _titleBarBGView.frame.size.height);
+- (void)viewWillLayoutSubviews{
+    CGSize size = self.view.frame.size;
+    _titleBarBGView.frame = CGRectMake(0, 0, size.width, size.width>size.height?44:KIsiPhoneX?84:64);
     _cancelBtn.frame = CGRectMake(_titleBarBGView.frame.size.width-80, _titleBarBGView.frame.size.height-34, 80, 24);
     _titleBtn.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);
     _collection.frame = CGRectMake(0, 0, size.width, size.height);
@@ -619,6 +618,7 @@
     CGFloat itemWH = size.width>size.height?(size.height/4-50/4):(size.width/4-50/4);
     CGRect rect = CGRectMake(0.0,-itemWH+30-64, size.width, itemWH+30 );
     _albumCollection.frame = rect;
+    _albumCollection.alpha = 0;
     _functionBGView.center = CGPointMake(size.width/2, size.height-60);
 }
 

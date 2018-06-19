@@ -9,6 +9,7 @@
 #import "Lemage.h"
 #import "LemageUrlInfo.h"
 #import <Photos/Photos.h>
+#import "CameraImgManagerTool.h"
 @implementation Lemage
 
 /**
@@ -44,10 +45,7 @@
         [tempImgDic writeToFile:filePath atomically:YES];
         return [NSString stringWithFormat:@"lemage://sandbox/%@/%@",fileName,key];
     }
-    
-    
-    
-    
+
     return nil;
 }
 
@@ -96,18 +94,19 @@
  @param lemageUrl lemageUrl LemageURL字符串
  @param complete 根据LemageURL逆向转换回来的图片UIImage对象，如果URL无效会返回nil
  */
-+ (void)loadImageByLemageUrl: (NSString *)lemageUrl complete:(void(^)(UIImage *image))complete  {
++ (void)loadImageByLemageUrl: (NSString *)lemageUrl size:(CGSize)size complete:(void(^)(UIImage *image))complete  {
 
     LemageUrlInfo *urlInfo = [[LemageUrlInfo alloc]initWithLemageUrl:lemageUrl];
     if (urlInfo) {
         if ([urlInfo.source isEqualToString:@"sandbox"]) {
             NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),urlInfo.type]];
-            complete([UIImage imageWithData:tempImgDic[urlInfo.tag]]);
+            ;
+            complete([CameraImgManagerTool compressImageSize:tempImgDic[urlInfo.tag] toSize:size]);
         }else{
             PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[urlInfo.tag] options:nil][0];
             if(asset){
-                [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-                    complete([UIImage imageWithData:imageData]);
+                [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                    complete(result);
                 }];
             }else{
                 complete(nil);

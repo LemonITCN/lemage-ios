@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5208BDFE20CFA48500622D23 /* lemage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; };
+		5208BDFE20CFA48500622D23 /* lemage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		52287B8420D0AB6800B3C841 /* Lemage.m in Sources */ = {isa = PBXBuildFile; fileRef = 52287B8320D0AB6800B3C841 /* Lemage.m */; };
 		52287B8D20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h in Headers */ = {isa = PBXBuildFile; fileRef = 52287B8B20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h */; };
 		52287B8E20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.m in Sources */ = {isa = PBXBuildFile; fileRef = 52287B8C20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.m */; };
@@ -38,6 +38,8 @@
 		571487B120D102CF009C2069 /* AlbumCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 571487AD20D102CF009C2069 /* AlbumCell.h */; };
 		571487B220D102CF009C2069 /* ImageSelectedCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 571487AE20D102CF009C2069 /* ImageSelectedCell.h */; };
 		571487B320D102CF009C2069 /* AlbumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 571487AF20D102CF009C2069 /* AlbumCell.m */; };
+		57A5435A20D8DB5F002647CB /* lemage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; };
+		57A5435B20D8DB5F002647CB /* lemage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +51,20 @@
 			remoteInfo = lemage;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		57A5435C20D8DB60002647CB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				57A5435B20D8DB5F002647CB /* lemage.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		52287B8320D0AB6800B3C841 /* Lemage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Lemage.m; sourceTree = "<group>"; };
@@ -95,6 +111,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5208BDFE20CFA48500622D23 /* lemage.framework in Frameworks */,
+				57A5435A20D8DB5F002647CB /* lemage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,6 +295,7 @@
 				52B3C90620CF5B1400CA3977 /* Sources */,
 				52B3C90720CF5B1400CA3977 /* Frameworks */,
 				52B3C90820CF5B1400CA3977 /* Resources */,
+				57A5435C20D8DB60002647CB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -427,15 +445,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7XU74H895V;
+				DEVELOPMENT_TEAM = M5P4CU52TD;
 				INFOPLIST_FILE = "lemage-example/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "cn.lemonit.lemage-example";
+				PRODUCT_BUNDLE_IDENTIFIER = "cn.lemonit.lemage-example-wwg";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -444,15 +465,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 7XU74H895V;
+				DEVELOPMENT_TEAM = M5P4CU52TD;
 				INFOPLIST_FILE = "lemage-example/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "cn.lemonit.lemage-example";
+				PRODUCT_BUNDLE_IDENTIFIER = "cn.lemonit.lemage-example-wwg";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -509,7 +533,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -564,7 +588,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -576,10 +600,10 @@
 		52BDF46120CE10130072FEF1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 7XU74H895V;
+				DEVELOPMENT_TEAM = M5P4CU52TD;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -591,8 +615,9 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = cn.lemonit.lemage;
+				PRODUCT_BUNDLE_IDENTIFIER = "cn.lemonit.lemage-wwg";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -601,10 +626,10 @@
 		52BDF46220CE10130072FEF1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 7XU74H895V;
+				DEVELOPMENT_TEAM = M5P4CU52TD;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -616,8 +641,9 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = cn.lemonit.lemage;
+				PRODUCT_BUNDLE_IDENTIFIER = "cn.lemonit.lemage-wwg";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

@@ -31,7 +31,6 @@
         
         [self.view addSubview:self.scrollView];
         self.imageView = [[UIImageView alloc] init];
-        self.imageView.image = [UIImage imageNamed:@"1.jpg"];
         self.imageView.contentMode = UIViewContentModeScaleAspectFit;
         [self.scrollView addSubview:self.imageView];
     }
@@ -90,10 +89,10 @@
 - (void)viewWillLayoutSubviews{
     [super viewWillLayoutSubviews];
     self.scrollView.frame = self.view.frame;
-    if (self.imageView.image) {
-        [self setImageFrame];
-        [self initScrollview];
-    }
+
+    [self setImageFrame];
+    [self initScrollview];
+    [self matchImageViewCenter];
  
 }
 

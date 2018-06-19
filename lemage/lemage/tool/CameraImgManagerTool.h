@@ -10,7 +10,7 @@
 #import <Photos/Photos.h>
 #import "MediaAssetModel.h"
 @interface CameraImgManagerTool : NSObject
-
++ (void)requestPhotosLibraryAuthorization:(void(^)(BOOL ownAuthorization))handler;
 /**
  获取所有相册的图片
 
@@ -41,4 +41,13 @@
  @return 返回的图片
  */
 + (NSData *)compressImageSize:(NSData *)imageData toKB:(NSUInteger)maxLength;
+
+/**
+ 压缩图片到指定的size
+
+ @param imageData 图片data
+ @param size 图片
+ @return 指定size图片
+ */
++ (UIImage *)compressImageSize:(NSData *)imageData toSize:(CGSize)size;
 @end

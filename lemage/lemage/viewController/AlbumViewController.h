@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^ImgIDBlock)(NSArray *localIdArr);
+
 @interface AlbumViewController : UIViewController
 
 /**
@@ -19,4 +21,6 @@
  @brief 是否显示原图按钮
  */
 @property (nonatomic, assign) BOOL hideOriginal;
+
+@property(nonatomic,copy) ImgIDBlock imgIDBlock;
 @end
