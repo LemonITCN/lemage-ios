@@ -285,6 +285,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     if (collectionView == _collection) {
         if (_mediaAssetArray.count) {
+            [self dismissAlbumCollection];
             BrowseImageController *tempVC = [[BrowseImageController alloc] init];
             tempVC.mediaAssetArray =_mediaAssetArray;
             tempVC.localIdentifierArr = _localIdentifierArr;

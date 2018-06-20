@@ -67,9 +67,6 @@
     }
     
 }
-- (void)viewWillLayoutSubviews{
-    NSLog(@"1");
-}
 
 
 

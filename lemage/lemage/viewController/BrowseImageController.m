@@ -269,11 +269,11 @@
     if(_selectedImgArr.count>0){
         [_finishBtn setTitle:[NSString stringWithFormat:@"完成(%ld)",_selectedImgArr.count] forState:UIControlStateNormal];
         _finishBtn.userInteractionEnabled = YES;
-        _finishBtn.alpha = 1;
+        _finishBtn.alpha = _finishBtn.alpha==0?0:1;
     }else{
         [_finishBtn setTitle:@"完成" forState:UIControlStateNormal];
         _finishBtn.userInteractionEnabled = NO;
-        _finishBtn.alpha = 0.6;
+        _finishBtn.alpha = _finishBtn.alpha==0?0:0.6;
     }
     
     
@@ -383,7 +383,6 @@
         _finishBtn.alpha = 1;
         _backBtn.frame = CGRectMake(0, _titleBarBGView.frame.size.height-34, 40,24);
     }
-    NSLog(@"123");
 }
 
 /*
