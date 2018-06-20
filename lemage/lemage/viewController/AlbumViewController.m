@@ -123,7 +123,7 @@
     
     _mediaAssetArray = [NSMutableArray arrayWithArray:[CameraImgManagerTool getAllImages]];
     for (MediaAssetModel *tempModel in _mediaAssetArray) {
-        [_localIdentifierArr addObject:tempModel.localIdentifier];
+        [_localIdentifierArr addObject:[NSString stringWithFormat:@"lemage://album/local/%@",tempModel.localIdentifier]];
     }
     [self.collection reloadData];
 

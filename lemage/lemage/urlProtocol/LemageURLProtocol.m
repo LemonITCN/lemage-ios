@@ -8,13 +8,15 @@
 
 #import "LemageURLProtocol.h"
 #import "LemageUrlInfo.h"
-
+#import "Lemage.h"
 @implementation LemageURLProtocol
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
+    NSLog(@"%@",request.URL);
     if ([request.URL.scheme caseInsensitiveCompare: LEMAGE] == NSOrderedSame) {
         return YES;
     }
+    
     if ([NSURLProtocol propertyForKey: LEMAGE inRequest:request]) {
         // 处理后的request会打上LEMAGE标记，在这里判断一下，如果打过标记的request会放过，防止死循环
         return NO;
@@ -26,6 +28,13 @@
     NSMutableURLRequest* request = self.request.mutableCopy;
     [NSURLProtocol setProperty:@YES forKey: LEMAGE inRequest:request];
     if ([request.URL.scheme caseInsensitiveCompare: LEMAGE] == NSOrderedSame) {
+        __block typeof(self) weakSelf = self;
+        [Lemage loadImageDataByLemageUrl:request.URL.absoluteString complete:^(NSData * _Nonnull imageData) {
+            NSURLResponse* response = [[NSURLResponse alloc] initWithURL:weakSelf.request.URL MIMEType:@"image/png" expectedContentLength:imageData.length textEncodingName:nil];
+            [weakSelf.client URLProtocol:weakSelf didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageAllowed];
+            [weakSelf.client URLProtocol:weakSelf didLoadData:imageData];
+            [weakSelf.client URLProtocolDidFinishLoading:weakSelf];
+        }];
         
     }
     else {

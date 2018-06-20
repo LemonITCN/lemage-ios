@@ -7,7 +7,8 @@
 //
 
 #import "AppDelegate.h"
-
+#import "LemageURLProtocol.h"
+#import "NSUrlProtocol+Lemage.h"
 @interface AppDelegate ()
 
 @end
@@ -18,16 +19,19 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    NSString *lemageUrl = @"lemage://album/local/AA39A4B6-8777-424F-963E-3E40583C8971/L0/001";
-    NSArray<NSString *> *strItems = [lemageUrl componentsSeparatedByString: @"/"];
-    NSInteger prefixLength = 0;
-    for (NSInteger index = 0; index < 4; index ++) {
-        prefixLength += (strItems[index].length + 1);
-    }
-    NSString *tag = [lemageUrl substringFromIndex: prefixLength];
-    NSLog(@"%@" , tag);
-    NSLog(@"%@" , [@"" componentsSeparatedByString: @"/"]);
-    NSDictionary<NSString *,NSString *> *dic = nil;
+//    NSString *lemageUrl = @"lemage://album/local/AA39A4B6-8777-424F-963E-3E40583C8971/L0/001";
+//    NSArray<NSString *> *strItems = [lemageUrl componentsSeparatedByString: @"/"];
+//    NSInteger prefixLength = 0;
+//    for (NSInteger index = 0; index < 4; index ++) {
+//        prefixLength += (strItems[index].length + 1);
+//    }
+//    NSString *tag = [lemageUrl substringFromIndex: prefixLength];
+//    NSLog(@"%@" , tag);
+//    NSLog(@"%@" , [@"" componentsSeparatedByString: @"/"]);
+//    NSDictionary<NSString *,NSString *> *dic = nil;
+    [NSURLProtocol registerClass:[LemageURLProtocol class]];
+    [NSURLProtocol registerToWKWebviewWithScheme:@"lemage"];
+    
     return YES;
 }
 
