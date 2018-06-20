@@ -10,7 +10,7 @@
 #import "AlbumViewController.h"
 #import "CameraImgManagerTool.h"
 #import "BrowseImageController.h"
-@interface ViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface ViewController ()
 @property (nonatomic, strong)NSArray *imgArr;
 @property (nonatomic, strong)UITextView *tempTextView;
 @end
@@ -33,7 +33,7 @@
     previewBtn.frame =CGRectMake(0, 0, 100, 50);
     previewBtn.center = CGPointMake(self.view.center.x/2*3, 75);
     [previewBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [previewBtn setTitle:@"选择照片" forState:UIControlStateNormal];
+    [previewBtn setTitle:@"预览照片" forState:UIControlStateNormal];
     [self.view addSubview:previewBtn];
     [previewBtn addTarget:self action:@selector(previewImg:) forControlEvents:UIControlEventTouchUpInside];
     

@@ -20,16 +20,17 @@
 @end
 @interface BrowseImageController : UIViewController
 /**
- @brief 最大选择照片数量
+ @brief 最大选择照片数量(为空时认为是不带有选择的预览)
  */
 @property (nonatomic, assign) NSUInteger restrictNumber;
-//@property (nonatomic, strong) UICollectionView *collection;
 /**
  @brief MediaAssetModel数组
  */
 @property (nonatomic, strong) NSMutableArray <MediaAssetModel *>*mediaAssetArray;
+/**
+ @brief asset的localID数组
+ */
 @property (nonatomic, strong) NSMutableArray *localIdentifierArr;
-//@property (nonatomic, assign) NSUInteger selectedCount;
 /**
  @brief 已选择的图片MediaAssetModel
  */

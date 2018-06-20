@@ -256,8 +256,12 @@
     
     if(_selectedImgArr.count>0){
         [_finishBtn setTitle:[NSString stringWithFormat:@"完成(%ld)",_selectedImgArr.count] forState:UIControlStateNormal];
+        _finishBtn.userInteractionEnabled = YES;
+        _finishBtn.alpha = 1;
     }else{
         [_finishBtn setTitle:@"完成" forState:UIControlStateNormal];
+        _finishBtn.userInteractionEnabled = NO;
+        _finishBtn.alpha = 0.6;
     }
     
     
@@ -301,6 +305,7 @@
     _finishBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_finishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_finishBtn setTitle:@"完成" forState:UIControlStateNormal];
+    
     _finishBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     [_finishBtn setBackgroundColor: [UIColor colorWithRed:112/255.0 green:198/255.0 blue:17/255.0 alpha:1/1.0]];
     _finishBtn.frame = CGRectMake(0, 0, 160, 45);
