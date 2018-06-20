@@ -18,6 +18,11 @@
 @property ZoomViewController *leftVC;
 @property ZoomViewController *middleVC;
 @property ZoomViewController *rightVC;
+
+/**
+ 动画是否在执行
+ */
+@property BOOL isAnimate;
 /**
  @brief 标题Bar
  */
@@ -154,11 +159,18 @@
 
 - (void)showOrHideBar:(UITapGestureRecognizer *)tap{
     __weak typeof(self) weakSelf = self;
-    [UIView animateWithDuration:0.2 animations:^{
-        weakSelf.titleBarBGView.alpha = 1-weakSelf.titleBarBGView.alpha;
-        weakSelf.titleBarBGView.frame = CGRectMake(0, -64-weakSelf.titleBarBGView.frame.origin.y, weakSelf.titleBarBGView.frame.size.width, 64);
-        weakSelf.finishBtn.alpha = 1-weakSelf.finishBtn.alpha;
-    }];
+    if (!_isAnimate) {
+        _isAnimate = YES;
+        [UIView animateWithDuration:0.2 animations:^{
+            weakSelf.titleBarBGView.alpha = 1-weakSelf.titleBarBGView.alpha;
+            CGSize size = self.view.frame.size;
+            weakSelf.titleBarBGView.frame=CGRectMake(0, -(size.width>size.height?44:KIsiPhoneX?84:64)-weakSelf.titleBarBGView.frame.origin.y, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
+            weakSelf.finishBtn.alpha = weakSelf.finishBtn.alpha>0?0:(weakSelf.selectedImgArr.count > 0?1:0.6);
+        } completion:^(BOOL finished) {
+            weakSelf.isAnimate = NO;
+        }];
+    }
+    
     
 }
 
@@ -360,15 +372,18 @@
 
 
 - (void)viewWillLayoutSubviews{
-    CGSize size = self.view.frame.size;
-    _titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
-    _titleBarBGView.alpha = 1;
-    _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-20, _titleBarBGView.frame.size.height-22);
-    _titleLabel.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);
-    _finishBtn.center = CGPointMake(size.width/2, size.height-40);
-    _finishBtn.alpha = 1;
-    _backBtn.frame = CGRectMake(0, _titleBarBGView.frame.size.height-34, 40,24);
-    
+    if (!_isAnimate) {
+        
+        CGSize size = self.view.frame.size;
+        _titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
+        _titleBarBGView.alpha = 1;
+        _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-20, _titleBarBGView.frame.size.height-22);
+        _titleLabel.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);
+        _finishBtn.center = CGPointMake(size.width/2, size.height-40);
+        _finishBtn.alpha = 1;
+        _backBtn.frame = CGRectMake(0, _titleBarBGView.frame.size.height-34, 40,24);
+    }
+    NSLog(@"123");
 }
 
 /*

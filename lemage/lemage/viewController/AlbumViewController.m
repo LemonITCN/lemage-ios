@@ -392,18 +392,18 @@
 
 
 - (void)createFunctionView{
-    UIView *functionBGView = [[UIView alloc] init];
+    _functionBGView = [[UIView alloc] init];
     if (_hideOriginal) {
-        functionBGView.frame = CGRectMake(0, self.view.frame.size.height-60, 240, 45);
+        _functionBGView.frame = CGRectMake(0, self.view.frame.size.height-60, 240, 45);
     }else{
-        functionBGView.frame = CGRectMake(0, self.view.frame.size.height-60, 360, 45);
+        _functionBGView.frame = CGRectMake(0, self.view.frame.size.height-60, 360, 45);
     }
-    functionBGView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
-    functionBGView.layer.cornerRadius = 22.5;
-    functionBGView.layer.masksToBounds = YES;
-    functionBGView.center = CGPointMake(self.view.center.x, self.view.frame.size.height-60);
-    [self.view addSubview:functionBGView];
-    [self.view bringSubviewToFront:functionBGView];
+    _functionBGView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
+    _functionBGView.layer.cornerRadius = 22.5;
+    _functionBGView.layer.masksToBounds = YES;
+    _functionBGView.center = CGPointMake(self.view.center.x, self.view.frame.size.height-60);
+    [self.view addSubview:_functionBGView];
+    [self.view bringSubviewToFront:_functionBGView];
     
     
     
@@ -417,7 +417,7 @@
     [_previewBtn setTintColor:[UIColor whiteColor]];
     _previewBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     [_previewBtn addTarget:self action:@selector(previewImg:) forControlEvents:UIControlEventTouchUpInside];
-    [functionBGView addSubview:_previewBtn];
+    [_functionBGView addSubview:_previewBtn];
     
     _originalImageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _originalImageBtn.selected = NO;
@@ -429,18 +429,18 @@
     [_originalImageBtn setImageEdgeInsets:UIEdgeInsetsMake(5, _originalImageBtn.imageEdgeInsets.left, 5,5)];
     _originalImageBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     [_originalImageBtn addTarget:self action:@selector(useOriginalImage:) forControlEvents:UIControlEventTouchUpInside];
-    [functionBGView addSubview:_originalImageBtn];
+    [_functionBGView addSubview:_originalImageBtn];
     
     _finishBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_finishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_finishBtn setTitle:@"完成" forState:UIControlStateNormal];
     [_finishBtn setBackgroundColor:[UIColor colorWithRed:94/255.0 green:170/255.0 blue:6/255.0 alpha:1/1.0]];
     _finishBtn.titleLabel.font = [UIFont systemFontOfSize:16];
-    _finishBtn.frame = CGRectMake(functionBGView.frame.size.width-120, 0, 120, 45);
+    _finishBtn.frame = CGRectMake(_functionBGView.frame.size.width-120, 0, 120, 45);
     _finishBtn.userInteractionEnabled=NO;//交互关闭
     _finishBtn.alpha=0.6;//透明度
     [_finishBtn addTarget:self action:@selector(finishSelectedImg: ) forControlEvents:UIControlEventTouchUpInside];
-    [functionBGView addSubview:_finishBtn];
+    [_functionBGView addSubview:_finishBtn];
 }
 
 - (void)finishSelectedImg:(UIButton *)btn{
