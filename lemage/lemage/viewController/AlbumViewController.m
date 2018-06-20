@@ -157,7 +157,7 @@
         layout.minimumLineSpacing = gap;
         layout.minimumInteritemSpacing = gap;
         layout.sectionInset = UIEdgeInsetsMake(gap, gap, gap, gap);
-        CGFloat itemWH = ([UIScreen mainScreen].bounds.size.width - gap * 5) / 4;
+        CGFloat itemWH = ((self.view.frame.size.width>self.view.frame.size.height?self.view.frame.size.height:self.view.frame.size.width) - gap * 5) / 4;
         layout.itemSize = CGSizeMake(itemWH, itemWH);
         
         
@@ -536,7 +536,7 @@
         layout.minimumLineSpacing = gap;
         layout.minimumInteritemSpacing = gap;
         layout.sectionInset = UIEdgeInsetsMake(0, gap, 0, gap);
-        CGFloat itemWH = self.view.frame.size.width/4-50/4;
+        CGFloat itemWH = (self.view.frame.size.width>self.view.frame.size.height?self.view.frame.size.height:self.view.frame.size.width)/4-50/4;
         CGRect rect = CGRectMake(0.0,64, [UIScreen mainScreen].bounds.size.width, itemWH+30 );
         
         layout.itemSize = CGSizeMake(itemWH, itemWH+20);
@@ -567,7 +567,9 @@
         self.isAnimate = YES;
         __weak typeof(self) weakSelf = self;
         [UIView animateWithDuration:0.4 animations:^{
-            weakSelf.albumCollection.frame = CGRectMake(0, -weakSelf.view.frame.size.width/4-50/4+30, weakSelf.albumCollection.frame.size.width, weakSelf.view.frame.size.width/4-50/4+30);
+            CGSize size = self.view.frame.size;
+            CGFloat itemWH = size.width>size.height?(size.height/4-50/4):(size.width/4-50/4);
+            weakSelf.albumCollection.frame = CGRectMake(0, -itemWH+30-64, weakSelf.albumCollection.frame.size.width, weakSelf.albumCollection.frame.size.height);
             weakSelf.albumCollection.alpha = 0;
             [weakSelf.titleBtn setImage:[[DrawingSingle shareDrawingSingle] getTriangleSize:CGSizeMake(16, 16) color:[UIColor whiteColor] positive:YES] forState:UIControlStateNormal];
         } completion:^(BOOL finished) {
@@ -588,7 +590,8 @@
         __weak typeof(self) weakSelf = self;
         [UIView animateWithDuration:0.4 animations:^{
             [weakSelf.albumCollection scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:weakSelf.selectedAlbumIndex inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
-            weakSelf.albumCollection.frame = CGRectMake(0, 64, weakSelf.albumCollection.frame.size.width, weakSelf.view.frame.size.width/4-50/4+30);
+            
+            weakSelf.albumCollection.frame = CGRectMake(0, weakSelf.titleBarBGView.frame.size.height, weakSelf.albumCollection.frame.size.width, weakSelf.albumCollection.frame.size.height);
             weakSelf.albumCollection.alpha = 1;
             
             [weakSelf.titleBtn setImage:[[DrawingSingle shareDrawingSingle] getTriangleSize:CGSizeMake(16, 16) color:[UIColor whiteColor] positive:NO] forState:UIControlStateNormal];
@@ -609,17 +612,21 @@
     [_collection reloadData];
 }
 - (void)viewWillLayoutSubviews{
-    CGSize size = self.view.frame.size;
-    _titleBarBGView.frame = CGRectMake(0, 0, size.width, size.width>size.height?44:KIsiPhoneX?84:64);
-    _cancelBtn.frame = CGRectMake(_titleBarBGView.frame.size.width-80, _titleBarBGView.frame.size.height-34, 80, 24);
-    _titleBtn.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);
-    _collection.frame = CGRectMake(0, 0, size.width, size.height);
     
-    CGFloat itemWH = size.width>size.height?(size.height/4-50/4):(size.width/4-50/4);
-    CGRect rect = CGRectMake(0.0,-itemWH+30-64, size.width, itemWH+30 );
-    _albumCollection.frame = rect;
-    _albumCollection.alpha = 0;
-    _functionBGView.center = CGPointMake(size.width/2, size.height-60);
+    
+    if (!_isAnimate) {
+        CGSize size = self.view.frame.size;
+        _titleBarBGView.frame = CGRectMake(0, 0, size.width, size.width>size.height?44:KIsiPhoneX?84:64);
+        _cancelBtn.frame = CGRectMake(_titleBarBGView.frame.size.width-80, _titleBarBGView.frame.size.height-34, 80, 24);
+        _titleBtn.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);
+        _collection.frame = CGRectMake(0, 0, size.width, size.height);
+        CGFloat itemWH = size.width>size.height?(size.height/4-50/4):(size.width/4-50/4);
+        CGRect rect = CGRectMake(0.0,-itemWH+30-64, size.width, itemWH+30 );
+        _albumCollection.frame = rect;
+        _albumCollection.alpha = 0;
+        _functionBGView.center = CGPointMake(size.width/2, size.height-60);
+    }
+    
 }
 
 #pragma mark - Getters
