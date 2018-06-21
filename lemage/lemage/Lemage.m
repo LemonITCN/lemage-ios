@@ -71,8 +71,10 @@
             PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[urlInfo.tag] options:nil][0];
             if(asset){
                 [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-                    
+                    if (complete) {
                         complete(imageData);
+                    }
+                    
                     
                 }];
             }else{

@@ -212,19 +212,18 @@
         imageView.image = assetModel.imageClear;
         [viewController setImageFrame];
     }else{
-//        [CameraImgManagerTool fetchCostumMediaAssetModel:assetModel localIdentifier:_localIdentifierArr[index] handler:^(NSData *imageData) {
-//            imageView.image = nil;
-//            imageView.image = [UIImage imageWithData:imageData];
-//            [viewController setImageFrame];
-//        }];
-//        NSLog(@"%@",_localIdentifierArr[index]);
         imageView.image = nil;
-        NSURL *url = [NSURL URLWithString:_localIdentifierArr[index]];// 获取的图片地址
-        NSData *data = [NSData dataWithContentsOfURL:url];
-        UIImage *image = [UIImage imageWithData: data]; // 根据地址取出图片
-        imageView.image=image;
-        assetModel.imageClear = image;
-        [viewController setImageFrame];
+        NSURL *url = [NSURL URLWithString:_localIdentifierArr[index]];
+        dispatch_queue_t queue =dispatch_queue_create("loadImage",NULL);
+        dispatch_async(queue, ^{
+            NSData *resultData = [NSData dataWithContentsOfURL:url];
+            UIImage *img = [UIImage imageWithData:resultData];
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                imageView.image = img;
+                assetModel.imageClear = img;
+                [viewController setImageFrame];
+            });
+        });
     }
   
     

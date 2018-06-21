@@ -9,6 +9,7 @@
 #import "LemageURLProtocol.h"
 #import "LemageUrlInfo.h"
 #import "Lemage.h"
+#import <Photos/Photos.h>
 @implementation LemageURLProtocol
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
@@ -23,23 +24,35 @@
     }
     return NO;
 }
++ (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request {
+    return request;
+}
 
 - (void)startLoading{
     NSMutableURLRequest* request = self.request.mutableCopy;
     [NSURLProtocol setProperty:@YES forKey: LEMAGE inRequest:request];
     if ([request.URL.scheme caseInsensitiveCompare: LEMAGE] == NSOrderedSame) {
         __block typeof(self) weakSelf = self;
-        [Lemage loadImageDataByLemageUrl:request.URL.absoluteString complete:^(NSData * _Nonnull imageData) {
-            NSURLResponse* response = [[NSURLResponse alloc] initWithURL:weakSelf.request.URL MIMEType:@"image/png" expectedContentLength:imageData.length textEncodingName:nil];
-            [weakSelf.client URLProtocol:weakSelf didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageAllowed];
-            [weakSelf.client URLProtocol:weakSelf didLoadData:imageData];
-            [weakSelf.client URLProtocolDidFinishLoading:weakSelf];
-        }];
-        
+        LemageUrlInfo *urlInfo = [[LemageUrlInfo alloc]initWithLemageUrl:request.URL.absoluteString];
+        PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[urlInfo.tag] options:nil][0];
+        if(asset){
+            [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                
+                NSData *data = imageData;
+                NSURLResponse* response = [[NSURLResponse alloc] initWithURL:weakSelf.request.URL MIMEType:@"image/png" expectedContentLength:data.length textEncodingName:nil];
+                
+                [weakSelf.client URLProtocol:weakSelf didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageAllowed];
+                [weakSelf.client URLProtocol:weakSelf didLoadData:data];
+                [weakSelf.client URLProtocolDidFinishLoading:weakSelf];
+                
+            }];
+        }
     }
     else {
         
     }
+}
+- (void)stopLoading {
 }
 
 /**
