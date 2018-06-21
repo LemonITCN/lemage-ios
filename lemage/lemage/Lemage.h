@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LemageUsageText.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,6 +20,20 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL isOriginal);
 
 @interface Lemage : NSObject
+
+/**
+ 设置全局文本
+
+ @param usageText 全局文本对象
+ */
++ (void)setUsageText: (LemageUsageText *)usageText;
+
+/**
+ 获取当前的全局文本对象
+
+ @return 当前使用中的全局文本对象
+ */
++ (LemageUsageText *)getUsageText;
 
 /**
  启动Lemage
@@ -117,7 +132,7 @@ typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
                    chooseImageUrlArr: (NSArray<NSString *> *)chooseImageUrlArr
                      allowChooseCount: (NSInteger)allowChooseCount
                             showIndex: (NSInteger)showIndex
-                           themeColor: (UIColor *) themeColor
+                           themeColor: (UIColor *)themeColor
                             willClose: (LEMAGE_RESULT_BLOCK)willClose
                                closed: (LEMAGE_RESULT_BLOCK)closed;
 
