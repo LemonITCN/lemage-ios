@@ -37,14 +37,12 @@
     }else{
         fileName = @"short";
     }
-    NSString *filePath = [NSString  stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),fileName];
+    
+    NSString *key = [self randomStringWithLength:16];
+    NSString *filePath = [NSString  stringWithFormat:@"/private/%@/img/%@/%@.data",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,fileName,key];
     if([self creatFileWithPath:filePath]){
-
-        NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:filePath]?[NSMutableDictionary dictionaryWithContentsOfFile:filePath]:[NSMutableDictionary new];
         //写入内容
-        NSString *key = [self randomStringWithLength:16];
-        [tempImgDic setObject:UIImageJPEGRepresentation(image, 0.8) forKey:key];
-        [tempImgDic writeToFile:filePath atomically:YES];
+        [UIImageJPEGRepresentation(image, 1) writeToFile:filePath atomically:YES];
         return [NSString stringWithFormat:@"lemage://sandbox/%@/%@",fileName,key];
     }
     return nil;
@@ -64,9 +62,7 @@
     LemageUrlInfo *urlInfo = [[LemageUrlInfo alloc]initWithLemageUrl:lemageUrl];
     if (urlInfo) {
         if ([urlInfo.source isEqualToString:@"sandbox"]) {
-            NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),urlInfo.type]];
-            
-                complete(tempImgDic[urlInfo.tag]);
+                complete([NSData dataWithContentsOfFile:[NSString  stringWithFormat:@"/private/%@/img/%@/%@.data",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,urlInfo.type,urlInfo.tag]]);
             
         }else{
             PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[urlInfo.tag] options:nil][0];
@@ -102,9 +98,8 @@
     LemageUrlInfo *urlInfo = [[LemageUrlInfo alloc]initWithLemageUrl:lemageUrl];
     if (urlInfo) {
         if ([urlInfo.source isEqualToString:@"sandbox"]) {
-            NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),urlInfo.type]];
-            ;
-            complete([CameraImgManagerTool compressImageSize:tempImgDic[urlInfo.tag] toSize:size]);
+            
+            complete([CameraImgManagerTool compressImageSize:[NSData dataWithContentsOfFile:[NSString  stringWithFormat:@"/private/%@/img/%@/%@.data",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,urlInfo.type,urlInfo.tag]] toSize:size]);
         }else{
             PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[urlInfo.tag] options:nil][0];
             if(asset){
@@ -124,7 +119,7 @@
  原理：删除所有本地长期LemageURL对应的沙盒图片文件
  */
 + (void)expiredAllLongTermUrl {
-    NSString *filePath = [NSString stringWithFormat:@"%@img/long",NSTemporaryDirectory()];
+    NSString *filePath = [NSString  stringWithFormat:@"/private/%@/img/long",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtPath:filePath error:nil];
 }
@@ -134,7 +129,7 @@
  原理：删除所有本地短期LemageURL对应的沙盒图片文件
  */
 + (void)expiredAllShortTermUrl {
-    NSString *filePath = [NSString stringWithFormat:@"%@img/short",NSTemporaryDirectory()];
+    NSString *filePath = [NSString  stringWithFormat:@"/private/%@/img/short",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtPath:filePath error:nil];
 }
@@ -150,9 +145,9 @@
     LemageUrlInfo *urlInfo = [[LemageUrlInfo alloc]initWithLemageUrl:lemageUrl];
     if (urlInfo) {
          if ([urlInfo.source isEqualToString:@"sandbox"]) {
-             NSMutableDictionary *tempImgDic = [NSMutableDictionary dictionaryWithContentsOfFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),urlInfo.type]];
-             [tempImgDic removeObjectForKey:urlInfo.tag];
-             [tempImgDic writeToFile:[NSString stringWithFormat:@"%@img/%@/imgBinary.plist",NSTemporaryDirectory(),urlInfo.type] atomically:YES];
+             NSString *filePath = [NSString  stringWithFormat:@"/private/%@/img/%@/%@.data",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,urlInfo.type,urlInfo.tag];
+             NSFileManager *fileManager = [NSFileManager defaultManager];
+             [fileManager removeItemAtPath:filePath error:nil];
          }else{
              PHFetchResult *pAsset = [PHAsset fetchAssetsWithLocalIdentifiers:@[urlInfo.tag] options:nil];
              if (pAsset) {
@@ -247,14 +242,14 @@
  启动图片预览器
  
  @param imageUrlArr 要预览的图片URL数组，如果对象为nil或数组为空，那么拒绝显示图片预览器
- @param choosedImageUrlArr 已经选择的图片Url数组
- @param allowChooseCount 允许选择的图片数量，如果传<=0的数，表示关闭选择功能（选择器右上角是否有选择按钮），如果允许选择数量大于choosedImageUrlArr数组元素数量，那么会截取choosedImageUrlArr中的数组前allowChooseCount个元素作为已选择图片
+ @param chooseImageUrlArr 已经选择的图片Url数组
+ @param allowChooseCount 允许选择的图片数量，如果传<=0的数，表示关闭选择功能（选择器右上角是否有选择按钮），如果允许选择数量大于chooseImageUrlArr数组元素数量，那么会截取chooseImageUrlArr中的数组前allowChooseCount个元素作为已选择图片
  @param themeColor 主题颜色，这个颜色会作为完成按钮、选择顺序标识的背景色
  @param willClose 当界面即将被关闭的时候的回调函数，若用户在选择器中点击了关闭按钮，那么回调函数中的imageUrlList为nil
  @param closed 当界面已经全部关闭的时候的回调函数，回调函数中的参数与willClose中的参数完全一致
  */
 + (void)startPreviewerWithImageUrlArr: (NSArray<NSString *> *)imageUrlArr
-                   choosedImageUrlArr: (NSArray<NSString *> *)choosedImageUrlArr
+                   chooseImageUrlArr: (NSArray<NSString *> *)chooseImageUrlArr
                      allowChooseCount: (NSInteger)allowChooseCount
                             showIndex: (NSInteger)showIndex
                            themeColor: (UIColor *) themeColor
@@ -262,7 +257,7 @@
                                closed: (LEMAGE_RESULT_BLOCK)closed{
     BrowseImageController *VC = [[BrowseImageController alloc] init];
     VC.localIdentifierArr = [NSMutableArray arrayWithArray:imageUrlArr];
-    VC.selectedImgArr = [NSMutableArray arrayWithArray:choosedImageUrlArr];
+    VC.selectedImgArr = [NSMutableArray arrayWithArray:chooseImageUrlArr];
     VC.restrictNumber = allowChooseCount;
     VC.themeColor = themeColor;
     VC.showIndex = showIndex;

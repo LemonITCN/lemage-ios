@@ -60,7 +60,7 @@
 
 - (void)previewImg:(UIButton *)btn{
     if (self.imgArr.count>0) {
-        [Lemage startPreviewerWithImageUrlArr:_imgArr choosedImageUrlArr:_imgArr allowChooseCount:5 showIndex:0 themeColor:[UIColor greenColor] willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+        [Lemage startPreviewerWithImageUrlArr:_imgArr chooseImageUrlArr:_imgArr allowChooseCount:5 showIndex:0 themeColor:[UIColor greenColor] willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
             NSLog(@"preview willClose = %@",imageUrlList);
         } closed:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
             NSLog(@"preview closed = %@",imageUrlList);

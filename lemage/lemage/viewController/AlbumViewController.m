@@ -286,7 +286,7 @@
         if (_mediaAssetArray.count) {
             [self dismissAlbumCollection];
             
-            [Lemage startPreviewerWithImageUrlArr:_localIdentifierArr choosedImageUrlArr:_selectedImgArr allowChooseCount:_restrictNumber showIndex:indexPath.row themeColor:_themeColor willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+            [Lemage startPreviewerWithImageUrlArr:_localIdentifierArr chooseImageUrlArr:_selectedImgArr allowChooseCount:_restrictNumber showIndex:indexPath.row themeColor:_themeColor willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
                 self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
                 if(self.willClose){
                     self.willClose(self.selectedImgArr, self.originalImageBtn.selected);
@@ -475,7 +475,7 @@
  */
 - (void)previewImg:(UIButton *)btn{
 
-    [Lemage startPreviewerWithImageUrlArr:_selectedImgArr choosedImageUrlArr:_selectedImgArr allowChooseCount:_selectedImgArr.count showIndex:0 themeColor:_themeColor willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+    [Lemage startPreviewerWithImageUrlArr:_selectedImgArr chooseImageUrlArr:_selectedImgArr allowChooseCount:_selectedImgArr.count showIndex:0 themeColor:_themeColor willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
         self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
         if (self.willClose) {
             self.willClose(self.selectedImgArr, self.originalImageBtn.selected);
