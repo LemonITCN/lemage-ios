@@ -105,10 +105,6 @@
     [self setSelectedButtonTitle:_showIndex];
 }
 
-- (void)viewWillDisappear:(BOOL)animated{
-    [self.delegate sendSelectedImgArr:_selectedImgArr];
-}
-
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
@@ -266,7 +262,7 @@
     if ([_selectedImgArr containsObject:self.localIdentifierArr[index]]) {
         [_selectButton setTitle:[NSString stringWithFormat:@"%ld",[_selectedImgArr indexOfObject:self.localIdentifierArr[index]]+1] forState:UIControlStateNormal];
         _selectButton.layer.borderWidth = 0;
-        [_selectButton setBackgroundColor:[UIColor colorWithRed:107/255.0 green:192/255.0 blue:28/255.0 alpha:1]];
+        [_selectButton setBackgroundColor:_themeColor];
     }else{
         _selectButton.layer.borderWidth = 2;
         [_selectButton setTitle:@"" forState:UIControlStateNormal];
@@ -282,7 +278,7 @@
         _finishBtn.userInteractionEnabled = NO;
         _finishBtn.alpha = _finishBtn.alpha==0?0:0.6;
     }
-    
+    _titleLabel.text = [NSString stringWithFormat:@"%ld/%ld",_showIndex+1,_localIdentifierArr.count];
     
 }
 
@@ -314,7 +310,7 @@
 
     _titleLabel = [[UILabel alloc]init];
     _titleLabel.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, self.view.frame.size.width-160, 24);
-    _titleLabel.text = _titleStr;
+    _titleLabel.text = [NSString stringWithFormat:@"%ld/%ld",_showIndex+1,_localIdentifierArr.count];
     _titleLabel.textColor = [UIColor whiteColor];
     _titleLabel.textAlignment = NSTextAlignmentCenter;
     [_titleBarBGView addSubview:_titleLabel];
@@ -326,20 +322,31 @@
     [_finishBtn setTitle:@"完成" forState:UIControlStateNormal];
     
     _finishBtn.titleLabel.font = [UIFont systemFontOfSize:14];
-    [_finishBtn setBackgroundColor: [UIColor colorWithRed:112/255.0 green:198/255.0 blue:17/255.0 alpha:1/1.0]];
+    [_finishBtn setBackgroundColor: _themeColor];
     _finishBtn.frame = CGRectMake(0, 0, 160, 45);
     _finishBtn.center = CGPointMake(self.view.center.x, self.view.frame.size.height-40);
     _finishBtn.layer.cornerRadius = 22.5;
+    [_finishBtn addTarget:self action:@selector(finishedSelected:) forControlEvents:UIControlEventTouchUpInside];
     [self.view  addSubview:_finishBtn];
     [self.view bringSubviewToFront:_finishBtn];
 }
 
-- (void)back:(UIButton *)btn{
-    if (self.presentingViewController) {
-        [self dismissViewControllerAnimated:YES completion:nil];
-    } else {
-        [self.navigationController popViewControllerAnimated:YES];
+- (void)finishedSelected:(UIButton *)btn{
+    if (self.willClose) {
+        self.willClose([NSArray arrayWithArray:_selectedImgArr], NO);
     }
+    
+    [self.presentingViewController.presentingViewController?self.presentingViewController.presentingViewController:self dismissViewControllerAnimated:YES completion:^{
+        if (self.closed) {
+            self.closed(self.selectedImgArr, NO);
+        }
+    }];
+}
+
+- (void)back:(UIButton *)btn{
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+
     
 }
 

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-typedef void(^ImgIDBlock)(NSArray *localIdArr);
+typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL isOriginal);
 
 @interface AlbumViewController : UIViewController
 
@@ -22,5 +22,8 @@ typedef void(^ImgIDBlock)(NSArray *localIdArr);
  */
 @property (nonatomic, assign) BOOL hideOriginal;
 
-@property(nonatomic,copy) ImgIDBlock imgIDBlock;
+@property(nonatomic,copy) LEMAGE_RESULT_BLOCK willClose;
+@property(nonatomic,copy) LEMAGE_RESULT_BLOCK closed;
+
+@property (nonatomic, strong) UIColor *themeColor;
 @end

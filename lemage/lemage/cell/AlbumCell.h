@@ -16,4 +16,5 @@
 @property (nonatomic, strong) UIButton *selectButton;
 @property (nonatomic, strong) void (^selectedBlock)(BOOL selected);
 @property (nonatomic, strong) MediaAssetModel *assetModel;
+@property (nonatomic, strong) UIColor *themeColor;
 @end

@@ -10,6 +10,7 @@
 #import "AlbumViewController.h"
 #import "CameraImgManagerTool.h"
 #import "BrowseImageController.h"
+#import "Lemage.h"
 @interface ViewController ()
 @property (nonatomic, strong)NSArray *imgArr;
 @property (nonatomic, strong)UITextView *tempTextView;
@@ -47,23 +48,23 @@
 }
 
 - (void)selectedImg:(UIButton *)btn{
-    AlbumViewController *VC = [[AlbumViewController alloc]init];
-    VC.restrictNumber = 0;
-    __block typeof(self) weakSelf = self;
-    VC.imgIDBlock = ^(NSArray *localIdArr) {
-        weakSelf.imgArr = localIdArr;
-        weakSelf.tempTextView.text = [weakSelf.imgArr componentsJoinedByString:@","];
-    };
-    
-    [self presentViewController:VC animated:YES completion:nil];
+    [Lemage startChooserWithMaxChooseCount:5 needShowOriginalButton:YES themeColor:[UIColor redColor] willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+        NSLog(@"willClose = %@",imageUrlList);
+        self.imgArr = [NSArray arrayWithArray:imageUrlList];
+        self.tempTextView.text = [self.imgArr componentsJoinedByString:@","];
+    } closed:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+        self.imgArr = [NSArray arrayWithArray:imageUrlList];
+        NSLog(@"closed = %@",imageUrlList);
+    }];
 }
 
 - (void)previewImg:(UIButton *)btn{
     if (self.imgArr.count>0) {
-        BrowseImageController *vc = [[BrowseImageController alloc] init];
-        vc.selectedImgArr = [NSMutableArray arrayWithArray:self.imgArr];
-        vc.titleStr = @"预览";
-        [self presentViewController:vc animated:YES completion:nil];
+        [Lemage startPreviewerWithImageUrlArr:_imgArr choosedImageUrlArr:_imgArr allowChooseCount:5 showIndex:0 themeColor:[UIColor greenColor] willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+            NSLog(@"preview willClose = %@",imageUrlList);
+        } closed:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+            NSLog(@"preview closed = %@",imageUrlList);
+        }];
     }
     
 }

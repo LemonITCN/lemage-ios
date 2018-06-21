@@ -8,16 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "MediaAssetModel.h"
-@protocol BrowseImageControllerDelegate<NSObject>
 
-/**
- 将选择的数组传递回上一页
- 
- @param selectedArr 数组
- */
-- (void)sendSelectedImgArr:(NSMutableArray *)selectedArr;
+typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL isOriginal);
 
-@end
 @interface BrowseImageController : UIViewController
 /**
  @brief 最大选择照片数量(为空时认为是不带有选择的预览)
@@ -28,17 +21,16 @@
  */
 @property (nonatomic, strong) NSMutableArray <MediaAssetModel *>*mediaAssetArray;
 /**
- @brief asset的localID数组
+ @brief asset的localID数组或网络图片地址数组
  */
 @property (nonatomic, strong) NSMutableArray *localIdentifierArr;
 /**
  @brief 已选择的图片MediaAssetModel
  */
 @property (nonatomic, strong) NSMutableArray *selectedImgArr;
-/**
- @brief 将选择照片的状态传递给首页
- */
-@property (nonatomic, assign) id<BrowseImageControllerDelegate>delegate;
+
+@property(nonatomic,copy) LEMAGE_RESULT_BLOCK willClose;
+@property(nonatomic,copy) LEMAGE_RESULT_BLOCK closed;
 /**
  @brief 当前展示的数组下标
  */
@@ -48,4 +40,5 @@
  @brief title
  */
 @property (nonatomic, strong) NSString *titleStr;
+@property (nonatomic, strong) UIColor *themeColor;
 @end

@@ -17,8 +17,8 @@
 #import "ZoomViewController.h"
 #import "AlbumCell.h"
 #import "DrawingSingle.h"
-
-@interface AlbumViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,BrowseImageControllerDelegate>
+#import "Lemage.h"
+@interface AlbumViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 /**
  @brief 当前显示照片的UICollectionView
  */
@@ -221,12 +221,10 @@
     if (collectionView == _collection) {
         ImageSelectedCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([ImageSelectedCell class]) forIndexPath:indexPath];
         //使用了注册,就不需要判断是否为空;
-        cell.contentView.backgroundColor = [UIColor yellowColor];
         
         
-        
+        cell.themeColor = _themeColor;
         MediaAssetModel *tempModel = self.mediaAssetArray[indexPath.row];
-//        tempModel.imgNo = [_selectedImgArr containsObject:self.localIdentifierArr[indexPath.row]]?[NSString stringWithFormat:@"%ld",[_selectedImgArr indexOfObject:self.localIdentifierArr[indexPath.row]]+1]:@"";
         self.mediaAssetArray[indexPath.row]=tempModel;
         cell.assetModel = _mediaAssetArray[indexPath.row];
         cell.canSelected = _selectedImgArr.count==_restrictNumber?NO:YES;
@@ -255,6 +253,7 @@
         return cell;
     }else{
         AlbumCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([AlbumCell class]) forIndexPath:indexPath];
+        cell.themeColor = _themeColor;
         NSDictionary *tempDic = _allAlbumArray[indexPath.row];
         NSArray *tempArr =tempDic[@"assetArr"];
         cell.albumTitleStr = [NSString stringWithFormat:@"%@%ld",_allAlbumArray[indexPath.row][@"albumName"],tempArr.count];
@@ -286,23 +285,20 @@
     if (collectionView == _collection) {
         if (_mediaAssetArray.count) {
             [self dismissAlbumCollection];
-            BrowseImageController *tempVC = [[BrowseImageController alloc] init];
-            tempVC.mediaAssetArray =_mediaAssetArray;
-            tempVC.localIdentifierArr = _localIdentifierArr;
-            tempVC.restrictNumber = _restrictNumber;
-            tempVC.selectedImgArr = _selectedImgArr;
-            tempVC.localIdentifierArr = _localIdentifierArr;
-            tempVC.showIndex = indexPath.row;
-            tempVC.delegate = self;
-            tempVC.titleStr = _titleBtn.titleLabel.text;
             
-            if (self.presentingViewController) {
-                [self presentViewController:tempVC animated:YES completion:nil];
-            } else {
-                [self.navigationController pushViewController:tempVC animated:YES];
-            }
-            
-            
+            [Lemage startPreviewerWithImageUrlArr:_localIdentifierArr choosedImageUrlArr:_selectedImgArr allowChooseCount:_restrictNumber showIndex:indexPath.row themeColor:_themeColor willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+                self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
+                if(self.willClose){
+                    self.willClose(self.selectedImgArr, self.originalImageBtn.selected);
+                }
+                
+            } closed:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+                self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
+                if (self.closed) {
+                    self.closed(self.selectedImgArr, self.originalImageBtn.selected);
+                }
+                
+            }];
         }
     }else{
         [self initDisplayImage:indexPath.row];
@@ -315,7 +311,7 @@
     _mediaAssetArray = [NSMutableArray arrayWithArray:_allAlbumArray[indexPathRow][@"assetArr"]];
     [_localIdentifierArr removeAllObjects];
     for (MediaAssetModel *tempModel in _mediaAssetArray) {
-        [_localIdentifierArr addObject:tempModel.localIdentifier];
+        [_localIdentifierArr addObject:[NSString stringWithFormat:@"lemage://album/local/%@",tempModel.localIdentifier]];
     }
     
     if (_mediaAssetArray.count <= 0) {
@@ -329,8 +325,6 @@
     _selectedAlbumIndex = indexPathRow;
     [_titleBtn setTitle:_allAlbumArray[indexPathRow][@"albumName"] forState:UIControlStateNormal];
     [_titleBtn setImageEdgeInsets:UIEdgeInsetsMake(0, [self getWidthForWord:_titleBtn.titleLabel.text height:24 font:_titleBtn.titleLabel.font].width, 0, -[self getWidthForWord:_titleBtn.titleLabel.text height:24 font:_titleBtn.titleLabel.font].width)];
-//    [self.selectedImgArr removeAllObjects];
-//    [self selectedImgArr];
     [_albumCollection reloadData];
     [_collection reloadData];
     [self dismissAlbumCollection];
@@ -395,14 +389,14 @@
 - (void)createFunctionView{
     _functionBGView = [[UIView alloc] init];
     if (_hideOriginal) {
-        _functionBGView.frame = CGRectMake(0, self.view.frame.size.height-60, 240, 45);
+        _functionBGView.frame = CGRectMake(0, self.view.frame.size.height-50, 240, 45);
     }else{
-        _functionBGView.frame = CGRectMake(0, self.view.frame.size.height-60, 360, 45);
+        _functionBGView.frame = CGRectMake(0, self.view.frame.size.height-50, 360, 45);
     }
     _functionBGView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
     _functionBGView.layer.cornerRadius = 22.5;
     _functionBGView.layer.masksToBounds = YES;
-    _functionBGView.center = CGPointMake(self.view.center.x, self.view.frame.size.height-60);
+    _functionBGView.center = CGPointMake(self.view.center.x, self.view.frame.size.height-50);
     [self.view addSubview:_functionBGView];
     [self.view bringSubviewToFront:_functionBGView];
     
@@ -421,7 +415,7 @@
     [_functionBGView addSubview:_previewBtn];
     
     _originalImageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _originalImageBtn.selected = NO;
+    _originalImageBtn.selected = _hideOriginal;
     _originalImageBtn.frame = CGRectMake(120, 0, 120, 45);
     [_originalImageBtn setTitle:@"原图" forState:UIControlStateNormal];
     [_originalImageBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -435,7 +429,7 @@
     _finishBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_finishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_finishBtn setTitle:@"完成" forState:UIControlStateNormal];
-    [_finishBtn setBackgroundColor:[UIColor colorWithRed:94/255.0 green:170/255.0 blue:6/255.0 alpha:1/1.0]];
+    [_finishBtn setBackgroundColor:_themeColor];
     _finishBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     _finishBtn.frame = CGRectMake(_functionBGView.frame.size.width-120, 0, 120, 45);
     _finishBtn.userInteractionEnabled=NO;//交互关闭
@@ -463,27 +457,37 @@
 //        }];
 //    }
     
-    self.imgIDBlock(_selectedImgArr);
-    [self dismissViewControllerAnimated:YES completion:nil];
+//    self.imgIDBlock(_selectedImgArr);
+    if (self.willClose) {
+        self.willClose(_selectedImgArr, _originalImageBtn.selected);
+    }
+    [self dismissViewControllerAnimated:YES completion:^{
+        if (self.closed) {
+            self.closed(self.selectedImgArr, self.originalImageBtn.selected);
+        }
+        
+    }];
 }
-
 /**
  预览图片
 
  @param btn 预览btn
  */
 - (void)previewImg:(UIButton *)btn{
-    BrowseImageController *tempVC = [[BrowseImageController alloc] init];
-    tempVC.selectedImgArr = _selectedImgArr;
-    tempVC.showIndex = 0;
-    tempVC.restrictNumber = _selectedImgArr.count;
-    tempVC.delegate = self;
-    tempVC.titleStr = @"预览";
-    if (self.presentingViewController) {
-        [self presentViewController:tempVC animated:YES completion:nil];
-    } else {
-        [self.navigationController pushViewController:tempVC animated:YES];
-    }
+
+    [Lemage startPreviewerWithImageUrlArr:_selectedImgArr choosedImageUrlArr:_selectedImgArr allowChooseCount:_selectedImgArr.count showIndex:0 themeColor:_themeColor willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+        self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
+        if (self.willClose) {
+            self.willClose(self.selectedImgArr, self.originalImageBtn.selected);
+        }
+        
+    } closed:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+        self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
+        if (self.closed) {
+            
+            self.closed(self.selectedImgArr, self.originalImageBtn.selected);
+        }
+    }];
 }
 
 
@@ -515,7 +519,7 @@
 - (void)useOriginalImage:(UIButton *)btn{
     btn.selected = !btn.selected;
     if (btn.selected) {
-        [btn setImage:[[DrawingSingle shareDrawingSingle] getCircularSize:CGSizeMake(23, 23) color:[UIColor whiteColor] insideColor:[UIColor greenColor] solid:YES] forState:UIControlStateSelected];
+        [btn setImage:[[DrawingSingle shareDrawingSingle] getCircularSize:CGSizeMake(23, 23) color:[UIColor whiteColor] insideColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0] solid:YES] forState:UIControlStateSelected];
     }else{
         [btn setImage:[[DrawingSingle shareDrawingSingle] getCircularSize:CGSizeMake(22, 22) color:[UIColor whiteColor] insideColor:[UIColor clearColor] solid:NO] forState:UIControlStateNormal];
     }
@@ -625,7 +629,7 @@
         CGRect rect = CGRectMake(0.0,-itemWH+30-64, size.width, itemWH+30 );
         _albumCollection.frame = rect;
         _albumCollection.alpha = 0;
-        _functionBGView.center = CGPointMake(size.width/2, size.height-60);
+        _functionBGView.center = CGPointMake(size.width/2, size.height-50);
     }
     
 }

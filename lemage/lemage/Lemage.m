@@ -10,6 +10,8 @@
 #import "LemageUrlInfo.h"
 #import <Photos/Photos.h>
 #import "CameraImgManagerTool.h"
+#import "AlbumViewController.h"
+#import "BrowseImageController.h"
 @implementation Lemage
 
 /**
@@ -211,5 +213,93 @@
     return [uuid lowercaseString];
 }
 
+/**
+ 启动图片选择器
+ 
+ @param maxChooseCount 允许最多选择的图片张数，支持范围：1-99
+ @param needShowOriginalButton 是否提供【原图】选项按钮，如果不提供，那么选择结果中的【用户是否选择了原图选项】会始终返回YES
+ @param themeColor 主题颜色，这个颜色会作为完成按钮、选择顺序标识、相册选择标识的背景色
+ @param willClose 当界面即将被关闭的时候的回调函数，若用户在选择器中点击了取消按钮，那么回调函数中的imageUrlList为nil
+ @param closed 当界面已经全部关闭的时候的回调函数，回调函数中的参数与willClose中的参数完全一致
+ */
++ (void)startChooserWithMaxChooseCount: (NSInteger) maxChooseCount
+                needShowOriginalButton: (BOOL) needShowOriginalButton
+                            themeColor: (UIColor *) themeColor
+                             willClose: (LEMAGE_RESULT_BLOCK) willClose
+                                closed: (LEMAGE_RESULT_BLOCK) closed{
+    AlbumViewController *VC = [[AlbumViewController alloc]init];
+    VC.restrictNumber = MAX(1, MIN(99, maxChooseCount));;
+    VC.hideOriginal = !needShowOriginalButton;
+    VC.themeColor = themeColor;
+
+    VC.willClose = ^(NSArray<NSString *> *imageUrlList, BOOL isOriginal) {
+        willClose(imageUrlList,isOriginal);
+    };
+    VC.closed = ^(NSArray<NSString *> *imageUrlList, BOOL isOriginal) {
+        closed(imageUrlList,isOriginal);
+    };
+    [[self getCurrentVC] presentViewController:VC animated:YES completion:nil];
+}
+
+
+
+/**
+ 启动图片预览器
+ 
+ @param imageUrlArr 要预览的图片URL数组，如果对象为nil或数组为空，那么拒绝显示图片预览器
+ @param choosedImageUrlArr 已经选择的图片Url数组
+ @param allowChooseCount 允许选择的图片数量，如果传<=0的数，表示关闭选择功能（选择器右上角是否有选择按钮），如果允许选择数量大于choosedImageUrlArr数组元素数量，那么会截取choosedImageUrlArr中的数组前allowChooseCount个元素作为已选择图片
+ @param themeColor 主题颜色，这个颜色会作为完成按钮、选择顺序标识的背景色
+ @param willClose 当界面即将被关闭的时候的回调函数，若用户在选择器中点击了关闭按钮，那么回调函数中的imageUrlList为nil
+ @param closed 当界面已经全部关闭的时候的回调函数，回调函数中的参数与willClose中的参数完全一致
+ */
++ (void)startPreviewerWithImageUrlArr: (NSArray<NSString *> *)imageUrlArr
+                   choosedImageUrlArr: (NSArray<NSString *> *)choosedImageUrlArr
+                     allowChooseCount: (NSInteger)allowChooseCount
+                            showIndex: (NSInteger)showIndex
+                           themeColor: (UIColor *) themeColor
+                            willClose: (LEMAGE_RESULT_BLOCK)willClose
+                               closed: (LEMAGE_RESULT_BLOCK)closed{
+    BrowseImageController *VC = [[BrowseImageController alloc] init];
+    VC.localIdentifierArr = [NSMutableArray arrayWithArray:imageUrlArr];
+    VC.selectedImgArr = [NSMutableArray arrayWithArray:choosedImageUrlArr];
+    VC.restrictNumber = allowChooseCount;
+    VC.themeColor = themeColor;
+    VC.showIndex = showIndex;
+    VC.willClose = ^(NSArray<NSString *> *imageUrlList, BOOL isOriginal) {
+        willClose(imageUrlList,isOriginal);
+    };
+    VC.closed = ^(NSArray<NSString *> *imageUrlList, BOOL isOriginal) {
+        closed(imageUrlList,isOriginal);
+    };
+    [[self getCurrentVC] presentViewController:VC animated:YES completion:nil];
+    
+}
+
+/**
+ 获取当前正在显示的viewcontroller
+
+ @return 正在显示的viewcontroller
+ */
++ (UIViewController *)getCurrentVC{
+        //获得当前活动窗口的根视图
+        UIViewController* vc = [UIApplication sharedApplication].keyWindow.rootViewController;
+        while (1)
+        {
+            //根据不同的页面切换方式，逐步取得最上层的viewController
+            if ([vc isKindOfClass:[UITabBarController class]]) {
+                vc = ((UITabBarController*)vc).selectedViewController;
+            }
+            if ([vc isKindOfClass:[UINavigationController class]]) {
+                vc = ((UINavigationController*)vc).visibleViewController;
+            }
+            if (vc.presentedViewController) {
+                vc = vc.presentedViewController;
+            }else{
+                break;
+            }
+        }
+        return vc;
+    }
 
 @end

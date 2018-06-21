@@ -65,7 +65,7 @@
     if (self.imgNo.length > 0) {
         _selectButton.layer.borderWidth = 0;
         [_selectButton setTitle:self.imgNo forState:UIControlStateNormal];
-        [_selectButton setBackgroundColor:[UIColor colorWithRed:107/255.0 green:192/255.0 blue:28/255.0 alpha:1]];
+        [_selectButton setBackgroundColor:_themeColor];
     }else{
         _selectButton.layer.borderWidth = 2;
         [_selectButton setTitle:@"" forState:UIControlStateNormal];

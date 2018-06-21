@@ -104,7 +104,8 @@ typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
  */
 + (void)startPreviewerWithImageUrlArr: (NSArray<NSString *> *)imageUrlArr
                    choosedImageUrlArr: (NSArray<NSString *> *)choosedImageUrlArr
-                     allowChooseCount: (BOOL)allowChooseCount
+                     allowChooseCount: (NSInteger)allowChooseCount
+                            showIndex: (NSInteger)showIndex
                            themeColor: (UIColor *) themeColor
                             willClose: (LEMAGE_RESULT_BLOCK)willClose
                                closed: (LEMAGE_RESULT_BLOCK)closed;

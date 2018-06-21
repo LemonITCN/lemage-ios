@@ -49,7 +49,7 @@
         _selectButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - selectedBtnHW , 0, selectedBtnHW, selectedBtnHW)];
         [self.contentView addSubview:_selectButton];
         [_selectButton setImage:[[DrawingSingle shareDrawingSingle] getCircularSize:CGSizeMake(24, 24) color:[UIColor whiteColor] insideColor:[UIColor clearColor] solid:NO] forState:UIControlStateNormal];
-        [_selectButton setImage:[[DrawingSingle shareDrawingSingle] getCircularSize:CGSizeMake(24, 24) color:[UIColor greenColor] insideColor:[UIColor whiteColor] solid:YES] forState:UIControlStateSelected];
+        [_selectButton setImage:[[DrawingSingle shareDrawingSingle] getCircularSize:CGSizeMake(24, 24) color:_themeColor insideColor:[UIColor whiteColor] solid:YES] forState:UIControlStateSelected];
         [_selectButton addTarget:self action:@selector(clickedBtn:) forControlEvents:UIControlEventTouchUpInside];
         _selectButton.titleLabel.font = [UIFont boldSystemFontOfSize:16.0];
     }

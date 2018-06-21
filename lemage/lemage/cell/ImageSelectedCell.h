@@ -18,4 +18,5 @@
 @property (nonatomic, assign) BOOL canSelected;
 @property (nonatomic, strong) UIView *whiteView;
 @property (nonatomic, strong) NSString *imgNo;
+@property (nonatomic, strong) UIColor *themeColor;
 @end

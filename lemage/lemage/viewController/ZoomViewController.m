@@ -50,6 +50,7 @@
     if (picHeight>self.view.frame.size.height) {
         picHeight = self.view.frame.size.height;
         picWidth = picHeight * image.size.width/image.size.height;
+        self.scrollView.maximumZoomScale = self.view.frame.size.height/picWidth;
     }
     self.imageView.frame = CGRectMake(0, 0, picWidth, picHeight>0?picHeight:0);
     self.scrollView.center = self.view.center;
