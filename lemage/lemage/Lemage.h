@@ -38,13 +38,23 @@ typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
 
 /**
  根据LemageURL加载对应的图片的NSData数据，如果用户传入的LemageURL有误或已过期，会返回nil
- 注意：此方法并不会处理图片的缩放参数，即LemageURL中的width参数和height参数会被忽略，若需要请调用[Lemage loadImageDataByLemageUrl]方法
+ 注意：此方法并不会处理图片的缩放参数，即LemageURL中的width参数和height参数会被忽略，若需要请调用[Lemage loadImageByLemageUrl]方法
  原理：根据LemageURL解析出沙盒对应的文件路径，然后从沙盒读取文件数据转换成NSData数据对象后返回
  
  @param lemageUrl LemageURL字符串
  @param complete 根据LemageURL逆向转换回来的图片NSData数据对象，如果URL无效会返回nil
  */
 + (void)loadImageDataByLemageUrl: (NSString *)lemageUrl complete:(void(^)(NSData *imageData))complete;
+
+/**
+ 根据LemageURL加载对应的图片的UIImage对象，如果用户传入的LemageURL有误或已过期，会返回nil
+ 该函数会解析LemageURL中的width、height参数，如果LemageURL中不存在这两个参数，那么会返回原图
+ 原理：根据LemageURL解析出沙盒对应的文件路径，然后从沙盒读取文件数据转换成NSData数据后转换成UIImage对象返回
+ 
+ @param lemageUrl LemageURL字符串
+ @param complete 根据LemageURL逆向转换回来的图片UIImage对象，如果URL无效会返回nil
+ */
++ (void)loadImageByLemageUrl: (NSString *)lemageUrl complete:(void(^)(UIImage *image))complete;
 
 /**
  根据LemageURL加载对应的图片的UIImage对象，如果用户传入的LemageURL有误或已过期，会返回nil
@@ -95,7 +105,7 @@ typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
 /**
  启动图片预览器
 
- @param imageUrlArr 要预览的图片URL数组，如果对象为nil或数组为空，那么拒绝显示图片预览器
+ @param imageUrlArr 要预览的图片URL数组，支持lemageURL和http(s)URL如果对象为nil或数组为空，那么拒绝显示图片预览器
  @param choosedImageUrlArr 已经选择的图片Url数组
  @param allowChooseCount 允许选择的图片数量，如果传<=0的数，表示关闭选择功能（选择器右上角是否有选择按钮），如果允许选择数量大于choosedImageUrlArr数组元素数量，那么会截取choosedImageUrlArr中的数组前allowChooseCount个元素作为已选择图片
  @param themeColor 主题颜色，这个颜色会作为完成按钮、选择顺序标识的背景色
