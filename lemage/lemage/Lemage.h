@@ -10,6 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ Lemage中返回结果Block预定义
+
+ @param lemageUrlList 选择的图片对应的lemageUrl列表
+ @param isOriginal 用户是否选择了原图选项，如果该组件关闭或不支持原图按钮选项，那么此值会始终返回YES
+ */
+typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL isOriginal);
+
 @interface Lemage : NSObject
 
 /**
@@ -67,6 +75,37 @@ NS_ASSUME_NONNULL_BEGIN
  @param lemageUrl 要使其过期的LemageURL
  */
 + (void)expiredUrl: (NSString *)lemageUrl;
+
+/**
+ 启动图片选择器
+
+ @param maxChooseCount 允许最多选择的图片张数，支持范围：1-99
+ @param needShowOriginalButton 是否提供【原图】选项按钮，如果不提供，那么选择结果中的【用户是否选择了原图选项】会始终返回YES
+ @param themeColor 主题颜色，这个颜色会作为完成按钮、选择顺序标识、相册选择标识的背景色
+ @param willClose 当界面即将被关闭的时候的回调函数，若用户在选择器中点击了取消按钮，那么回调函数中的imageUrlList为nil
+ @param closed 当界面已经全部关闭的时候的回调函数，回调函数中的参数与willClose中的参数完全一致
+ */
++ (void)startChooserWithMaxChooseCount: (NSInteger) maxChooseCount
+                needShowOriginalButton: (BOOL) needShowOriginalButton
+                            themeColor: (UIColor *) themeColor
+                             willClose: (LEMAGE_RESULT_BLOCK) willClose
+                                closed: (LEMAGE_RESULT_BLOCK) closed;
+
+
+/**
+ 启动图片预览器
+
+ @param imageUrlArr 要预览的图片URL数组，如果对象为nil或数组为空，那么拒绝显示图片预览器
+ @param allowChoose 是否允许选择图片（选择器右上角是否有选择按钮）
+ @param themeColor 主题颜色，这个颜色会作为完成按钮、选择顺序标识的背景色
+ @param willClose 当界面即将被关闭的时候的回调函数，若用户在选择器中点击了关闭按钮，那么回调函数中的imageUrlList为nil
+ @param closed 当界面已经全部关闭的时候的回调函数，回调函数中的参数与willClose中的参数完全一致
+ */
++ (void)startPreviewerWithImageUrlArr: (NSArray<NSString *> *)imageUrlArr
+                          allowChoose: (BOOL)allowChoose
+                           themeColor: (UIColor *) themeColor
+                            willClose: (LEMAGE_RESULT_BLOCK)willClose
+                               closed: (LEMAGE_RESULT_BLOCK)closed;
 
 @end
 

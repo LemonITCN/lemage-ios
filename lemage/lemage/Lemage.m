@@ -45,7 +45,6 @@
         [tempImgDic writeToFile:filePath atomically:YES];
         return [NSString stringWithFormat:@"lemage://sandbox/%@/%@",fileName,key];
     }
-
     return nil;
 }
 
