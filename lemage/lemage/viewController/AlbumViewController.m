@@ -234,7 +234,7 @@
         __weak typeof(self) weakSelf = self;
         cell.selectedBlock = ^(BOOL selected) {
             if(weakSelf.selectedImgArr.count<=self.restrictNumber){
-                if(weakCell.selectButton.selected){
+                if([weakSelf.selectedImgArr containsObject:weakSelf.localIdentifierArr[indexPath.row]]){
 //                    [weakSelf.selectedImgArr removeObject:weakSelf.mediaAssetArray[indexPath.row]];
                     [weakSelf.selectedImgArr removeObject:weakSelf.localIdentifierArr[indexPath.row]];
                 }else{
