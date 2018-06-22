@@ -36,7 +36,7 @@ static LemageUsageText *EN_TEXT;
         EN_TEXT.preview = @"Preview";
         EN_TEXT.originalImage = @"Original";
         EN_TEXT.allImages = @"All images";
-        CN_TEXT.noImages = @"No images";
+        EN_TEXT.noImages = @"No images";
     }
     return EN_TEXT;
 }

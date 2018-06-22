@@ -276,11 +276,11 @@
         _finishBtn.userInteractionEnabled = YES;
         _finishBtn.alpha = _finishBtn.alpha==0?0:1;
     }else{
-        [_finishBtn setTitle:@"完成" forState:UIControlStateNormal];
+        [_finishBtn setTitle:[Lemage getUsageText].complete forState:UIControlStateNormal];
         _finishBtn.userInteractionEnabled = NO;
         _finishBtn.alpha = _finishBtn.alpha==0?0:0.6;
     }
-    _titleLabel.text = [NSString stringWithFormat:@"%ld/%ld",_showIndex+1,_localIdentifierArr.count];
+    _titleLabel.text = [NSString stringWithFormat:@"%ld/%ld",index+1,_localIdentifierArr.count];
     
 }
 
@@ -347,7 +347,9 @@
 }
 
 - (void)back:(UIButton *)btn{
-    
+    if (self.willClose) {
+        self.willClose([NSArray arrayWithArray:_selectedImgArr], NO);
+    }
     [self dismissViewControllerAnimated:YES completion:nil];
 
     

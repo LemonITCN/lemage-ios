@@ -13,7 +13,6 @@
 @implementation LemageURLProtocol
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
-    NSLog(@"%@",request.URL);
     if ([request.URL.scheme caseInsensitiveCompare: LEMAGE] == NSOrderedSame) {
         return YES;
     }

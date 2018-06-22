@@ -289,10 +289,10 @@
             
             [Lemage startPreviewerWithImageUrlArr:_localIdentifierArr chooseImageUrlArr:_selectedImgArr allowChooseCount:_restrictNumber showIndex:indexPath.row themeColor:_themeColor willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
                 self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
-                if(self.willClose){
+                [self.collection reloadData];
+                if (self.willClose) {
                     self.willClose(self.selectedImgArr, self.originalImageBtn.selected);
                 }
-                
             } closed:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
                 self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
                 if (self.closed) {
@@ -441,6 +441,7 @@
 }
 
 - (void)finishSelectedImg:(UIButton *)btn{
+    
 //    NSMutableArray *imageArr = [NSMutableArray new];
 //    for (NSInteger i = 0; i<_selectedImgArr.count; i++) {
 //        __weak typeof(self) weakSelf = self;
@@ -479,14 +480,13 @@
 
     [Lemage startPreviewerWithImageUrlArr:_selectedImgArr chooseImageUrlArr:_selectedImgArr allowChooseCount:_selectedImgArr.count showIndex:0 themeColor:_themeColor willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
         self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
+        [self.collection reloadData];
         if (self.willClose) {
             self.willClose(self.selectedImgArr, self.originalImageBtn.selected);
         }
-        
     } closed:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
         self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
         if (self.closed) {
-            
             self.closed(self.selectedImgArr, self.originalImageBtn.selected);
         }
     }];
