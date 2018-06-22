@@ -296,6 +296,7 @@
  @param themeColor 主题颜色，这个颜色会作为完成按钮、选择顺序标识的背景色
  @param willClose 当界面即将被关闭的时候的回调函数，若用户在选择器中点击了关闭按钮，那么回调函数中的imageUrlList为nil
  @param closed 当界面已经全部关闭的时候的回调函数，回调函数中的参数与willClose中的参数完全一致
+ @param cancelBack 当界面点击返回按钮时候的回调函数，回调函数中的参数与willClose中的参数完全一致
  */
 + (void)startPreviewerWithImageUrlArr: (NSArray<NSString *> *)imageUrlArr
                    chooseImageUrlArr: (NSArray<NSString *> *)chooseImageUrlArr
@@ -303,7 +304,8 @@
                             showIndex: (NSInteger)showIndex
                            themeColor: (UIColor *) themeColor
                             willClose: (LEMAGE_RESULT_BLOCK)willClose
-                               closed: (LEMAGE_RESULT_BLOCK)closed{
+                               closed: (LEMAGE_RESULT_BLOCK)closed
+                           cancelBack: (LEMAGE_RESULT_BLOCK)cancelBack{
     BrowseImageController *VC = [[BrowseImageController alloc] init];
     VC.localIdentifierArr = [NSMutableArray arrayWithArray:imageUrlArr];
     if (allowChooseCount<chooseImageUrlArr.count&&allowChooseCount>0) {
@@ -320,6 +322,9 @@
     };
     VC.closed = ^(NSArray<NSString *> *imageUrlList, BOOL isOriginal) {
         closed(imageUrlList,isOriginal);
+    };
+    VC.cancelBack = ^(NSArray<NSString *> *imageUrlList, BOOL isOriginal) {
+        cancelBack(imageUrlList,isOriginal);
     };
     [[self getCurrentVC] presentViewController:VC animated:YES completion:nil];
     

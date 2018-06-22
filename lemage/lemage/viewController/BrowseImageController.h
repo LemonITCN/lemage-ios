@@ -31,6 +31,7 @@ typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
 
 @property(nonatomic,copy) LEMAGE_RESULT_BLOCK willClose;
 @property(nonatomic,copy) LEMAGE_RESULT_BLOCK closed;
+@property(nonatomic,copy) LEMAGE_RESULT_BLOCK cancelBack;
 /**
  @brief 当前展示的数组下标
  */

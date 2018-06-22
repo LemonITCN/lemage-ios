@@ -347,8 +347,8 @@
 }
 
 - (void)back:(UIButton *)btn{
-    if (self.willClose) {
-        self.willClose([NSArray arrayWithArray:_selectedImgArr], NO);
+    if (self.cancelBack) {
+        self.cancelBack([NSArray arrayWithArray:_selectedImgArr], NO);
     }
     [self dismissViewControllerAnimated:YES completion:nil];
 

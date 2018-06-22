@@ -67,6 +67,8 @@
             self.tempTextView.text = [self.imgArr componentsJoinedByString:@","];
         } closed:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
             NSLog(@"preview closed = %@",imageUrlList);
+        } cancelBack:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+            
         }];
     }
     
