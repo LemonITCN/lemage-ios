@@ -11,6 +11,7 @@
 #import "CameraImgManagerTool.h"
 #import "BrowseImageController.h"
 #import "Lemage.h"
+
 @interface ViewController ()
 @property (nonatomic, strong)NSArray *imgArr;
 @property (nonatomic, strong)UITextView *tempTextView;
@@ -60,8 +61,10 @@
 
 - (void)previewImg:(UIButton *)btn{
     if (self.imgArr.count>0) {
-        [Lemage startPreviewerWithImageUrlArr:_imgArr chooseImageUrlArr:_imgArr allowChooseCount:5 showIndex:0 themeColor:[UIColor greenColor] willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+        [Lemage startPreviewerWithImageUrlArr:_imgArr chooseImageUrlArr:_imgArr allowChooseCount:0 showIndex:0 themeColor:[UIColor greenColor] willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
             NSLog(@"preview willClose = %@",imageUrlList);
+            self.imgArr = [NSArray arrayWithArray:imageUrlList];
+            self.tempTextView.text = [self.imgArr componentsJoinedByString:@","];
         } closed:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
             NSLog(@"preview closed = %@",imageUrlList);
         }];

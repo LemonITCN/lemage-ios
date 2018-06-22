@@ -12,6 +12,10 @@
 #import "CameraImgManagerTool.h"
 #import "AlbumViewController.h"
 #import "BrowseImageController.h"
+#import "LemageUsageText.h"
+
+
+
 @implementation Lemage
 
 /**
@@ -76,7 +80,7 @@
                 }];
             }else{
                 
-                    complete(nil);
+                complete(nil);
                 
             }
             
@@ -84,8 +88,53 @@
     }
 
 }
+/**
+ 根据LemageURL加载对应的图片的UIImage对象，如果用户传入的LemageURL有误或已过期，会返回nil
+ 该函数会解析LemageURL中的width、height参数，如果LemageURL中不存在这两个参数，那么会返回原图
+ 原理：根据LemageURL解析出沙盒对应的文件路径，然后从沙盒读取文件数据转换成NSData数据后转换成UIImage对象返回
+ 
+ @param lemageUrl LemageURL字符串
+ @param complete 根据LemageURL逆向转换回来的图片UIImage对象，如果URL无效会返回nil
+ */
 
-
++(void)loadImageByLemageUrl: (NSString *)lemageUrl complete:(void(^)(UIImage *image))complete{
+    LemageUrlInfo *urlInfo = [[LemageUrlInfo alloc]initWithLemageUrl:lemageUrl];
+    if (urlInfo) {
+        if ([urlInfo.source isEqualToString:@"sandbox"]) {
+            
+            if ([urlInfo.params[@"width"] floatValue]>0&&[urlInfo.params[@"height"] floatValue]>0) {
+                CGSize size = CGSizeMake([urlInfo.params[@"width"] floatValue], [urlInfo.params[@"height"] floatValue]);
+                complete([CameraImgManagerTool compressImageSize:[NSData dataWithContentsOfFile:[NSString  stringWithFormat:@"/private/%@/img/%@/%@.data",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,urlInfo.type,urlInfo.tag]] toSize:size]);
+            }else{
+                complete([UIImage imageWithData:[NSData dataWithContentsOfFile:[NSString  stringWithFormat:@"/private/%@/img/%@/%@.data",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,urlInfo.type,urlInfo.tag]]]);
+            }
+            
+            
+            
+        }else{
+            PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[urlInfo.tag] options:nil][0];
+            if(asset){
+                if ([urlInfo.params[@"width"] floatValue]>0&&[urlInfo.params[@"height"] floatValue]>0) {
+                    CGSize size = CGSizeMake([urlInfo.params[@"width"] floatValue], [urlInfo.params[@"height"] floatValue]);
+                    [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:size contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                        complete(result);
+                    }];
+                }else{
+                    [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+                        if (complete) {
+                            complete([UIImage imageWithData:imageData]);
+                        }
+                    }];
+                }
+            }else{
+                if (complete) {
+                    complete(nil);
+                }
+            }
+            
+        }
+    }
+}
 /**
  根据LemageURL加载对应的图片的UIImage对象，如果用户传入的LemageURL有误或已过期，会返回nil
  原理：根据LemageURL解析出沙盒对应的文件路径，然后从沙盒读取文件数据转换成NSData数据后转换成UIImage对象返回
@@ -243,7 +292,7 @@
  
  @param imageUrlArr 要预览的图片URL数组，如果对象为nil或数组为空，那么拒绝显示图片预览器
  @param chooseImageUrlArr 已经选择的图片Url数组
- @param allowChooseCount 允许选择的图片数量，如果传<=0的数，表示关闭选择功能（选择器右上角是否有选择按钮），如果允许选择数量大于chooseImageUrlArr数组元素数量，那么会截取chooseImageUrlArr中的数组前allowChooseCount个元素作为已选择图片
+ @param allowChooseCount 允许选择的图片数量，如果传<=0的数，表示关闭选择功能（选择器右上角是否有选择按钮），如果允许选择数量小于chooseImageUrlArr数组元素数量，那么会截取chooseImageUrlArr中的数组前allowChooseCount个元素作为已选择图片
  @param themeColor 主题颜色，这个颜色会作为完成按钮、选择顺序标识的背景色
  @param willClose 当界面即将被关闭的时候的回调函数，若用户在选择器中点击了关闭按钮，那么回调函数中的imageUrlList为nil
  @param closed 当界面已经全部关闭的时候的回调函数，回调函数中的参数与willClose中的参数完全一致
@@ -257,7 +306,12 @@
                                closed: (LEMAGE_RESULT_BLOCK)closed{
     BrowseImageController *VC = [[BrowseImageController alloc] init];
     VC.localIdentifierArr = [NSMutableArray arrayWithArray:imageUrlArr];
-    VC.selectedImgArr = [NSMutableArray arrayWithArray:chooseImageUrlArr];
+    if (allowChooseCount<chooseImageUrlArr.count&&allowChooseCount>0) {
+        VC.selectedImgArr = [NSMutableArray  arrayWithArray:[chooseImageUrlArr subarrayWithRange:NSMakeRange(0, allowChooseCount)]];
+    }else{
+        VC.selectedImgArr = [NSMutableArray arrayWithArray:chooseImageUrlArr];
+    }
+    
     VC.restrictNumber = allowChooseCount;
     VC.themeColor = themeColor;
     VC.showIndex = showIndex;
@@ -277,24 +331,34 @@
  @return 正在显示的viewcontroller
  */
 + (UIViewController *)getCurrentVC{
-        //获得当前活动窗口的根视图
-        UIViewController* vc = [UIApplication sharedApplication].keyWindow.rootViewController;
-        while (1)
-        {
-            //根据不同的页面切换方式，逐步取得最上层的viewController
-            if ([vc isKindOfClass:[UITabBarController class]]) {
-                vc = ((UITabBarController*)vc).selectedViewController;
-            }
-            if ([vc isKindOfClass:[UINavigationController class]]) {
-                vc = ((UINavigationController*)vc).visibleViewController;
-            }
-            if (vc.presentedViewController) {
-                vc = vc.presentedViewController;
-            }else{
-                break;
-            }
+    //获得当前活动窗口的根视图
+    UIViewController* vc = [UIApplication sharedApplication].keyWindow.rootViewController;
+    while (1)
+    {
+        //根据不同的页面切换方式，逐步取得最上层的viewController
+        if ([vc isKindOfClass:[UITabBarController class]]) {
+            vc = ((UITabBarController*)vc).selectedViewController;
         }
-        return vc;
+        if ([vc isKindOfClass:[UINavigationController class]]) {
+            vc = ((UINavigationController*)vc).visibleViewController;
+        }
+        if (vc.presentedViewController) {
+            vc = vc.presentedViewController;
+        }else{
+            break;
+        }
     }
+    return vc;
+}
+static LemageUsageText *_usageText;
++ (void)setUsageText: (LemageUsageText *)usageText{
+    _usageText = usageText;
+}
++ (LemageUsageText *)getUsageText{
+    if (!_usageText) {
+        _usageText = [LemageUsageText enText];
+    }
+    return _usageText;
+}
 
 @end

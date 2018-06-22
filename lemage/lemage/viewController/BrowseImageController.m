@@ -10,6 +10,8 @@
 #import "ZoomViewController.h"
 #import "MediaAssetModel.h"
 #import "CameraImgManagerTool.h"
+#import "LemageUsageText.h"
+#import "Lemage.h"
 @interface BrowseImageController ()<UIPageViewControllerDelegate, UIPageViewControllerDataSource,UIScrollViewDelegate>
 
 /**
@@ -270,7 +272,7 @@
     }
     
     if(_selectedImgArr.count>0){
-        [_finishBtn setTitle:[NSString stringWithFormat:@"完成(%ld)",_selectedImgArr.count] forState:UIControlStateNormal];
+        [_finishBtn setTitle:[NSString stringWithFormat:@"%@(%ld)",[Lemage getUsageText].complete,_selectedImgArr.count] forState:UIControlStateNormal];
         _finishBtn.userInteractionEnabled = YES;
         _finishBtn.alpha = _finishBtn.alpha==0?0:1;
     }else{
@@ -290,7 +292,7 @@
     
     CGFloat selectedBtnHW = 24;
     _selectButton = [[UIButton alloc] initWithFrame:CGRectMake(0 , 0, selectedBtnHW, selectedBtnHW)];
-    _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-20, _titleBarBGView.frame.size.height-22);
+    _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-28, _titleBarBGView.frame.size.height-22);
     _selectButton.layer.borderWidth = 2;
     _selectButton.alpha = _restrictNumber>0;
     _selectButton.layer.borderColor = [UIColor colorWithRed:188/255.0 green:188/255.0 blue:188/255.0 alpha:1].CGColor;
@@ -301,11 +303,12 @@
 
     
     _backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_backBtn setTitle:@"返回" forState:UIControlStateNormal];
+    [_backBtn setTitle:[Lemage getUsageText].back forState:UIControlStateNormal];
     [_backBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_backBtn addTarget:self action:@selector(back:) forControlEvents:UIControlEventTouchUpInside];
-    _backBtn.frame = CGRectMake(0, _titleBarBGView.frame.size.height-34, 40, 24);
+    _backBtn.frame = CGRectMake(16, _titleBarBGView.frame.size.height-34, 64, 24);
     _backBtn.titleLabel.font = [UIFont systemFontOfSize: 14.0];
+    _backBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [_titleBarBGView addSubview:_backBtn];
 
     _titleLabel = [[UILabel alloc]init];
@@ -319,7 +322,7 @@
 - (void)createFooterBar{
     _finishBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_finishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_finishBtn setTitle:@"完成" forState:UIControlStateNormal];
+    [_finishBtn setTitle:[Lemage getUsageText].complete forState:UIControlStateNormal];
     
     _finishBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     [_finishBtn setBackgroundColor: _themeColor];
@@ -391,11 +394,11 @@
         CGSize size = self.view.frame.size;
         _titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
         _titleBarBGView.alpha = 1;
-        _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-20, _titleBarBGView.frame.size.height-22);
+        _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-28, _titleBarBGView.frame.size.height-22);
         _titleLabel.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);
         _finishBtn.center = CGPointMake(size.width/2, size.height-40);
         _finishBtn.alpha = 1;
-        _backBtn.frame = CGRectMake(0, _titleBarBGView.frame.size.height-34, 40,24);
+        _backBtn.frame = CGRectMake(16, _titleBarBGView.frame.size.height-34, 64,24);
     }
 }
 

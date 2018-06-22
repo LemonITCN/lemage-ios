@@ -16,7 +16,7 @@
 @property NSString *preview;
 @property NSString *originalImage;
 @property NSString *allImages;
-
+@property NSString *noImages;
 + (LemageUsageText *)cnText;
 + (LemageUsageText *)enText;
 

@@ -18,6 +18,7 @@
 #import "AlbumCell.h"
 #import "DrawingSingle.h"
 #import "Lemage.h"
+#import "LemageUsageText.h"
 @interface AlbumViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 /**
  @brief 当前显示照片的UICollectionView
@@ -129,14 +130,14 @@
 
     
     _allAlbumArray = [NSMutableArray arrayWithArray:[CameraImgManagerTool getAllAlbum]];
-    [_allAlbumArray insertObject:@{@"albumName":@"全部图片",@"assetArr":_mediaAssetArray} atIndex:0];
+    [_allAlbumArray insertObject:@{@"albumName":[Lemage getUsageText].allImages,@"assetArr":_mediaAssetArray} atIndex:0];
     [self.view addSubview:self.albumCollection];
     [self.albumCollection reloadData];
 }
 
 - (void)createNoImgLabel{
     _noImgLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.height, 30)];
-    _noImgLabel.text = @"没有图片";
+    _noImgLabel.text = [Lemage getUsageText].noImages;
     _noImgLabel.font = [UIFont systemFontOfSize:30];
     _noImgLabel.center = self.view.center;
     _noImgLabel.textAlignment = NSTextAlignmentCenter;
@@ -351,21 +352,22 @@
     [self.view bringSubviewToFront:_titleBarBGView];
     
     _cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [_cancelBtn setTitle:[Lemage getUsageText].cancel forState:UIControlStateNormal];
     [_cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_cancelBtn addTarget:self action:@selector(cancelSelected:) forControlEvents:UIControlEventTouchUpInside];
-    _cancelBtn.frame = CGRectMake(_titleBarBGView.frame.size.width-80, _titleBarBGView.frame.size.height-34, 80, 24);
+    _cancelBtn.frame = CGRectMake(_titleBarBGView.frame.size.width-80, _titleBarBGView.frame.size.height-34, 64, 24);
     _cancelBtn.titleLabel.font = [UIFont systemFontOfSize: 14.0];
+    _cancelBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [_titleBarBGView addSubview:_cancelBtn ];
     
    _titleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _titleBtn.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, self.view.frame.size.width-160, 24);
-    [_titleBtn setTitle:@"全部图片" forState:UIControlStateNormal];
+    [_titleBtn setTitle:[Lemage getUsageText].allImages forState:UIControlStateNormal];
     [_titleBtn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
     [_titleBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_titleBtn setImage:[[DrawingSingle shareDrawingSingle] getTriangleSize:CGSizeMake(16, 16) color:[UIColor whiteColor] positive:YES] forState:UIControlStateNormal];
     [_titleBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -(20), 0, (20))];
-    [_titleBtn setImageEdgeInsets:UIEdgeInsetsMake(0, [self getWidthForWord:@"全部图片" height:24 font:_titleBtn.titleLabel.font].width, 0, -[self getWidthForWord:@"全部图片" height:24 font:_titleBtn.titleLabel.font].width)];
+    [_titleBtn setImageEdgeInsets:UIEdgeInsetsMake(0, [self getWidthForWord:[Lemage getUsageText].allImages height:24 font:_titleBtn.titleLabel.font].width, 0, -[self getWidthForWord:[Lemage getUsageText].allImages height:24 font:_titleBtn.titleLabel.font].width)];
     [_titleBtn addTarget:self action:@selector(selectdAlbum:) forControlEvents:UIControlEventTouchUpInside];
     [_titleBarBGView addSubview:_titleBtn];
     
@@ -408,7 +410,7 @@
     _previewBtn.userInteractionEnabled=NO;//交互关闭
     _previewBtn.frame = CGRectMake(0, 00, 120, 45);
     _previewBtn.alpha = 0.6;
-    [_previewBtn setTitle:@"预览" forState:UIControlStateNormal];
+    [_previewBtn setTitle:[Lemage getUsageText].preview forState:UIControlStateNormal];
     [_previewBtn setTintColor:[UIColor whiteColor]];
     _previewBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     [_previewBtn addTarget:self action:@selector(previewImg:) forControlEvents:UIControlEventTouchUpInside];
@@ -417,7 +419,7 @@
     _originalImageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _originalImageBtn.selected = _hideOriginal;
     _originalImageBtn.frame = CGRectMake(120, 0, 120, 45);
-    [_originalImageBtn setTitle:@"原图" forState:UIControlStateNormal];
+    [_originalImageBtn setTitle:[Lemage getUsageText].originalImage forState:UIControlStateNormal];
     [_originalImageBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_originalImageBtn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
     [_originalImageBtn setImage:[[DrawingSingle shareDrawingSingle] getCircularSize:CGSizeMake(22, 22) color:[UIColor whiteColor] insideColor:[UIColor clearColor] solid:NO] forState:UIControlStateNormal];
@@ -428,7 +430,7 @@
     
     _finishBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_finishBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_finishBtn setTitle:@"完成" forState:UIControlStateNormal];
+    [_finishBtn setTitle:[Lemage getUsageText].complete forState:UIControlStateNormal];
     [_finishBtn setBackgroundColor:_themeColor];
     _finishBtn.titleLabel.font = [UIFont systemFontOfSize:16];
     _finishBtn.frame = CGRectMake(_functionBGView.frame.size.width-120, 0, 120, 45);
@@ -496,13 +498,13 @@
  */
 - (void )setFinishBtnTitle{
     if (_selectedImgArr.count>0) {
-        [_finishBtn setTitle:[NSString stringWithFormat:@"完成(%ld)",_selectedImgArr.count] forState:UIControlStateNormal];
+        [_finishBtn setTitle:[NSString stringWithFormat:@"%@(%ld)",[Lemage getUsageText].complete,_selectedImgArr.count] forState:UIControlStateNormal];
         _finishBtn.userInteractionEnabled = YES;
         _finishBtn.alpha = 1;
         _previewBtn.userInteractionEnabled = YES;
         _previewBtn.alpha = 1;
     }else{
-        [_finishBtn setTitle:@"完成" forState:UIControlStateNormal];
+        [_finishBtn setTitle:[Lemage getUsageText].complete forState:UIControlStateNormal];
         _finishBtn.userInteractionEnabled = NO;
         _finishBtn.alpha = 0.6;
         _previewBtn.userInteractionEnabled = NO;
@@ -622,7 +624,7 @@
     if (!_isAnimate) {
         CGSize size = self.view.frame.size;
         _titleBarBGView.frame = CGRectMake(0, 0, size.width, size.width>size.height?44:KIsiPhoneX?84:64);
-        _cancelBtn.frame = CGRectMake(_titleBarBGView.frame.size.width-80, _titleBarBGView.frame.size.height-34, 80, 24);
+        _cancelBtn.frame = CGRectMake(_titleBarBGView.frame.size.width-80, _titleBarBGView.frame.size.height-34, 64, 24);
         _titleBtn.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);
         _collection.frame = CGRectMake(0, 0, size.width, size.height);
         CGFloat itemWH = size.width>size.height?(size.height/4-50/4):(size.width/4-50/4);

@@ -22,6 +22,7 @@ static LemageUsageText *EN_TEXT;
         CN_TEXT.preview = @"预览";
         CN_TEXT.originalImage = @"原图";
         CN_TEXT.allImages = @"全部图片";
+        CN_TEXT.noImages = @"没有图片";
     }
     return CN_TEXT;
 }
@@ -35,6 +36,7 @@ static LemageUsageText *EN_TEXT;
         EN_TEXT.preview = @"Preview";
         EN_TEXT.originalImage = @"Original";
         EN_TEXT.allImages = @"All images";
+        CN_TEXT.noImages = @"No images";
     }
     return EN_TEXT;
 }

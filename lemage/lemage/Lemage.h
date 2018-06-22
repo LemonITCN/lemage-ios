@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LemageUsageText.h"
 
+@class LemageUsageText;
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -122,7 +122,7 @@ typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
 
  @param imageUrlArr 要预览的图片URL数组，支持lemageURL和http(s)URL如果对象为nil或数组为空，那么拒绝显示图片预览器
  @param chooseImageUrlArr 已经选择的图片Url数组
- @param allowChooseCount 允许选择的图片数量，如果传<=0的数，表示关闭选择功能（选择器右上角是否有选择按钮），如果允许选择数量大于chooseImageUrlArr数组元素数量，那么会截取chooseImageUrlArr中的数组前allowChooseCount个元素作为已选择图片
+ @param allowChooseCount 允许选择的图片数量，如果传<=0的数，表示关闭选择功能（选择器右上角是否有选择按钮），如果允许选择数量小于chooseImageUrlArr数组元素数量，那么会截取chooseImageUrlArr中的数组前allowChooseCount个元素作为已选择图片
  @param showIndex 当前页面所展示的图片下标
  @param themeColor 主题颜色，这个颜色会作为完成按钮、选择顺序标识的背景色
  @param willClose 当界面即将被关闭的时候的回调函数，若用户在选择器中点击了关闭按钮，那么回调函数中的imageUrlList为nil
