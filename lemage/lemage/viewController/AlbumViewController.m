@@ -226,8 +226,9 @@
         
         cell.themeColor = _themeColor;
         MediaAssetModel *tempModel = self.mediaAssetArray[indexPath.row];
+        tempModel.selected = [_selectedImgArr containsObject:self.localIdentifierArr[indexPath.row]]?YES:NO;
         self.mediaAssetArray[indexPath.row]=tempModel;
-        cell.assetModel = _mediaAssetArray[indexPath.row];
+        cell.assetModel = tempModel;
         cell.canSelected = _selectedImgArr.count==_restrictNumber?NO:YES;
         cell.imgNo = [_selectedImgArr containsObject:self.localIdentifierArr[indexPath.row]]?[NSString stringWithFormat:@"%ld",[_selectedImgArr indexOfObject:self.localIdentifierArr[indexPath.row]]+1]:@"";
         __weak typeof(cell) weakCell = cell;

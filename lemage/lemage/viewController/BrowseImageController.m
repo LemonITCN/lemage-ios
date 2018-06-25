@@ -373,8 +373,8 @@
                 self.mediaAssetArray[_showIndex] = tempModel;
                 [self.selectedImgArr addObject:self.localIdentifierArr[_showIndex]];
             }else{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[NSString stringWithFormat:@"最多只能选择%ld张",_restrictNumber] preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *iKnow = [UIAlertAction actionWithTitle:@"我知道了" style:UIAlertActionStyleCancel handler:nil];
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[NSString stringWithFormat:[Lemage getUsageText].tipSelectedCount,_restrictNumber] preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *iKnow = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
                 [alert addAction:iKnow];
                 [self presentViewController:alert animated:YES completion:nil];
             }

@@ -23,6 +23,7 @@ static LemageUsageText *EN_TEXT;
         CN_TEXT.originalImage = @"原图";
         CN_TEXT.allImages = @"全部图片";
         CN_TEXT.noImages = @"没有图片";
+        CN_TEXT.tipSelectedCount = @"最多只能选择%ld张";
     }
     return CN_TEXT;
 }
@@ -37,6 +38,8 @@ static LemageUsageText *EN_TEXT;
         EN_TEXT.originalImage = @"Original";
         EN_TEXT.allImages = @"All images";
         EN_TEXT.noImages = @"No images";
+        EN_TEXT.tipSelectedCount = @"Select a maximum of %ld images";
+        
     }
     return EN_TEXT;
 }
