@@ -85,6 +85,11 @@
  */
 @property (nonatomic, strong) UIView *functionBGView;
 
+/**
+ @brief 当前选择的类型
+ */
+@property (nonatomic, assign) NSInteger nowMediaType;
+
 @end
 
 @implementation AlbumViewController
@@ -121,18 +126,32 @@
 - (void)initViews{
      [self.navigationController setNavigationBarHidden:YES animated:YES];
      [self.view addSubview:self.collection];
+    __block typeof(self) weakSelf = self;
+    [CameraImgManagerTool getAllImagesType:self.selectedType complete:^(NSArray<MediaAssetModel *> *allAlbumArray) {
+        weakSelf.mediaAssetArray = [NSMutableArray arrayWithArray:allAlbumArray];
+        if (weakSelf.allAlbumArray) {
+            [weakSelf.allAlbumArray insertObject:@{@"albumName":[Lemage getUsageText].allImages,@"assetArr":weakSelf.mediaAssetArray} atIndex:0];
+        }
+        for (MediaAssetModel *tempModel in weakSelf.mediaAssetArray) {
+            [weakSelf.localIdentifierArr addObject:[NSString stringWithFormat:@"lemage://album/%@",tempModel.localIdentifier]];
+        }
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [weakSelf.collection reloadData];
+        });
+    }];
     
-    _mediaAssetArray = [NSMutableArray arrayWithArray:[CameraImgManagerTool getAllImages]];
-    for (MediaAssetModel *tempModel in _mediaAssetArray) {
-        [_localIdentifierArr addObject:[NSString stringWithFormat:@"lemage://album/local/%@",tempModel.localIdentifier]];
-    }
-    [self.collection reloadData];
+    [CameraImgManagerTool getAllAlbum:self.selectedType complete:^(NSArray<MediaAssetModel *> *allAlbumArray) {
+        weakSelf.allAlbumArray = [NSMutableArray arrayWithArray:allAlbumArray];
+        if (weakSelf.mediaAssetArray) {
+            
+            [weakSelf.allAlbumArray insertObject:@{@"albumName":[Lemage getUsageText].allImages,@"assetArr":weakSelf.mediaAssetArray} atIndex:0];
+        }
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [weakSelf.albumCollection reloadData];
+        });
+    }];
 
-    
-    _allAlbumArray = [NSMutableArray arrayWithArray:[CameraImgManagerTool getAllAlbum]];
-    [_allAlbumArray insertObject:@{@"albumName":[Lemage getUsageText].allImages,@"assetArr":_mediaAssetArray} atIndex:0];
     [self.view addSubview:self.albumCollection];
-    [self.albumCollection reloadData];
 }
 
 - (void)createNoImgLabel{
@@ -154,7 +173,7 @@
         CGRect rect = CGRectMake(0.0,0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height );
         
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        CGFloat gap = 10.0;
+        CGFloat gap = 5.0;
         layout.minimumLineSpacing = gap;
         layout.minimumInteritemSpacing = gap;
         layout.sectionInset = UIEdgeInsetsMake(gap, gap, gap, gap);
@@ -229,19 +248,22 @@
         tempModel.selected = [_selectedImgArr containsObject:self.localIdentifierArr[indexPath.row]]?YES:NO;
         self.mediaAssetArray[indexPath.row]=tempModel;
         cell.assetModel = tempModel;
-        cell.canSelected = _selectedImgArr.count==_restrictNumber?NO:YES;
+        cell.canSelected = _selectedImgArr.count>=_restrictNumber?NO:([self.styleType isEqualToString:@"unique"]?(self.nowMediaType>0?(tempModel.mediaType == self.nowMediaType?YES:NO):YES):YES);
         cell.imgNo = [_selectedImgArr containsObject:self.localIdentifierArr[indexPath.row]]?[NSString stringWithFormat:@"%ld",[_selectedImgArr indexOfObject:self.localIdentifierArr[indexPath.row]]+1]:@"";
         __weak typeof(cell) weakCell = cell;
         __weak typeof(self) weakSelf = self;
         cell.selectedBlock = ^(BOOL selected) {
             if(weakSelf.selectedImgArr.count<=self.restrictNumber){
                 if([weakSelf.selectedImgArr containsObject:weakSelf.localIdentifierArr[indexPath.row]]){
-//                    [weakSelf.selectedImgArr removeObject:weakSelf.mediaAssetArray[indexPath.row]];
                     [weakSelf.selectedImgArr removeObject:weakSelf.localIdentifierArr[indexPath.row]];
                 }else{
-//                    [weakSelf.selectedImgArr addObject:weakSelf.mediaAssetArray[indexPath.row]];
                     [weakSelf.selectedImgArr addObject:weakSelf.localIdentifierArr[indexPath.row]];
                     
+                }
+                if (weakSelf.selectedImgArr.count == 0) {
+                    weakSelf.nowMediaType = 0;
+                }else{
+                    weakSelf.nowMediaType = weakCell.assetModel.mediaType;
                 }
                 weakCell.assetModel.selected = !weakCell.assetModel.selected;
                 weakCell.selectButton.selected = weakCell.assetModel.selected;
@@ -288,7 +310,7 @@
         if (_mediaAssetArray.count) {
             [self dismissAlbumCollection];
             
-            [Lemage startPreviewerWithImageUrlArr:_localIdentifierArr chooseImageUrlArr:_selectedImgArr allowChooseCount:_restrictNumber showIndex:indexPath.row themeColor:_themeColor willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+            [Lemage startPreviewerWithImageUrlArr:_localIdentifierArr chooseImageUrlArr:_selectedImgArr allowChooseCount:_restrictNumber showIndex:indexPath.row themeColor:_themeColor styleType:self.styleType nowMediaType:self.nowMediaType willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
                 self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
                 if (self.willClose) {
                     self.willClose(self.selectedImgArr, self.originalImageBtn.selected);
@@ -299,7 +321,8 @@
                     self.closed(self.selectedImgArr, self.originalImageBtn.selected);
                 }
                 
-            } cancelBack:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+            } cancelBack:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal,NSInteger NowMediaType) {
+                self.nowMediaType = NowMediaType;
                 self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
                 [self.collection reloadData];
                 
@@ -316,7 +339,7 @@
     _mediaAssetArray = [NSMutableArray arrayWithArray:_allAlbumArray[indexPathRow][@"assetArr"]];
     [_localIdentifierArr removeAllObjects];
     for (MediaAssetModel *tempModel in _mediaAssetArray) {
-        [_localIdentifierArr addObject:[NSString stringWithFormat:@"lemage://album/local/%@",tempModel.localIdentifier]];
+        [_localIdentifierArr addObject:[NSString stringWithFormat:@"lemage://album/%@",tempModel.localIdentifier]];
     }
     
     if (_mediaAssetArray.count <= 0) {
@@ -364,7 +387,7 @@
     _cancelBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [_titleBarBGView addSubview:_cancelBtn ];
     
-   _titleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _titleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     _titleBtn.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, self.view.frame.size.width-160, 24);
     [_titleBtn setTitle:[Lemage getUsageText].allImages forState:UIControlStateNormal];
     [_titleBtn setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
@@ -446,25 +469,7 @@
 
 - (void)finishSelectedImg:(UIButton *)btn{
     
-//    NSMutableArray *imageArr = [NSMutableArray new];
-//    for (NSInteger i = 0; i<_selectedImgArr.count; i++) {
-//        __weak typeof(self) weakSelf = self;
-//        [CameraImgManagerTool fetchCostumMediaAssetModel:nil localIdentifier:_selectedImgArr[i] handler:^(NSData *imageData) {
-//            if (weakSelf.originalImageBtn.selected) {
-//                [imageArr addObject:imageData];
-//            }else{
-//                //压缩图片
-//                [imageArr addObject:[CameraImgManagerTool compressImageSize:imageData toKB:400]];
-//
-//            }
-//            if (imageArr.count == weakSelf.selectedImgArr.count) {
-//                NSLog(@"%ld",imageArr.count);
-//            }
-//
-//        }];
-//    }
-    
-//    self.imgIDBlock(_selectedImgArr);
+
     if (self.willClose) {
         self.willClose(_selectedImgArr, _originalImageBtn.selected);
     }
@@ -482,7 +487,7 @@
  */
 - (void)previewImg:(UIButton *)btn{
 
-    [Lemage startPreviewerWithImageUrlArr:_selectedImgArr chooseImageUrlArr:_selectedImgArr allowChooseCount:_selectedImgArr.count showIndex:0 themeColor:_themeColor willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+    [Lemage startPreviewerWithImageUrlArr:_selectedImgArr chooseImageUrlArr:_selectedImgArr allowChooseCount:_selectedImgArr.count showIndex:0 themeColor:_themeColor styleType:self.styleType nowMediaType:self.nowMediaType willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
         self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
         if (self.willClose) {
             self.willClose(self.selectedImgArr, self.originalImageBtn.selected);
@@ -492,7 +497,7 @@
         if (self.closed) {
             self.closed(self.selectedImgArr, self.originalImageBtn.selected);
         }
-    } cancelBack:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+    } cancelBack:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal,NSInteger NowMediaType) {
         self.selectedImgArr = [NSMutableArray arrayWithArray:imageUrlList];
         [self.collection reloadData];
         
@@ -545,13 +550,13 @@
 -(UICollectionView *)albumCollection{
     if(!_albumCollection){
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        CGFloat gap = 10.0;
+        CGFloat gap = 5.0;
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
         layout.minimumLineSpacing = gap;
         layout.minimumInteritemSpacing = gap;
-        layout.sectionInset = UIEdgeInsetsMake(0, gap, 0, gap);
-        CGFloat itemWH = (self.view.frame.size.width>self.view.frame.size.height?self.view.frame.size.height:self.view.frame.size.width)/4-50/4;
-        CGRect rect = CGRectMake(0.0,64, [UIScreen mainScreen].bounds.size.width, itemWH+30 );
+        layout.sectionInset = UIEdgeInsetsMake(gap, gap, gap, gap);
+        CGFloat itemWH = (MIN(self.view.frame.size.height, self.view.frame.size.width) - gap * 5)/4;
+        CGRect rect = CGRectMake(0.0,64, [UIScreen mainScreen].bounds.size.width, itemWH+36 );
         
         layout.itemSize = CGSizeMake(itemWH, itemWH+20);
         
@@ -634,8 +639,8 @@
         _cancelBtn.frame = CGRectMake(_titleBarBGView.frame.size.width-80, _titleBarBGView.frame.size.height-34, 64, 24);
         _titleBtn.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);
         _collection.frame = CGRectMake(0, 0, size.width, size.height);
-        CGFloat itemWH = size.width>size.height?(size.height/4-50/4):(size.width/4-50/4);
-        CGRect rect = CGRectMake(0.0,-itemWH+30-64, size.width, itemWH+30 );
+        CGFloat itemWH = (MIN(size.height,size.width) - 5 * 5)/4;
+        CGRect rect = CGRectMake(0.0,-itemWH+30-64, size.width, itemWH+36 );
         _albumCollection.frame = rect;
         _albumCollection.alpha = 0;
         _functionBGView.center = CGPointMake(size.width/2, size.height-50);

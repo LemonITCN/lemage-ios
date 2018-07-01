@@ -10,16 +10,20 @@
 #import "LemageUrlInfo.h"
 #import "Lemage.h"
 #import <Photos/Photos.h>
+
+
 @implementation LemageURLProtocol
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
-    if ([request.URL.scheme caseInsensitiveCompare: LEMAGE] == NSOrderedSame) {
-        return YES;
-    }
+    NSLog(@"request.URL === %@",request.URL);
+    
     
     if ([NSURLProtocol propertyForKey: LEMAGE inRequest:request]) {
         // 处理后的request会打上LEMAGE标记，在这里判断一下，如果打过标记的request会放过，防止死循环
         return NO;
+    }
+    if ([request.URL.scheme caseInsensitiveCompare: LEMAGE] == NSOrderedSame||[request.URL.scheme caseInsensitiveCompare: @"http"] == NSOrderedSame||[request.URL.scheme caseInsensitiveCompare: @"https"] == NSOrderedSame) {
+        return YES;
     }
     return NO;
 }
@@ -30,23 +34,49 @@
 - (void)startLoading{
     NSMutableURLRequest* request = self.request.mutableCopy;
     [NSURLProtocol setProperty:@YES forKey: LEMAGE inRequest:request];
+    __block typeof(self) weakSelf = self;
     if ([request.URL.scheme caseInsensitiveCompare: LEMAGE] == NSOrderedSame) {
-        __block typeof(self) weakSelf = self;
+        
         [Lemage loadImageDataByLemageUrl:request.URL.absoluteString complete:^(NSData * _Nonnull imageData) {
             NSData *data = imageData;
             NSURLResponse* response = [[NSURLResponse alloc] initWithURL:weakSelf.request.URL MIMEType:@"image/png" expectedContentLength:data.length textEncodingName:nil];
-            
             [weakSelf.client URLProtocol:weakSelf didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageAllowed];
             [weakSelf.client URLProtocol:weakSelf didLoadData:data];
             [weakSelf.client URLProtocolDidFinishLoading:weakSelf];
         }];
     }else {
+
+        NSDictionary *fileNameDic = [Lemage queryContainsFileForUrl:request.URL];
+        if (((NSString *)fileNameDic[@"fileName"]).length>0) {
+
+            
+            NSData *data =    [NSJSONSerialization dataWithJSONObject:fileNameDic options:NSJSONWritingPrettyPrinted error:nil];
+            NSURLResponse* response = [[NSURLResponse alloc] initWithURL:weakSelf.request.URL MIMEType:@"tempFile/unknow" expectedContentLength:data.length textEncodingName:nil];
+            [weakSelf.client URLProtocol:weakSelf didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageAllowed];
+            [weakSelf.client URLProtocol:weakSelf didLoadData:data];
+            [weakSelf.client URLProtocolDidFinishLoading:weakSelf];
+        }else{
+            NSURLSession *session = [NSURLSession sharedSession];
+            NSURLSessionDataTask *tempSessionDataTask =  [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                [weakSelf.client URLProtocol:weakSelf didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageAllowed];
+                [weakSelf.client URLProtocol:weakSelf didLoadData:data];
+                [weakSelf.client URLProtocolDidFinishLoading:weakSelf];
+            }];
+            [tempSessionDataTask resume];
+        }
         
     }
 }
 - (void)stopLoading {
 }
-
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveResponse:(NSURLResponse *)response completionHandler:(void (^)(NSURLSessionResponseDisposition))completionHandler {
+    [[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageAllowed];
+    
+    completionHandler(NSURLSessionResponseAllow);
+}
+- (void)URLSession:(NSURLSession *)session dataTask:(NSURLSessionDataTask *)dataTask didReceiveData:(NSData *)data {
+    [[self client] URLProtocol:self didLoadData:data];
+}
 /**
  根据lemageUrl信息对象逆向找到对应的相册图片，然后将其NSData数据返回
 

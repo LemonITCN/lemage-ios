@@ -19,4 +19,6 @@
 @property (nonatomic, strong) UIView *whiteView;
 @property (nonatomic, strong) NSString *imgNo;
 @property (nonatomic, strong) UIColor *themeColor;
+@property (nonatomic, strong) UILabel *timeLabel;
+@property (nonatomic, strong) UIImageView *videoImageView;
 @end

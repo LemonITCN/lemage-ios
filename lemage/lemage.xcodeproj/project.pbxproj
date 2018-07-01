@@ -40,6 +40,8 @@
 		571487B120D102CF009C2069 /* AlbumCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 571487AD20D102CF009C2069 /* AlbumCell.h */; };
 		571487B220D102CF009C2069 /* ImageSelectedCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 571487AE20D102CF009C2069 /* ImageSelectedCell.h */; };
 		571487B320D102CF009C2069 /* AlbumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 571487AF20D102CF009C2069 /* AlbumCell.m */; };
+		5743BDD720E6071100E13869 /* MediaProgressBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 5743BDD520E6071100E13869 /* MediaProgressBar.h */; };
+		5743BDD820E6071100E13869 /* MediaProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5743BDD620E6071100E13869 /* MediaProgressBar.m */; };
 		57A5435A20D8DB5F002647CB /* lemage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; };
 		57A5435B20D8DB5F002647CB /* lemage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -107,6 +109,8 @@
 		571487AD20D102CF009C2069 /* AlbumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumCell.h; sourceTree = "<group>"; };
 		571487AE20D102CF009C2069 /* ImageSelectedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageSelectedCell.h; sourceTree = "<group>"; };
 		571487AF20D102CF009C2069 /* AlbumCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumCell.m; sourceTree = "<group>"; };
+		5743BDD520E6071100E13869 /* MediaProgressBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaProgressBar.h; sourceTree = "<group>"; };
+		5743BDD620E6071100E13869 /* MediaProgressBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaProgressBar.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,6 +207,7 @@
 		52BDF45A20CE10130072FEF1 /* lemage */ = {
 			isa = PBXGroup;
 			children = (
+				5743BDD420E606F400E13869 /* view */,
 				571487AB20D102CF009C2069 /* cell */,
 				571487A620D102C6009C2069 /* model */,
 				571487A120D102BF009C2069 /* single */,
@@ -269,6 +274,15 @@
 			path = cell;
 			sourceTree = "<group>";
 		};
+		5743BDD420E606F400E13869 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				5743BDD520E6071100E13869 /* MediaProgressBar.h */,
+				5743BDD620E6071100E13869 /* MediaProgressBar.m */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -276,6 +290,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5743BDD720E6071100E13869 /* MediaProgressBar.h in Headers */,
 				5714879920D102AA009C2069 /* BrowseImageController.h in Headers */,
 				52287B8D20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h in Headers */,
 				52287B9220D0C2B200B3C841 /* LemageURLProtocol.h in Headers */,
@@ -406,6 +421,7 @@
 				5714879F20D102B4009C2069 /* CameraImgManagerTool.m in Sources */,
 				52287B9820D0E04100B3C841 /* LemageUrlInfo.m in Sources */,
 				571487B020D102CF009C2069 /* ImageSelectedCell.m in Sources */,
+				5743BDD820E6071100E13869 /* MediaProgressBar.m in Sources */,
 				52287B8420D0AB6800B3C841 /* Lemage.m in Sources */,
 				571487A920D102C6009C2069 /* MediaAssetModel.m in Sources */,
 				571487A420D102BF009C2069 /* DrawingSingle.m in Sources */,

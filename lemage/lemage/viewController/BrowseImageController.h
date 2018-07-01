@@ -10,6 +10,7 @@
 #import "MediaAssetModel.h"
 
 typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL isOriginal);
+typedef void (^ LEMAGE_CANCEL_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL isOriginal ,NSInteger NowMediaType);
 
 @interface BrowseImageController : UIViewController
 /**
@@ -29,9 +30,18 @@ typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
  */
 @property (nonatomic, strong) NSMutableArray *selectedImgArr;
 
+/**
+ @brief 将要关闭回调
+ */
 @property(nonatomic,copy) LEMAGE_RESULT_BLOCK willClose;
+/**
+ @brief 已经关闭回调
+ */
 @property(nonatomic,copy) LEMAGE_RESULT_BLOCK closed;
-@property(nonatomic,copy) LEMAGE_RESULT_BLOCK cancelBack;
+/**
+ 取消选择的回调
+ */
+@property(nonatomic,copy) LEMAGE_CANCEL_BLOCK cancelBack;
 /**
  @brief 当前展示的数组下标
  */
@@ -41,5 +51,16 @@ typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
  @brief title
  */
 @property (nonatomic, strong) NSString *titleStr;
+/**
+ @brief  unique:只能选择一种,mix:都可以选择;
+ */
+@property (nonatomic, strong) NSString *styleType;
+/**
+ @brief 当前选择的类型
+ */
+@property (nonatomic, assign) NSInteger nowMediaType;
+/**
+ 主体颜色
+ */
 @property (nonatomic, strong) UIColor *themeColor;
 @end

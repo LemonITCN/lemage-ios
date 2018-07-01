@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param isOriginal 用户是否选择了原图选项，如果该组件关闭或不支持原图按钮选项，那么此值会始终返回YES
  */
 typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL isOriginal);
-
+typedef void (^ LEMAGE_CANCEL_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL isOriginal ,NSInteger NowMediaType);
 @interface Lemage : NSObject
 
 /**
@@ -100,7 +100,36 @@ typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
  @param lemageUrl 要使其过期的LemageURL
  */
 + (void)expiredUrl: (NSString *)lemageUrl;
+/**
+ 查询当前是否包含url的缓存文件
+ 原理:沙盒文件管理查询
+ @param url url
+ @return dic中如果filename为空表示没有文件
+ */
++ (NSDictionary *)queryContainsFileForUrl:(NSURL *)url;
+/**
+ 下载下来的二进制数据添加到缓存当中
+ 原理:将二进制存储到沙盒
 
+ @param data 二进制文件
+ @param url urlMD5加密后作为存贮的标识
+ @param type image/video
+ @return 返回的存储路径
+ */
++(NSString *)saveImageOrVideoWithData:(NSData *)data url:(NSURL *)url type:(NSString *)type;
+/**
+ 获取当前file的路径
+ 原理:url二进制加密后根据type类型在沙盒中查找
+ @param url url
+ @param type 类型
+ @return filePath文件路径
+ */
++(NSString *)getImageOrVideoFile:(NSURL *)url type:(NSString *)type;
+/**
+ 删除缓存文件
+ 原来:沙盒管理删除文件夹
+ */
++ (void)expiredTmpTermUrl;
 /**
  启动图片选择器
 
@@ -113,6 +142,8 @@ typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
 + (void)startChooserWithMaxChooseCount: (NSInteger) maxChooseCount
                 needShowOriginalButton: (BOOL) needShowOriginalButton
                             themeColor: (UIColor *) themeColor
+                          selectedType: (NSString *) selectedType
+                             styleType: (NSString *) styleType
                              willClose: (LEMAGE_RESULT_BLOCK) willClose
                                 closed: (LEMAGE_RESULT_BLOCK) closed;
 
@@ -134,9 +165,11 @@ typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
                      allowChooseCount: (NSInteger)allowChooseCount
                             showIndex: (NSInteger)showIndex
                            themeColor: (UIColor *)themeColor
+                            styleType: (NSString *) styleType
+                         nowMediaType: (NSInteger) nowMediaType
                             willClose: (LEMAGE_RESULT_BLOCK)willClose
                                closed: (LEMAGE_RESULT_BLOCK)closed
-                            cancelBack: (LEMAGE_RESULT_BLOCK)cancelBack;
+                            cancelBack: (LEMAGE_CANCEL_BLOCK)cancelBack;
 
 @end
 

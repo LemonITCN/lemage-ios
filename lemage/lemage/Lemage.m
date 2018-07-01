@@ -13,7 +13,7 @@
 #import "AlbumViewController.h"
 #import "BrowseImageController.h"
 #import "LemageUsageText.h"
-
+#import<CommonCrypto/CommonDigest.h>
 
 
 @implementation Lemage
@@ -211,7 +211,6 @@
 }
 
 
-
 /**
  创建图片NSData文件
  原理:先查询是否已经创建过文件夹,如果没有则创建一个相应的文件用来存储图片data
@@ -269,13 +268,16 @@
 + (void)startChooserWithMaxChooseCount: (NSInteger) maxChooseCount
                 needShowOriginalButton: (BOOL) needShowOriginalButton
                             themeColor: (UIColor *) themeColor
+                          selectedType: (NSString *) selectedType
+                             styleType: (NSString *) styleType
                              willClose: (LEMAGE_RESULT_BLOCK) willClose
                                 closed: (LEMAGE_RESULT_BLOCK) closed{
     AlbumViewController *VC = [[AlbumViewController alloc]init];
     VC.restrictNumber = MAX(1, MIN(99, maxChooseCount));;
     VC.hideOriginal = !needShowOriginalButton;
     VC.themeColor = themeColor;
-
+    VC.styleType = [@[@"mix",@"unique"] containsObject:styleType]?styleType:@"mix";
+    VC.selectedType = [@[@"all",@"image",@"video"] containsObject:selectedType]?selectedType:@"all";
     VC.willClose = ^(NSArray<NSString *> *imageUrlList, BOOL isOriginal) {
         willClose(imageUrlList,isOriginal);
     };
@@ -303,9 +305,11 @@
                      allowChooseCount: (NSInteger)allowChooseCount
                             showIndex: (NSInteger)showIndex
                            themeColor: (UIColor *) themeColor
+                            styleType: (NSString *) styleType
+                         nowMediaType: (NSInteger) nowMediaType
                             willClose: (LEMAGE_RESULT_BLOCK)willClose
                                closed: (LEMAGE_RESULT_BLOCK)closed
-                           cancelBack: (LEMAGE_RESULT_BLOCK)cancelBack{
+                           cancelBack: (LEMAGE_CANCEL_BLOCK)cancelBack{
     BrowseImageController *VC = [[BrowseImageController alloc] init];
     VC.localIdentifierArr = [NSMutableArray arrayWithArray:imageUrlArr];
     if (allowChooseCount<chooseImageUrlArr.count&&allowChooseCount>0) {
@@ -313,7 +317,8 @@
     }else{
         VC.selectedImgArr = [NSMutableArray arrayWithArray:chooseImageUrlArr];
     }
-    
+    VC.styleType = [@[@"mix",@"unique"] containsObject:styleType]?styleType:@"mix";
+    VC.nowMediaType = MAX(0, MIN(2, nowMediaType));
     VC.restrictNumber = allowChooseCount;
     VC.themeColor = themeColor;
     VC.showIndex = showIndex;
@@ -323,8 +328,8 @@
     VC.closed = ^(NSArray<NSString *> *imageUrlList, BOOL isOriginal) {
         closed(imageUrlList,isOriginal);
     };
-    VC.cancelBack = ^(NSArray<NSString *> *imageUrlList, BOOL isOriginal) {
-        cancelBack(imageUrlList,isOriginal);
+    VC.cancelBack = ^(NSArray<NSString *> *imageUrlList, BOOL isOriginal ,NSInteger NowMediaType) {
+        cancelBack(imageUrlList,isOriginal,NowMediaType);
     };
     [[self getCurrentVC] presentViewController:VC animated:YES completion:nil];
     
@@ -365,5 +370,78 @@ static LemageUsageText *_usageText;
     }
     return _usageText;
 }
++ (NSDictionary *)queryContainsFileForUrl:(NSURL *)url{
+    NSInteger status = [self isFileExist:[self md5:[url absoluteString]]];
+    if (status) {
+        NSString *fileName;
+        fileName = [NSString  stringWithFormat:@"/private/%@/tmp/%@/%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,status==1?@"image":@"video",[self md5:[url absoluteString]]];
+        if (status == 2) {
+            fileName = [NSString stringWithFormat:@"%@.mp4",fileName];
+        }
+        return @{@"fileName":fileName,@"type":status==1?@"image":@"video"};
+    }else{
+        return @{@"fileName":@""};
+    }
+    
+}
++(NSInteger ) isFileExist:(NSString *)fileName{
+    NSString *filePath = [NSString  stringWithFormat:@"/private/%@/tmp/image/%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,fileName];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    BOOL result = [fileManager fileExistsAtPath:filePath];
+    if (result) {
+        return 1;
+    }
+    filePath = [NSString  stringWithFormat:@"/private/%@/tmp/video/%@.mp4",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,fileName];
+    result = [fileManager fileExistsAtPath:filePath];
+    if (result) {
+        return 2;
+    }
+    NSLog(@"这个文件已经存在：%@",result?@"是的":@"不存在");
+    return 0;
+}
++(NSString *)getImageOrVideoFile:(NSURL *)url type:(NSString *)type{
+    NSString *filePath = [NSString  stringWithFormat:@"/private/%@/tmp/%@/%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,type,[self md5:[url absoluteString]]];
+    if ([type isEqualToString:@"video"]) {
+        filePath = [NSString stringWithFormat:@"%@.mp4",filePath];
+    }
+    return filePath;
+}
++(NSString *)saveImageOrVideoWithData:(NSData *)data url:(NSURL *)url type:(NSString *)type{
+    NSString *filePath = [NSString  stringWithFormat:@"/private/%@/tmp/%@/%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,type,[self md5:[url absoluteString]]];
+    if ([type containsString:@"video"]) {
+        filePath = [NSString  stringWithFormat:@"%@.mp4",filePath];
+    }
+    
+    NSLog(@"filePath === %@",filePath);
+    if([self creatFileWithPath:filePath]){
+        //写入内容
+        [data writeToFile:filePath atomically:YES];
+    }
+    return filePath;
+}
+/**
+ 让所有temp失效
+ 原理：删除所有本地tem对应的沙盒图片文件
+ */
++ (void)expiredTmpTermUrl {
+    NSString *filePath = [NSString  stringWithFormat:@"/private/%@/tmp",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    [fileManager removeItemAtPath:filePath error:nil];
+}
 
++ (NSString *) md5:(NSString *) input {
+    const char *cStr = [input UTF8String];
+    unsigned char digest[CC_MD5_DIGEST_LENGTH];
+    
+    CC_MD5(cStr, (CC_LONG)strlen(cStr), digest);
+    
+    NSMutableString *result = [NSMutableString stringWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+    for (int i = 0; i < CC_MD5_DIGEST_LENGTH; i++) {
+        [result appendFormat:@"%02X", digest[i]];
+    }
+    
+    return result;
+    
+    
+}
 @end

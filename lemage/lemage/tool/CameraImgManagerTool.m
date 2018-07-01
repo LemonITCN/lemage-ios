@@ -25,8 +25,8 @@
     }];
 }
 
-+(NSMutableArray <MediaAssetModel *>*)getAllImages{
-    
++(void)getAllImagesType:(NSString *)type complete:(LEMAGE_COMPLETE_RESULT)complete{
+    //
     PHImageRequestOptions *options = [[PHImageRequestOptions alloc] init];//请求选项设置
     options.resizeMode = PHImageRequestOptionsResizeModeExact;//自定义图片大小的加载模式
     options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
@@ -34,32 +34,86 @@
     
     //容器类
     
-    NSMutableArray <MediaAssetModel *>*mmediaAssetArray = [NSMutableArray array];
-    for (PHAsset *asset in [PHAsset fetchAssetsWithMediaType:PHAssetMediaTypeImage options:[[self class] configImageOptions]]) {
-        
+    NSMutableArray *mmediaAssetArray = [NSMutableArray array];
+    NSMutableArray *tempAssetArr = [NSMutableArray new];
+    for (PHAsset *asset in [PHAsset fetchAssetsWithOptions:nil]) {
+        if ([type isEqualToString:@"image"]) {
+            if (asset.mediaType == 1) {
+                [tempAssetArr addObject:asset];
+            }
+        }else if ([type isEqualToString:@"video"]){
+            if (asset.mediaType == 2) {
+                [tempAssetArr addObject:asset];
+            }
+        }else{
+            [tempAssetArr addObject:asset];
+        }
+        [mmediaAssetArray addObject:@"0"];
+    }
+    
+    for (NSInteger i = 0;i<tempAssetArr.count;i++) {
+        PHAsset *asset  = tempAssetArr[i];
+        NSString *index = [NSString stringWithFormat:@"%ld",i];
         [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(100, 100) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-            MediaAssetModel *object = [[MediaAssetModel alloc] init];
-            object.localIdentifier = asset.localIdentifier;
-            object.imageThumbnail = result;
-            object.asset = asset;
-            [mmediaAssetArray addObject:object];
+            
+            if (asset.mediaType == 2) {
+                
+                [[PHImageManager defaultManager] requestPlayerItemForVideo:asset options:nil resultHandler:^(AVPlayerItem * _Nullable playerItem, NSDictionary * _Nullable info) {
+                    
+                    //    如果要切换视频需要调AVPlayer的replaceCurrentItemWithPlayerItem:方法
+                    AVPlayer *player = [AVPlayer playerWithPlayerItem:playerItem];
+                    CMTime time = player.currentItem.asset.duration;
+                    Float64 seconds = CMTimeGetSeconds(time);
+                    
+                    MediaAssetModel *object = [[MediaAssetModel alloc] init];
+                    object.localIdentifier = [NSString stringWithFormat:@"local%@/%@",asset.mediaType == 1?@"Image":@"Video",asset.localIdentifier];
+                    object.imageThumbnail = result;
+                    object.videoTime = [NSString stringWithFormat:@"%f",seconds];
+                    object.asset = asset;
+                    object.mediaType = asset.mediaType;
+                    mmediaAssetArray[[index integerValue]] = object;
+ 
+                    if (![mmediaAssetArray containsObject:@"0"]) {
+                        if (complete) {
+                            complete(mmediaAssetArray);
+                        }
+                    }
+                }];
+            }else{
+                MediaAssetModel *object = [[MediaAssetModel alloc] init];
+                object.localIdentifier = [NSString stringWithFormat:@"local%@/%@",asset.mediaType == 1?@"Image":@"Video",asset.localIdentifier];
+                object.imageThumbnail = result;
+                object.asset = asset;
+                object.mediaType = asset.mediaType;
+                mmediaAssetArray[[index integerValue]] = object;
+                
+                if (![mmediaAssetArray containsObject:@"0"]) {
+                    if (complete) {
+                        complete(mmediaAssetArray);
+                    }
+                }
+            }
+            
         }];
 
     }
-    return mmediaAssetArray;
+    
+//    return mmediaAssetArray;
 }
 
 + (PHFetchOptions *)configImageOptions {
     PHFetchOptions *fetchResoultOption = [[PHFetchOptions alloc] init];
     fetchResoultOption.sortDescriptors = @[[NSSortDescriptor sortDescriptorWithKey:@"creationDate" ascending:false]];//按照日期降序排序
-    fetchResoultOption.predicate = [NSPredicate predicateWithFormat:@"mediaType = %d",PHAssetMediaTypeImage];//过滤剩下照片类型
+//    fetchResoultOption.predicate = [NSPredicate predicateWithFormat:@"mediaType = %d",PHAssetMediaTypeImage];//过滤剩下照片类型
     return fetchResoultOption;
 }
 
-+ (NSArray *)getAllAlbum{
++ (void)getAllAlbum:(NSString *)type complete:(LEMAGE_COMPLETE_RESULT)complete{
+
     NSMutableArray *nameArr = [NSMutableArray array];//用于存储assets's名字
     NSMutableArray *assetArr = [NSMutableArray array];//用于存储assets's内容
     NSMutableArray *nameAndAssetArr = [NSMutableArray new];
+    NSMutableArray *statusArr = [NSMutableArray new];
     
     // 获取系统设置的相册信息(没有<照片流>等)
     PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
@@ -69,20 +123,23 @@
 
         NSMutableArray *tempPHF = [NSMutableArray new];
         for (PHAsset *tempAsset in results) {
-            if (tempAsset.mediaType ==PHAssetMediaTypeImage) {
-                [[PHImageManager defaultManager] requestImageForAsset:tempAsset targetSize:CGSizeMake(100, 100) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-                    MediaAssetModel *object = [[MediaAssetModel alloc] init];
-                    object.localIdentifier = tempAsset.localIdentifier;
-                    object.imageThumbnail = result;
-                    object.asset = tempAsset;
-                    [tempPHF addObject:object];
-                }];
 
+            if ([type isEqualToString:@"image"]) {
+                if (tempAsset.mediaType == 1) {
+                    [tempPHF addObject:tempAsset];
+                }
+            }else if ([type isEqualToString:@"video"]){
+                if (tempAsset.mediaType == 2) {
+                    [tempPHF addObject:tempAsset];
+                }
+            }else{
+                [tempPHF addObject:tempAsset];
             }
         }
         [nameArr addObject:collection.localizedTitle];//存储assets's名字
         [assetArr addObject:tempPHF];//存储assets's内容
         [nameAndAssetArr addObject:@{@"albumName":collection.localizedTitle,@"assetArr":tempPHF}];
+        [statusArr addObject:tempPHF.count>0?@"0":@"1"];
     }
     
     //  用户自定义的资源
@@ -91,23 +148,90 @@
         PHFetchResult *assets = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
         NSMutableArray *tempPHF = [NSMutableArray new];
         for (PHAsset *tempAsset in assets) {
-            if (tempAsset.mediaType ==PHAssetMediaTypeImage) {
             
-                [[PHImageManager defaultManager] requestImageForAsset:tempAsset targetSize:CGSizeMake(100, 100) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-                    MediaAssetModel *object = [[MediaAssetModel alloc] init];
-                    object.localIdentifier = tempAsset.localIdentifier;
-                    object.imageThumbnail = result;
-                    object.asset = tempAsset;
-                    [tempPHF addObject:object];
-                }];
+            if ([type isEqualToString:@"image"]) {
+                if (tempAsset.mediaType == 1) {
+                    [tempPHF addObject:tempAsset];
+                }
+            }else if ([type isEqualToString:@"video"]){
+                if (tempAsset.mediaType == 2) {
+                    [tempPHF addObject:tempAsset];
+                }
+            }else{
+                [tempPHF addObject:tempAsset];
             }
         }
         [nameArr addObject:collection.localizedTitle];
-        [assetArr addObject:tempPHF];
         [nameAndAssetArr addObject:@{@"albumName":collection.localizedTitle,@"assetArr":tempPHF}];
+        [statusArr addObject:tempPHF.count>0?@"0":@"1"];
     }
     
-    return [NSArray arrayWithArray:nameAndAssetArr];
+    for (NSInteger i = 0;i<nameAndAssetArr.count;i++) {
+        NSDictionary *tempDic = nameAndAssetArr[i];
+        NSArray *tempArr = tempDic[@"assetArr"];
+        NSMutableArray *modelArr = [NSMutableArray new];
+        NSString *index = [NSString stringWithFormat:@"%ld",i];
+        for (NSInteger k = 0; k<tempArr.count; k++) {
+            [modelArr addObject:@"0"];
+        }
+        for (NSInteger j = 0; j<tempArr.count; j++) {
+            PHAsset *asset = tempArr[j];
+            NSString *jindex = [NSString stringWithFormat:@"%ld",j];
+            
+            [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(100, 100) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                
+                if (asset.mediaType == 2) {
+                    
+                    [[PHImageManager defaultManager] requestPlayerItemForVideo:asset options:nil resultHandler:^(AVPlayerItem * _Nullable playerItem, NSDictionary * _Nullable info) {
+                        
+                        //    如果要切换视频需要调AVPlayer的replaceCurrentItemWithPlayerItem:方法
+                        AVPlayer *player = [AVPlayer playerWithPlayerItem:playerItem];
+                        CMTime time = player.currentItem.asset.duration;
+                        Float64 seconds = CMTimeGetSeconds(time);
+                        
+                        MediaAssetModel *object = [[MediaAssetModel alloc] init];
+                        object.localIdentifier = [NSString stringWithFormat:@"local%@/%@",asset.mediaType == 1?@"Image":@"Video",asset.localIdentifier];
+                        object.imageThumbnail = result;
+                        object.videoTime = [NSString stringWithFormat:@"%f",seconds];
+                        object.asset = asset;
+                        object.mediaType = asset.mediaType;
+                        modelArr[[jindex integerValue]] = object;
+                        if (![modelArr containsObject:@"0"]) {
+                            nameAndAssetArr[[index integerValue]] = @{@"albumName":tempDic[@"albumName"],@"assetArr":modelArr};
+                            statusArr[[index integerValue]] = @"1";
+                            if ([statusArr containsObject:@"0"]) {
+                                
+                            }else{
+                                if (complete) {
+                                    complete(nameAndAssetArr);
+                                }
+                            }
+                        }
+                        
+                    }];
+                }else{
+                    MediaAssetModel *object = [[MediaAssetModel alloc] init];
+                    object.localIdentifier = [NSString stringWithFormat:@"local%@/%@",asset.mediaType == 1?@"Image":@"Video",asset.localIdentifier];
+                    object.imageThumbnail = result;
+                    object.asset = asset;
+                    object.mediaType = asset.mediaType;
+                    modelArr[[jindex integerValue]] = object;
+                    if (![modelArr containsObject:@"0"]) {
+                        nameAndAssetArr[[index integerValue]] = @{@"albumName":tempDic[@"albumName"],@"assetArr":modelArr};
+                        statusArr[[index integerValue]] = @"1";
+                        if ([statusArr containsObject:@"0"]) {
+                            
+                        }else{
+                            if (complete) {
+                                complete(nameAndAssetArr);
+                            }
+                        }
+                    }
+                }
+                
+            }];
+        }
+    }
 }
 
 + (void)fetchCostumMediaAssetModel:(MediaAssetModel *)model localIdentifier:(NSString *)localIdentifier handler:(void (^)(NSData *imageData))handler{

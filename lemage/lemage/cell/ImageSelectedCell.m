@@ -8,7 +8,7 @@
 
 #import "ImageSelectedCell.h"
 #import <AssetsLibrary/AssetsLibrary.h>
-
+#import "DrawingSingle.h"
 @implementation ImageSelectedCell
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -53,13 +53,56 @@
     if ([assetModel isKindOfClass:[MediaAssetModel class]]) {
         _assetModel = assetModel;
         self.selectButton.selected = _assetModel.selected;
+        if (_assetModel.videoTime) {
+            self.timeLabel.text =[self timeFormatted:[[self decimalwithFormat:@"0" floatV:[_assetModel.videoTime floatValue]] intValue]];
+            self.videoImageView.image = [[DrawingSingle shareDrawingSingle] getVideoImageSize:_videoImageView.frame.size color:[UIColor whiteColor]];
+        }else{
+            self.timeLabel.text = nil;
+            self.videoImageView.image = nil;
+        }
+        
         if (_assetModel.imageThumbnail) {
             self.imageView.image = _assetModel.imageThumbnail;
         }
     }
     
 }
+//格式话小数 四舍五入类型
+- (NSString *) decimalwithFormat:(NSString *)format  floatV:(float)floatV{
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    
+    [numberFormatter setPositiveFormat:format];
+    
+    return  [numberFormatter stringFromNumber:[NSNumber numberWithFloat:floatV]];
+}
 
+
+- (NSString *)timeFormatted:(int)totalSeconds{
+    int seconds = totalSeconds % 60;
+    int minutes = (totalSeconds / 60) % 60;
+    int hours = totalSeconds / 3600;
+    if (hours==0) {
+        return [NSString stringWithFormat:@"%02d:%02d", minutes, seconds];
+    }
+    return [NSString stringWithFormat:@"%02d:%02d:%02d",hours, minutes, seconds];
+}
+- (UILabel *)timeLabel{
+    if (!_timeLabel) {
+        _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.contentView.frame.size.width/5*2, self.contentView.frame.size.height-20, self.contentView.frame.size.width/5*3, 14)];
+        _timeLabel.font = [UIFont systemFontOfSize:13];
+        _timeLabel.textColor = [UIColor whiteColor];
+        
+        [self.contentView addSubview:_timeLabel];
+    }
+    return _timeLabel;
+}
+- (UIImageView *)videoImageView{
+    if (!_videoImageView) {
+        _videoImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, self.contentView.frame.size.height-19, self.contentView.frame.size.width/5*2, 12)];
+        [self.contentView addSubview:_videoImageView];
+    }
+    return _videoImageView;
+}
 - (void)setImgNo:(NSString *)imgNo{
     _imgNo = imgNo;
     if (self.imgNo.length > 0) {

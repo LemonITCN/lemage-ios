@@ -9,20 +9,29 @@
 #import <Foundation/Foundation.h>
 #import <Photos/Photos.h>
 #import "MediaAssetModel.h"
+typedef void (^ LEMAGE_COMPLETE_RESULT)(NSArray *allAlbumArray);
 @interface CameraImgManagerTool : NSObject
+/**
+ 获取相册权限
+
+ @param handler nil;
+ */
 + (void)requestPhotosLibraryAuthorization:(void(^)(BOOL ownAuthorization))handler;
 /**
- 获取所有相册的图片
+ 获取所有相册的图片和视频
 
- @return 所有相册
+ @param type 类型(只返回图片、相册或所有)
+ @param complete 完成回调
  */
-+(NSArray *)getAllImages;
++(void)getAllImagesType:(NSString *)type complete:(LEMAGE_COMPLETE_RESULT)complete;
+
 /**
  获取所有的相册名称和图片
 
- @return 相册名称和图片(数组下标对应)
+ @param type 类型(只返回图片、相册或所有)
+ @param complete 完成回调
  */
-+ (NSArray *)getAllAlbum;
++ (void)getAllAlbum:(NSString *)type complete:(LEMAGE_COMPLETE_RESULT)complete;
 
 /**
  获取高清图片

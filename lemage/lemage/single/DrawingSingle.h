@@ -30,4 +30,35 @@
  @return 返回的图片
  */
 -(UIImage *)getCircularSize:(CGSize)size color:(UIColor *)color insideColor:(UIColor *)insideColor solid:(BOOL)solid;
+/**
+ 显示视频图片
+
+ @param size 大小
+ @param color 颜色
+ @return 返回的图片
+ */
+-(UIImage *)getVideoImageSize:(CGSize)size color:(UIColor *)color;
+/**
+ 播放图片
+
+ @param size 大小
+ @param color 颜色
+ @return 返回的图片
+ */
+-(UIImage *)getPlayImageSize:(CGSize)size color:(UIColor *)color;
+/**
+ 暂停的图片
+
+ @param size 代销
+ @param color 颜色
+ @return 返回的大小
+ */
+-(UIImage *)getPauseImageSize:(CGSize)size color:(UIColor *)color;
+/**
+ 创建slider的圆点图片
+
+ @param size 圆点的大熊啊
+ @return 返回的图片
+ */
+-(UIImage*) OriginImageToSize:(CGSize)size;
 @end

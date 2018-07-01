@@ -14,7 +14,8 @@
 @property (nonatomic, assign) BOOL selected;//是否已被选中
 @property (nonatomic, strong) NSString *imgNo;//图片顺序
 @property (nonatomic, strong) PHAsset *asset;//元数据资源
-
+@property (nonatomic, strong) NSString *videoTime;//时间长短
+@property (nonatomic, assign) NSInteger mediaType;//视频还是图片类型1:图片,2:视频
 @property (nonatomic, strong) NSString *localIdentifier; //assetId;(根据ID 获取asset)
 
 ///大小由宏定义
