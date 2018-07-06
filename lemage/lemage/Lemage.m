@@ -14,7 +14,7 @@
 #import "BrowseImageController.h"
 #import "LemageUsageText.h"
 #import<CommonCrypto/CommonDigest.h>
-
+#import "CameraViewController.h"
 
 @implementation Lemage
 
@@ -219,6 +219,9 @@
  */
 +(BOOL)creatFileWithPath:(NSString *)filePath
 {
+    if ([[filePath substringFromIndex:filePath.length-1] isEqualToString:@"/"]) {
+        filePath = [NSString stringWithFormat:@"%@place",filePath];
+    }
     BOOL isSuccess = YES;
     NSFileManager *fileManager = [NSFileManager defaultManager];
     BOOL temp = [fileManager fileExistsAtPath:filePath];
@@ -371,18 +374,49 @@ static LemageUsageText *_usageText;
     return _usageText;
 }
 + (NSDictionary *)queryContainsFileForUrl:(NSURL *)url{
-    NSInteger status = [self isFileExist:[self md5:[url absoluteString]]];
-    if (status) {
-        NSString *fileName;
-        fileName = [NSString  stringWithFormat:@"/private/%@/tmp/%@/%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,status==1?@"image":@"video",[self md5:[url absoluteString]]];
-        if (status == 2) {
-            fileName = [NSString stringWithFormat:@"%@.mp4",fileName];
-        }
-        return @{@"fileName":fileName,@"type":status==1?@"image":@"video"};
-    }else{
-        return @{@"fileName":@""};
-    }
+//    NSInteger status = [self isFileExist:[self md5:[url absoluteString]]];
+//    if (status) {
+//        NSString *fileName;
+//        fileName = [NSString  stringWithFormat:@"/private/%@/tmp/%@/%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,status==1?@"image":@"video",[self md5:[url absoluteString]]];
+//        if (status == 2) {
+//            fileName = [NSString stringWithFormat:@"%@.mp4",fileName];
+//        }
+//        return @{@"fileName":fileName,@"type":status==1?@"image":@"video"};
+//    }else{
+//        return @{@"fileName":@""};
+//    }
     
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSDirectoryEnumerator<NSString *> * myDirectoryEnumerator;
+    
+    NSString *strPath = [NSString  stringWithFormat:@"/private/%@/tmp/image",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject];
+    myDirectoryEnumerator=  [fileManager enumeratorAtPath:strPath];
+    NSString *filePath = [NSString  stringWithFormat:@"/private/%@/tmp/",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject];
+    while (strPath = [myDirectoryEnumerator nextObject]) {
+        
+        for (NSString * namePath in strPath.pathComponents) {
+            
+            if ([namePath containsString:[self md5:[url absoluteString]]]) {
+                
+                return @{@"fileName":[NSString stringWithFormat:@"%@/image/%@",filePath,namePath],@"type":@"image"};
+            }
+        }
+    }
+    strPath = [NSString  stringWithFormat:@"/private/%@/tmp/video",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject];
+    myDirectoryEnumerator=  [fileManager enumeratorAtPath:strPath];
+    while (strPath = [myDirectoryEnumerator nextObject]) {
+        
+        for (NSString * namePath in strPath.pathComponents) {
+            
+            if ([namePath containsString:[self md5:[url absoluteString]]]) {
+                
+                return @{@"fileName":[NSString stringWithFormat:@"%@/video/%@",filePath,namePath],@"type":@"video"};
+            }
+        }
+    }
+    return @{@"fileName":@""};
 }
 +(NSInteger ) isFileExist:(NSString *)fileName{
     NSString *filePath = [NSString  stringWithFormat:@"/private/%@/tmp/image/%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,fileName];
@@ -396,7 +430,7 @@ static LemageUsageText *_usageText;
     if (result) {
         return 2;
     }
-    NSLog(@"这个文件已经存在：%@",result?@"是的":@"不存在");
+//    NSLog(@"这个文件已经存在：%@",result?@"是的":@"不存在");
     return 0;
 }
 +(NSString *)getImageOrVideoFile:(NSURL *)url type:(NSString *)type{
@@ -406,13 +440,27 @@ static LemageUsageText *_usageText;
     }
     return filePath;
 }
+
++(NSString *)saveImageOrVideoWithTmpURL:(NSString *)AtPath type:(NSString *)type suffix:(NSString *)suffix name:(NSString *)fileName{
+    NSString *toPath = [NSString  stringWithFormat:@"/private%@/tmp/%@/",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,type];
+    if ([self creatFileWithPath:toPath]) {
+        NSError * error = nil;
+        [[NSFileManager defaultManager] moveItemAtPath:[AtPath stringByReplacingOccurrencesOfString:@"file://" withString:@""]  toPath:[NSString stringWithFormat:@"%@%@.%@",toPath,[self md5:fileName],suffix] error:&error];
+        if (error){
+            NSLog(@"重命名失败：%@",[error localizedDescription]);
+            return nil;
+        }
+    }
+    return [NSString stringWithFormat:@"%@%@.%@",toPath,[self md5:fileName],suffix];
+}
+
 +(NSString *)saveImageOrVideoWithData:(NSData *)data url:(NSURL *)url type:(NSString *)type{
     NSString *filePath = [NSString  stringWithFormat:@"/private/%@/tmp/%@/%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,type,[self md5:[url absoluteString]]];
     if ([type containsString:@"video"]) {
         filePath = [NSString  stringWithFormat:@"%@.mp4",filePath];
     }
     
-    NSLog(@"filePath === %@",filePath);
+//    NSLog(@"filePath === %@",filePath);
     if([self creatFileWithPath:filePath]){
         //写入内容
         [data writeToFile:filePath atomically:YES];
@@ -441,7 +489,20 @@ static LemageUsageText *_usageText;
     }
     
     return result;
-    
-    
 }
+
++(void)startCameraWithVideoSeconds:(CGFloat)seconds
+                        themeColor: (UIColor *)themeColor
+                      cameraReturn:(LEMAGE_CAMERA_BLOCK)cameraReturn{
+    CameraViewController *VC = [[CameraViewController alloc] init];
+    VC.HSeconds = seconds;
+    VC.themeColor = themeColor;
+    VC.takeBlock = ^(id item) {
+        cameraReturn(item);
+    };
+    [[self getCurrentVC] presentViewController:VC animated:YES completion:nil];
+}
+
+
+
 @end

@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 typedef void (^ LEMAGE_RESULT_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL isOriginal);
 typedef void (^ LEMAGE_CANCEL_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL isOriginal ,NSInteger NowMediaType);
+typedef void (^ LEMAGE_CAMERA_BLOCK)(id item);
 @interface Lemage : NSObject
 
 /**
@@ -127,7 +128,7 @@ typedef void (^ LEMAGE_CANCEL_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
 +(NSString *)getImageOrVideoFile:(NSURL *)url type:(NSString *)type;
 /**
  删除缓存文件
- 原来:沙盒管理删除文件夹
+ 原理:删除所有本地temp对应的沙盒图片视频文件
  */
 + (void)expiredTmpTermUrl;
 /**
@@ -136,6 +137,8 @@ typedef void (^ LEMAGE_CANCEL_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
  @param maxChooseCount 允许最多选择的图片张数，支持范围：1-99
  @param needShowOriginalButton 是否提供【原图】选项按钮，如果不提供，那么选择结果中的【用户是否选择了原图选项】会始终返回YES
  @param themeColor 主题颜色，这个颜色会作为完成按钮、选择顺序标识、相册选择标识的背景色
+ @param selectedType  选择器中显示的类型'all' 'image'和'video'默认all
+ @param styleType 可以选一种合适都可以选择 'unique'和'mix'默认mix
  @param willClose 当界面即将被关闭的时候的回调函数，若用户在选择器中点击了取消按钮，那么回调函数中的imageUrlList为nil
  @param closed 当界面已经全部关闭的时候的回调函数，回调函数中的参数与willClose中的参数完全一致
  */
@@ -156,6 +159,8 @@ typedef void (^ LEMAGE_CANCEL_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
  @param allowChooseCount 允许选择的图片数量，如果传<=0的数，表示关闭选择功能（选择器右上角是否有选择按钮），如果允许选择数量小于chooseImageUrlArr数组元素数量，那么会截取chooseImageUrlArr中的数组前allowChooseCount个元素作为已选择图片
  @param showIndex 当前页面所展示的图片下标
  @param themeColor 主题颜色，这个颜色会作为完成按钮、选择顺序标识的背景色
+ @param styleType 可以选一种合适都可以选择 'unique'和'mix'默认mix
+ @param nowMediaType 当前选择的类型 0 是都可以 1是图片 2是视频
  @param willClose 当界面即将被关闭的时候的回调函数，若用户在选择器中点击了关闭按钮，那么回调函数中的imageUrlList为nil
  @param closed 当界面已经全部关闭的时候的回调函数，回调函数中的参数与willClose中的参数完全一致
  @param cancelBack 当界面点击返回按钮时候的回调函数，回调函数中的参数与willClose中的参数完全一致
@@ -170,6 +175,29 @@ typedef void (^ LEMAGE_CANCEL_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
                             willClose: (LEMAGE_RESULT_BLOCK)willClose
                                closed: (LEMAGE_RESULT_BLOCK)closed
                             cancelBack: (LEMAGE_CANCEL_BLOCK)cancelBack;
+
+/**
+ 开启自定义相机
+
+ @param seconds 视频的长度
+ @param themeColor 主体颜色
+ @param cameraReturn 返回值(图片或者视频视频的话是url)
+ */
++(void)startCameraWithVideoSeconds:(CGFloat)seconds
+                        themeColor: (UIColor *)themeColor
+                      cameraReturn:(LEMAGE_CAMERA_BLOCK)cameraReturn;
+
+
+/**
+ 将下载下来的网络图片和视频放到指定的沙盒中
+
+ @param AtPath 当前的路径
+ @param type 类型(图片还是视频)用来区分文件夹
+ @param suffix 文件后缀
+ @param fileName 文件名称
+ @return 存放的路径
+ */
++(NSString *)saveImageOrVideoWithTmpURL:(NSString *)AtPath type:(NSString *)type suffix:(NSString *)suffix name:(NSString *)fileName;
 
 @end
 

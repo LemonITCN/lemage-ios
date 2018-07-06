@@ -29,7 +29,6 @@ typedef void (^ LEMAGE_CANCEL_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
  @brief 已选择的图片MediaAssetModel
  */
 @property (nonatomic, strong) NSMutableArray *selectedImgArr;
-
 /**
  @brief 将要关闭回调
  */
@@ -46,7 +45,6 @@ typedef void (^ LEMAGE_CANCEL_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
  @brief 当前展示的数组下标
  */
 @property (nonatomic, assign) NSInteger showIndex;
-
 /**
  @brief title
  */
@@ -63,4 +61,12 @@ typedef void (^ LEMAGE_CANCEL_BLOCK)(NSArray<NSString *> *imageUrlList , BOOL is
  主体颜色
  */
 @property (nonatomic, strong) UIColor *themeColor;
+/**
+@brief 完成按钮
+*/
+@property UIButton *finishBtn;
+/**
+ @brief 播放暂停按钮/进度条背景图
+ */
+@property UIView *funtionBGView;
 @end

@@ -15,6 +15,7 @@
 #import "LemageUrlInfo.h"
 #import "DrawingSingle.h"
 #import "MediaProgressBar.h"
+#import "ProgressHUD.h"
 @interface BrowseImageController ()<UIPageViewControllerDelegate, UIPageViewControllerDataSource,UIScrollViewDelegate>
 
 /**
@@ -36,10 +37,7 @@
  @brief 选择按钮
  */
 @property UIButton *selectButton;
-/**
- @brief 完成按钮
- */
-@property UIButton *finishBtn;
+
 /**
  @brief pageviewcontrollver的scrollview
  */
@@ -60,26 +58,43 @@
  @brief 返回按钮
  */
 @property UIButton *backBtn;
-
-
-
-@property UIView *funtionBGView;
-
+/**
+ @brief 视频播放暂停按钮
+ */
 @property UIButton *playOrPauseBtn;
-
+/**
+ @brief 进度条
+ */
 @property MediaProgressBar *progressBar;
-
+/**
+ @brief 当前播放的时间label
+ */
 @property UILabel *currentPlayTimeLabel;
-
+/**
+ @breif 视频播放总视频
+ */
 @property UILabel *allTimeLabel;
-
+/**
+ @brief 当前的frame(用来区分是否是屏幕旋转导致didscroll)
+ */
+@property CGRect nowFrame;
+/**
+ @brief 是否正在执行动画
+ */
 @property (nonatomic, assign) BOOL isSliding;
-
+/**
+ @brief 用来取消网络请求
+ */
 @property NSURLSessionDataTask *sessionDataTaskLeft;
 @property NSURLSessionDataTask *sessionDataTaskMiddle;
 @property NSURLSessionDataTask *sessionDataTaskRight;
+
+@property NSURLSessionDownloadTask *sessionDownloadTaskLeft;
+@property NSURLSessionDownloadTask *sessionDownloadTaskMiddle;
+@property NSURLSessionDownloadTask *sessionDownloadTaskRight;
+
+@property (nonatomic, strong) ProgressHUD * progressHUD;
 @end
-static dispatch_queue_t queue;
 
 @implementation BrowseImageController
 
@@ -91,19 +106,10 @@ static dispatch_queue_t queue;
         _localIdentifierArr = [NSMutableArray arrayWithArray:_selectedImgArr];
     }
     _mediaAssetArray = [NSMutableArray new];
-    for (NSString *localId in _localIdentifierArr) {
+    for (NSInteger i = 0;i< _localIdentifierArr.count;i++) {
         MediaAssetModel *tempModel = [[MediaAssetModel alloc] init];
-//        if ([urlInfo.source isEqualToString:@"album"]) {
-//
-//            PHAsset *asset = [PHAsset fetchAssetsWithLocalIdentifiers:@[urlInfo.tag] options:nil][0];
-//            tempModel.mediaType = asset.mediaType;
-//        }else{
-        
-            tempModel.mediaType = 0;
-//        }
-//        NSLog(@"%ld",tempModel.mediaType);
+        tempModel.mediaType = 0;
         [self.mediaAssetArray addObject:tempModel];
-        
     }
     [self createMiddleVC];
     [self createRightVC];
@@ -136,6 +142,7 @@ static dispatch_queue_t queue;
         if([subview isKindOfClass:UIScrollView.class]){
             _tempScrollview = subview;
             _tempScrollview.delegate = self;
+            _nowFrame = _tempScrollview.frame;
             break;
         }
     }
@@ -144,30 +151,45 @@ static dispatch_queue_t queue;
     [self createFooterBar];
     [self setSelectedButtonTitle:_showIndex];
     [self createFuntionBGView];
-//        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(showOrHideBar:)];
-//        //把手势添加到置指定的控件上
-//        [_tempPageVC.view addGestureRecognizer:tap];
+    self.progressHUD = [[ProgressHUD alloc] initWithNotAllHudColor:[UIColor whiteColor] backgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.7]];
+    [self.view addSubview:self.progressHUD];
+    [self.view bringSubviewToFront:self.progressHUD];
+    
+    if ([_middleVC.imageView.image isEqual:[UIImage imageNamed:@"placeholder"]] && _middleVC.playerItem == nil ) {
+        [self.progressHUD progressHUDStart];
+    }
 }
 
 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
-
     ZoomViewController *tempView = _tempPageVC.viewControllers[0];
-    [tempView.player pause];
-    tempView.playBtn.alpha = 1;
-    self.funtionBGView.alpha = 0;
-    self.finishBtn.alpha = self.titleBarBGView.alpha;
-    if (tempView.playTimeObserver) {
-        [tempView.player removeTimeObserver:tempView.playTimeObserver];
-        tempView.playTimeObserver = nil;
+    if(CGRectEqualToRect(scrollView.frame,self.nowFrame)){
+        [tempView.player pause];
+        tempView.playBtn.alpha = 1;
+        self.funtionBGView.alpha = 0;
+        self.finishBtn.alpha = _restrictNumber>0?self.titleBarBGView.alpha:0;
+        if (tempView.playTimeObserver) {
+            [tempView.player removeTimeObserver:tempView.playTimeObserver];
+            tempView.playTimeObserver = nil;
+        }
+        self.isSliding = NO;
+        self.currentPlayTimeLabel.text = @"00:00";
+        [tempView.player seekToTime:kCMTimeZero];
+        self.progressBar.value = 0;
+        [self.playOrPauseBtn setImage:[[DrawingSingle shareDrawingSingle]getPauseImageSize:CGSizeMake(50, 50) color:[UIColor colorWithRed:216/255.0 green:216/255.0 blue:216/255.0 alpha:1]] forState:UIControlStateNormal];
+        [self setSelectedButtonTitle:tempView.showIndex];
+        [self.progressHUD progressHUDStop];
+    }else{
+        self.nowFrame = scrollView.frame;
+        if(tempView.player.rate){
+            self.finishBtn.alpha = 0;
+        }else{
+            
+            self.finishBtn.alpha = _restrictNumber>0?1:0;
+        }
     }
-    self.isSliding = NO;
-    self.currentPlayTimeLabel.text = @"00:00";
-    [tempView.player seekToTime:kCMTimeZero];
-    self.progressBar.value = 0;
-    [self.playOrPauseBtn setImage:[[DrawingSingle shareDrawingSingle]getPauseImageSize:CGSizeMake(50, 50) color:[UIColor colorWithRed:216/255.0 green:216/255.0 blue:216/255.0 alpha:1]] forState:UIControlStateNormal];
-    [self setSelectedButtonTitle:tempView.showIndex];
+    
     
 }
 
@@ -209,7 +231,7 @@ static dispatch_queue_t queue;
                     weakSelf.titleBarBGView.alpha = 1;
                     CGSize size = weakSelf.view.frame.size;
                     weakSelf.titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
-                    weakSelf.finishBtn.alpha = weakSelf.selectedImgArr.count > 0?1:0.6;
+                    weakSelf.finishBtn.alpha = weakSelf.restrictNumber>0?weakSelf.selectedImgArr.count > 0?1:0.6:0;
                 }];
                 
             }
@@ -227,7 +249,6 @@ static dispatch_queue_t queue;
     };
     _leftVC.hideBGView = ^{
         [weakSelf hideBar];
-//        weakSelf.funtionBGView.alpha = 1;
         weakSelf.isSliding = NO;
         [weakSelf.playOrPauseBtn setImage:[[DrawingSingle shareDrawingSingle]getPauseImageSize:CGSizeMake(50, 50) color:[UIColor colorWithRed:216/255.0 green:216/255.0 blue:216/255.0 alpha:1]] forState:UIControlStateNormal];
         [weakSelf setAlltimeLabelText:weakSelf.leftVC];
@@ -267,7 +288,7 @@ static dispatch_queue_t queue;
                     weakSelf.titleBarBGView.alpha = 1;
                     CGSize size = weakSelf.view.frame.size;
                     weakSelf.titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
-                    weakSelf.finishBtn.alpha = weakSelf.selectedImgArr.count > 0?1:0.6;
+                    weakSelf.finishBtn.alpha = weakSelf.restrictNumber>0?weakSelf.selectedImgArr.count > 0?1:0.6:0;
                 }];
                 
             }
@@ -280,12 +301,10 @@ static dispatch_queue_t queue;
     
     _middleVC.showBGView = ^{
         [weakSelf showBar];
-//        weakSelf.funtionBGView.alpha = 0;
         weakSelf.progressBar.value = 0;
     };
     _middleVC.hideBGView = ^{
         [weakSelf hideBar];
-//        weakSelf.funtionBGView.alpha = weakSelf.titleBarBGView.alpha;
         weakSelf.isSliding = NO;
         [weakSelf.playOrPauseBtn setImage:[[DrawingSingle shareDrawingSingle]getPauseImageSize:CGSizeMake(50, 50) color:[UIColor colorWithRed:216/255.0 green:216/255.0 blue:216/255.0 alpha:1]] forState:UIControlStateNormal];
         [weakSelf setAlltimeLabelText:weakSelf.middleVC];
@@ -322,7 +341,7 @@ static dispatch_queue_t queue;
                     weakSelf.titleBarBGView.alpha = 1;
                     CGSize size = weakSelf.view.frame.size;
                     weakSelf.titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
-                    weakSelf.finishBtn.alpha = weakSelf.selectedImgArr.count > 0?1:0.6;
+                    weakSelf.finishBtn.alpha = weakSelf.restrictNumber>0?weakSelf.selectedImgArr.count > 0?1:0.6:0;
                 }];
                 
             }
@@ -336,12 +355,10 @@ static dispatch_queue_t queue;
     };
     _rightVC.showBGView = ^{
         [weakSelf showBar];
-//        weakSelf.funtionBGView.alpha = 0;
         weakSelf.progressBar.value = 0;
     };
     _rightVC.hideBGView = ^{
         [weakSelf hideBar];
-//        weakSelf.funtionBGView.alpha = 1;
         weakSelf.isSliding = NO;
         [weakSelf.playOrPauseBtn setImage:[[DrawingSingle shareDrawingSingle]getPauseImageSize:CGSizeMake(50, 50) color:[UIColor colorWithRed:216/255.0 green:216/255.0 blue:216/255.0 alpha:1]] forState:UIControlStateNormal];
         [weakSelf setAlltimeLabelText:weakSelf.rightVC];
@@ -362,7 +379,7 @@ static dispatch_queue_t queue;
             weakSelf.titleBarBGView.alpha = 1;
             CGSize size = self.view.frame.size;
             weakSelf.titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
-            weakSelf.finishBtn.alpha = weakSelf.selectedImgArr.count > 0?1:0.6;
+            weakSelf.finishBtn.alpha = weakSelf.restrictNumber>0?weakSelf.selectedImgArr.count > 0?1:0.6:0;
         } completion:^(BOOL finished) {
             weakSelf.isAnimate = NO;
         }];
@@ -375,9 +392,6 @@ static dispatch_queue_t queue;
     if (!_isAnimate) {
         _isAnimate = YES;
         [UIView animateWithDuration:0.2 animations:^{
-//            weakSelf.titleBarBGView.alpha = 0;
-//            CGSize size = self.view.frame.size;
-//            weakSelf.titleBarBGView.frame=CGRectMake(0, -(size.width>size.height?44:KIsiPhoneX?84:64), size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
             weakSelf.funtionBGView.alpha = weakSelf.titleBarBGView.alpha;
             weakSelf.finishBtn.alpha = 0;
         } completion:^(BOOL finished) {
@@ -388,6 +402,7 @@ static dispatch_queue_t queue;
     
 }
 - (void)showOrHideBar:(UITapGestureRecognizer *)tap{
+    
     __weak typeof(self) weakSelf = self;
     if (!_isAnimate) {
         _isAnimate = YES;
@@ -395,7 +410,7 @@ static dispatch_queue_t queue;
             weakSelf.titleBarBGView.alpha = 1-weakSelf.titleBarBGView.alpha;
             CGSize size = self.view.frame.size;
             weakSelf.titleBarBGView.frame=CGRectMake(0, -(size.width>size.height?44:KIsiPhoneX?84:64)-weakSelf.titleBarBGView.frame.origin.y, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
-            weakSelf.finishBtn.alpha = weakSelf.finishBtn.alpha>0?0:(weakSelf.selectedImgArr.count > 0?1:0.6);
+            weakSelf.finishBtn.alpha = weakSelf.restrictNumber>0?weakSelf.finishBtn.alpha>0?0:(weakSelf.selectedImgArr.count > 0?1:0.6):0;
         } completion:^(BOOL finished) {
             weakSelf.isAnimate = NO;
         }];
@@ -436,17 +451,108 @@ static dispatch_queue_t queue;
 
 
 - (void)getImageforMediaAsset:(NSInteger)index imageView:(UIImageView *)imageView viewController:(ZoomViewController *)viewController{
-    
+    __block typeof(self) weakSelf = self;
     viewController.tapGestureView.alpha = 0;
     [viewController initAvplayer];
-    
+    NSString *dataTaskName = @"";
+    NSString *downloadTaskName = @"";
+    switch (viewController== _leftVC?1:viewController== _middleVC?2:3) {
+        case 1:
+            dataTaskName = @"sessionDataTaskLeft";
+            downloadTaskName=@"sessionDownloadTaskLeft";
+            break;
+        case 2:
+            dataTaskName = @"sessionDataTaskMiddle";
+            downloadTaskName=@"sessionDownloadTaskMiddle";
+            break;
+        case 3:
+            dataTaskName = @"sessionDataTaskRight";
+            downloadTaskName=@"sessionDownloadTaskRight";
+            break;
+        
+        default:
+        break;
+    }
+    NSURLSessionDataTask *dataTak = (NSURLSessionDataTask *)[self valueForKey:dataTaskName];
+    if (dataTak) {
+        [dataTak cancel];
+    }
+    NSURLSessionDownloadTask *downloadTak = (NSURLSessionDownloadTask *)[self valueForKey:downloadTaskName];
+    if (downloadTak) {
+        [downloadTak cancel];
+    }
     LemageUrlInfo *urlInfo = [[LemageUrlInfo alloc] initWithLemageUrl:_localIdentifierArr[index]];
     NSURL *url = [NSURL URLWithString:_localIdentifierArr[index]];
     MediaAssetModel *assetModel = _mediaAssetArray[index];
-    
-    
-    Float64 seconds = 0;
-    AVAsset *videoAsset;
+
+    if([@[@"http",@"https"] containsObject:url.scheme]){
+        imageView.image = [UIImage imageNamed:@"placeholder"];
+        NSDictionary *fileNameDic = [Lemage queryContainsFileForUrl:url];
+        if((((NSString *)fileNameDic[@"fileName"]).length>0)){
+            if ([fileNameDic[@"type"] isEqualToString:@"image"]) {
+                UIImage *image = [UIImage imageWithContentsOfFile:fileNameDic[@"fileName"]];
+                if (image) {
+                    imageView.image = image;
+                }
+                [viewController setImageFrame];
+                
+            }else{
+                imageView.image = nil;
+                [viewController setVideoFrame];
+                viewController.playerItem = [[AVPlayerItem alloc] initWithURL:[NSURL fileURLWithPath:fileNameDic[@"fileName"]]];
+                viewController.player = [[AVPlayer alloc] initWithPlayerItem:viewController.playerItem];
+                viewController.playerLayer = [AVPlayerLayer playerLayerWithPlayer:viewController.player];
+                viewController.playerLayer.frame = imageView.bounds;
+                //放置播放器的视图
+                [viewController.imageView.layer addSublayer:viewController.playerLayer];
+                viewController.tapGestureView.alpha = 1;
+            }
+            if (viewController == _tempPageVC.viewControllers[0]) {
+                [self.progressHUD progressHUDStop];
+            }
+            
+            return;
+        }else{
+            NSURLSession *session = [NSURLSession sharedSession];
+            NSURLSessionDownloadTask *tempSessionDownloadTask = [session downloadTaskWithURL:url completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                NSLog(@"%@",error);
+                if (!error) {
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                        if (viewController == weakSelf.tempPageVC.viewControllers[0]) {
+                            [self.progressHUD progressHUDStop];
+                        }
+                        NSDictionary *dictionary = ((NSHTTPURLResponse *)response).allHeaderFields;
+                        NSString *contentType = dictionary[@"Content-Type"];
+                        NSArray *typeArr = [contentType componentsSeparatedByString:@"/"];
+                        if ([typeArr[0] containsString:@"image"]) {
+                            assetModel.mediaType = 1;
+                            NSString *filePath = [Lemage saveImageOrVideoWithTmpURL:[location absoluteString] type:@"image" suffix:typeArr[1] name:[url absoluteString]];
+                            UIImage *image = [UIImage imageWithContentsOfFile:filePath];
+                            if (image) {
+                                imageView.image = image;
+                            }
+                            [viewController setImageFrame];
+                        }else if ([typeArr[0] containsString:@"video"]) {
+                            assetModel.mediaType = 2;
+                            NSString *filePath = [Lemage saveImageOrVideoWithTmpURL:[location absoluteString] type:@"video" suffix:typeArr[1] name:[url absoluteString]];
+                            imageView.image = nil;
+                            [viewController setVideoFrame];
+                            viewController.playerItem = [[AVPlayerItem alloc] initWithURL:[NSURL fileURLWithPath:filePath]];
+                            viewController.player = [[AVPlayer alloc] initWithPlayerItem:viewController.playerItem];
+                            viewController.playerLayer = [AVPlayerLayer playerLayerWithPlayer:viewController.player];
+                            viewController.playerLayer.frame = imageView.bounds;
+                            //放置播放器的视图
+                            [viewController.imageView.layer addSublayer:viewController.playerLayer];
+                            viewController.tapGestureView.alpha = 1;
+                        }
+                    });
+                }
+            }];
+            [tempSessionDownloadTask resume];
+            [self setValue:tempSessionDownloadTask forKey:downloadTaskName];
+        }
+    }else{
+        
         if ([urlInfo.type isEqualToString:@"localVideo"]) {
             imageView.image = nil;
             [viewController setVideoFrame];
@@ -457,125 +563,41 @@ static dispatch_queue_t queue;
             [[PHImageManager defaultManager] requestPlayerItemForVideo:asset options:nil resultHandler:^(AVPlayerItem * _Nullable playerItem, NSDictionary * _Nullable info) {
                 viewController.player = [AVPlayer playerWithPlayerItem:playerItem];
                 viewController.playerLayer.player = viewController.player;
+                if (viewController == weakSelf.tempPageVC.viewControllers[0]) {
+                    [self.progressHUD progressHUDStop];
+                }
             }];
             viewController.tapGestureView.alpha = 1;
         }else{
             imageView.image = [UIImage imageNamed:@"placeholder"];
-            if (assetModel.imageClear) {
-                imageView.image = assetModel.imageClear;
-                [viewController setImageFrame];
-            }else{
-                NSString *dataTastName = @"";
-                switch (viewController== _leftVC?1:viewController== _middleVC?2:3) {
-                    case 1:
-                        dataTastName = @"sessionDataTaskLeft";
-                        break;
-                    case 2:
-                        dataTastName = @"sessionDataTaskMiddle";
-                        break;
-                    case 3:
-                        dataTastName = @"sessionDataTaskRight";
-                        break;
-                        
-                    default:
-                        break;
-                }
-                NSURLSessionDataTask *dataTak = (NSURLSessionDataTask *)[self valueForKey:dataTastName];
-                if (dataTak) {
-                    [dataTak cancel];
-                }
-                
-//                NSURL *url = [NSURL URLWithString:_localIdentifierArr[index]];
-                
-                // 2.创建一个网络请求
-                
-                NSURLRequest *request =[NSURLRequest requestWithURL:url];
-                
-                // 3.获得会话对象
-                
-                NSURLSession *session = [NSURLSession sharedSession];
-                
-                // 4.根据会话对象，创建一个Task任务：
-                NSURLSessionDataTask *tempSessionDataTask = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                    NSDictionary *dictionary = ((NSHTTPURLResponse *)response).allHeaderFields;
-                    if ([dictionary[@"Content-Type"] containsString:@"image"]) {
-                        assetModel.mediaType = 1;
-                        NSString *filePath = [Lemage saveImageOrVideoWithData:data url:url type:@"image"];
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfFile:filePath]];
-                            if (image) {
-                                imageView.image = image;
-                            }
-                            [viewController setImageFrame];
-                        });
-                    } else if ([dictionary[@"Content-Type"] containsString:@"video"]) {
-                        assetModel.mediaType = 2;
-                        NSString *filePath = [Lemage saveImageOrVideoWithData:data url:url type:@"video"];
-                        dispatch_sync(dispatch_get_main_queue(), ^{
-                            imageView.image = nil;
-                            [viewController setVideoFrame];
-                            viewController.playerItem = [[AVPlayerItem alloc] initWithURL:[NSURL fileURLWithPath:filePath]];
-                            viewController.player = [[AVPlayer alloc] initWithPlayerItem:viewController.playerItem];
-                            viewController.playerLayer = [AVPlayerLayer playerLayerWithPlayer:viewController.player];
-                            viewController.playerLayer.frame = imageView.bounds;
-                            //放置播放器的视图
-                            [viewController.imageView.layer addSublayer:viewController.playerLayer];
-                            viewController.tapGestureView.alpha = 1;
-                        });
-                    }else{
-                        
-                        //                        NSLog(@"%@",jsonDict);
-                        NSLog(@"%@",response.MIMEType);
-                        NSLog(@"7");
-                        if ([response.MIMEType isEqualToString:@"tempFile/unknow"]) {
-                            NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableLeaves error:nil];
-                            NSLog(@"8");
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                if ([jsonDict[@"type"] isEqualToString:@"image"]) {
-                                    NSLog(@"9");
-                                    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfFile:jsonDict[@"fileName"]]];
-                                    NSLog(@"10");
-                                    if (image) {
-                                        imageView.image = image;
-                                    }
-                                    [viewController setImageFrame];
-                                    
-                                }else{
-                                    imageView.image = nil;
-                                    [viewController setVideoFrame];
-                                    viewController.playerItem = [[AVPlayerItem alloc] initWithURL:[NSURL fileURLWithPath:jsonDict[@"fileName"]]];
-                                    viewController.player = [[AVPlayer alloc] initWithPlayerItem:viewController.playerItem];
-                                    viewController.playerLayer = [AVPlayerLayer playerLayerWithPlayer:viewController.player];
-                                    viewController.playerLayer.frame = imageView.bounds;
-                                    //放置播放器的视图
-                                    [viewController.imageView.layer addSublayer:viewController.playerLayer];
-                                    viewController.tapGestureView.alpha = 1;
-                                }
-                            });
-                        }else{
-                            dispatch_sync(dispatch_get_main_queue(), ^{
-                                UIImage *image = [UIImage imageWithData:data];
-                                if (image) {
-                                    imageView.image = image;
-                                }
-                                [viewController setImageFrame];
-                            });
+            NSURLSession *session = [NSURLSession sharedSession];
+            NSURLSessionDataTask *tempSessionDataTask = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    if([response.MIMEType isEqualToString:@"lemage/png"]){
+                        UIImage *image = [UIImage imageWithData:data];
+                        if (image) {
+                            imageView.image = image;
                         }
-                        /*
-                         
-                         对从服务器获取到的数据data进行相应的处理：
-                         
-                         */
-                        
+                        [viewController setImageFrame];
                     }
-                    self.mediaAssetArray[index] = assetModel;
-                }];
-                // 5.最后一步，执行任务（resume也是继续执行）:
-                [tempSessionDataTask resume];
-                [self setValue:tempSessionDataTask forKey:dataTastName];
-            }
+                    if (viewController == weakSelf.tempPageVC.viewControllers[0]) {
+                        [self.progressHUD progressHUDStop];
+                    }
+                });
+                self.mediaAssetArray[index] = assetModel;
+            }];
+            [tempSessionDataTask resume];
+            [self setValue:tempSessionDataTask forKey:dataTaskName];
             
         }
+    }
+    
+    
+    
+    
+    
+    
+    
 
 }
 
@@ -589,8 +611,6 @@ static dispatch_queue_t queue;
         [_middleVC initScrollview];
         [_rightVC initScrollview];
         if (_middleVC == viewController) {
-            
-            
             _rightVC.showIndex =_showIndex + 1;
             [self getImageforMediaAsset:_showIndex+1 imageView:_rightVC.imageView viewController:_rightVC];
             return _rightVC;
@@ -626,11 +646,11 @@ static dispatch_queue_t queue;
     if(_selectedImgArr.count>0){
         [_finishBtn setTitle:[NSString stringWithFormat:@"%@(%ld)",[Lemage getUsageText].complete,_selectedImgArr.count] forState:UIControlStateNormal];
         _finishBtn.userInteractionEnabled = YES;
-        _finishBtn.alpha = _finishBtn.alpha==0?0:1;
+        _finishBtn.alpha = _restrictNumber>0?_finishBtn.alpha==0?0:1:0;
     }else{
         [_finishBtn setTitle:[Lemage getUsageText].complete forState:UIControlStateNormal];
         _finishBtn.userInteractionEnabled = NO;
-        _finishBtn.alpha = _finishBtn.alpha==0?0:0.6;
+        _finishBtn.alpha = _restrictNumber>0?_finishBtn.alpha==0?0:0.6:0;
     }
     _titleLabel.text = [NSString stringWithFormat:@"%ld/%ld",index+1,_localIdentifierArr.count];
     
@@ -760,7 +780,7 @@ static dispatch_queue_t queue;
         _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-28, _titleBarBGView.frame.size.height-22);
         _titleLabel.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);
         _finishBtn.center = CGPointMake(size.width/2, size.height-40);
-        _finishBtn.alpha = 1;
+        _finishBtn.alpha = _restrictNumber>0;
         _backBtn.frame = CGRectMake(16, _titleBarBGView.frame.size.height-34, 64,24);
         _funtionBGView.frame = CGRectMake(0, self.view.frame.size.height-60, self.view.frame.size.width, 60);
         _progressBar.frame = CGRectMake(60, 30, self.view.frame.size.width-70, 20);
@@ -884,7 +904,21 @@ static dispatch_queue_t queue;
 }
 - (void)dealloc
 {
+    [_sessionDataTaskLeft cancel];
+    [_sessionDataTaskMiddle cancel];
+    [_sessionDataTaskRight cancel];
+    [_sessionDownloadTaskLeft cancel];
+    [_sessionDownloadTaskMiddle cancel];
+    [_sessionDownloadTaskRight cancel];
     [Lemage expiredTmpTermUrl];
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    NSLog(@"scrollViewDidEndDecelerating  -   End of Scrolling.");
+    ZoomViewController *tempView = _tempPageVC.viewControllers[0];
+    if ([tempView.imageView.image isEqual:[UIImage imageNamed:@"placeholder"]] && tempView.playerItem == nil ) {
+        [self.progressHUD progressHUDStart];
+    }
 }
 /*
 #pragma mark - Navigation

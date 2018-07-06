@@ -15,14 +15,12 @@
 @implementation LemageURLProtocol
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
-    NSLog(@"request.URL === %@",request.URL);
-    
-    
+ 
     if ([NSURLProtocol propertyForKey: LEMAGE inRequest:request]) {
         // 处理后的request会打上LEMAGE标记，在这里判断一下，如果打过标记的request会放过，防止死循环
         return NO;
     }
-    if ([request.URL.scheme caseInsensitiveCompare: LEMAGE] == NSOrderedSame||[request.URL.scheme caseInsensitiveCompare: @"http"] == NSOrderedSame||[request.URL.scheme caseInsensitiveCompare: @"https"] == NSOrderedSame) {
+    if ([request.URL.scheme caseInsensitiveCompare: LEMAGE] == NSOrderedSame) {
         return YES;
     }
     return NO;
@@ -39,32 +37,11 @@
         
         [Lemage loadImageDataByLemageUrl:request.URL.absoluteString complete:^(NSData * _Nonnull imageData) {
             NSData *data = imageData;
-            NSURLResponse* response = [[NSURLResponse alloc] initWithURL:weakSelf.request.URL MIMEType:@"image/png" expectedContentLength:data.length textEncodingName:nil];
+            NSURLResponse* response = [[NSURLResponse alloc] initWithURL:weakSelf.request.URL MIMEType:@"lemage/png" expectedContentLength:data.length textEncodingName:nil];
             [weakSelf.client URLProtocol:weakSelf didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageAllowed];
             [weakSelf.client URLProtocol:weakSelf didLoadData:data];
             [weakSelf.client URLProtocolDidFinishLoading:weakSelf];
         }];
-    }else {
-
-        NSDictionary *fileNameDic = [Lemage queryContainsFileForUrl:request.URL];
-        if (((NSString *)fileNameDic[@"fileName"]).length>0) {
-
-            
-            NSData *data =    [NSJSONSerialization dataWithJSONObject:fileNameDic options:NSJSONWritingPrettyPrinted error:nil];
-            NSURLResponse* response = [[NSURLResponse alloc] initWithURL:weakSelf.request.URL MIMEType:@"tempFile/unknow" expectedContentLength:data.length textEncodingName:nil];
-            [weakSelf.client URLProtocol:weakSelf didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageAllowed];
-            [weakSelf.client URLProtocol:weakSelf didLoadData:data];
-            [weakSelf.client URLProtocolDidFinishLoading:weakSelf];
-        }else{
-            NSURLSession *session = [NSURLSession sharedSession];
-            NSURLSessionDataTask *tempSessionDataTask =  [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                [weakSelf.client URLProtocol:weakSelf didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageAllowed];
-                [weakSelf.client URLProtocol:weakSelf didLoadData:data];
-                [weakSelf.client URLProtocolDidFinishLoading:weakSelf];
-            }];
-            [tempSessionDataTask resume];
-        }
-        
     }
 }
 - (void)stopLoading {

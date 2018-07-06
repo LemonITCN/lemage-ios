@@ -61,4 +61,19 @@
  @return 返回的图片
  */
 -(UIImage*) OriginImageToSize:(CGSize)size;
+/**
+ 获得拍照取消按钮图片
+ 
+ @param size 图片大小
+ @param color 北京颜色
+ @param insideColor X颜色
+ @param sure 对号还是叉号
+ @return 图片
+ */
+- (UIImage *)getSureOrCancelCircularSize:(CGSize)size color:(UIColor *)color insideColor:(UIColor *)insideColor sure:(BOOL)sure;
+- (UIImage *)getDownArrow:(CGSize)size color:(UIColor *)color;
+
+- (UIImage *)getCameraChangeSize:(CGSize)size;
+
+- (UIImage *)getFoucusImageSize:(CGSize)size themeColor:(UIColor *)color;
 @end

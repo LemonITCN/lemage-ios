@@ -211,4 +211,196 @@
     
 }
 
+- (UIImage *)getDownArrow:(CGSize)size color:(UIColor *)color{
+    
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(context, 4.0);
+    //    CGContextSetRGBStrokeColor(context,red,green,blue,1.0);//画笔线的颜色
+    [color setStroke];
+    CGPoint sPoints[3];
+    sPoints[0] = CGPointMake(4, 4);
+    sPoints[1] = CGPointMake(size.width/2, size.height-4);
+    sPoints[2] = CGPointMake(size.width-4, 4);
+    CGContextAddLines(context, sPoints, 3);//添加线
+    CGContextDrawPath(context, kCGPathStroke); //根据坐标绘制路径
+    
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    //关闭图形上下文
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+- (UIImage *)getCameraChangeSize:(CGSize)size{
+    
+    size = CGSizeMake(size.width-2, size.height);
+    //开启图形上下文
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGContextSetLineWidth(ctx, MIN(MAX(size.height/40, 1), 4));
+    
+    // 系统贝塞尔曲线
+    [[UIColor whiteColor] setStroke];
+    CGContextMoveToPoint(ctx, size.width/5*2,size.height/5);
+    CGContextAddQuadCurveToPoint(ctx, -size.width/6, size.height/8*5, size.width/5*2, size.height/8*5);
+    
+    CGContextMoveToPoint(ctx, size.width/5*2,size.height/5);
+    //    CGContextAddQuadCurveToPoint(ctx, -size.width/5*2, size.height/5*3, size.width/5*2, size.height/5*4);
+    //三次曲线函数
+    CGContextAddCurveToPoint(ctx,-size.width/8, size.height/4, -size.width/8, size.height/8*7, size.width/5*2, size.height/8*7);//设置贝塞尔曲线的控制点坐标和控制点坐标终点坐标
+    
+    
+    
+    CGContextMoveToPoint(ctx, size.width/5*3,size.height/5*4);
+    CGContextAddQuadCurveToPoint(ctx, size.width+size.width/6, size.height/8*3, size.width/5*3, size.height/8*3);
+    
+    CGContextMoveToPoint(ctx, size.width/5*3,size.height/5*4);
+    //    CGContextAddQuadCurveToPoint(ctx, size.width+size.width/5*2, size.height/5*2, size.width/5*3, size.height/5*1);
+    CGContextAddCurveToPoint(ctx,size.width+size.width/8, size.height/4*3, size.width+size.width/8, size.height/8, size.width/5*3, size.height/8);
+    CGContextDrawPath(ctx, kCGPathStroke);
+    
+    
+    CGContextSetLineWidth(ctx,0);
+    CGPoint sPoints[3];//坐标点
+    sPoints[0] = CGPointMake(size.width/5*2, size.height/2);
+    sPoints[1] = CGPointMake(size.width/5*3-size.width/20 , size.height/4*3);
+    sPoints[2] = CGPointMake(size.width/5*2, size.height);
+    CGContextAddLines(ctx, sPoints, 3);//添加线
+    CGContextClosePath(ctx);//封起来
+    CGContextSetFillColorWithColor(ctx, [UIColor redColor].CGColor);
+    
+    
+    sPoints[0] = CGPointMake(size.width/5*3, size.height/2);
+    sPoints[1] = CGPointMake(size.width/5*2+size.width/20, size.height/4);
+    sPoints[2] = CGPointMake(size.width/5*3, 0);
+    CGContextAddLines(ctx, sPoints, 3);//添加线
+    CGContextClosePath(ctx);//封起来
+    CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
+    
+    CGContextDrawPath(ctx, kCGPathFillStroke); //根据坐标绘制路径
+    
+    
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    //关闭图形上下文
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+- (UIImage *)getFoucusImageSize:(CGSize)size themeColor:(UIColor *)color{
+    size = CGSizeMake(size.width-4, size.height-4);
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    //获取颜色RGB
+    CGFloat red = 0.0;
+    CGFloat green = 0.0;
+    CGFloat blue = 0.0;
+    CGFloat alpha = 0.0;
+    
+    [color getRed:&red green:&green blue:&blue alpha:&alpha];
+    CGContextSetRGBStrokeColor(ctx,red,green,blue,1.0);//画笔线的颜色
+    CGContextSetLineWidth(ctx, 3.0);//线的宽度
+    CGPoint sPoints[3];//坐标点
+    sPoints[0] = CGPointMake(0, size.height/5*2);
+    sPoints[1] = CGPointMake(0, 0);
+    sPoints[2] = CGPointMake(size.width/5*2, 0);
+    CGContextAddLines(ctx, sPoints, 3);//添加线
+    CGContextDrawPath(ctx, kCGPathStroke);
+    
+    sPoints[0] = CGPointMake(0, size.height/5*3);
+    sPoints[1] = CGPointMake(0, size.height);
+    sPoints[2] = CGPointMake(size.width/5*2,size.height);
+    CGContextAddLines(ctx, sPoints, 3);//添加线
+    CGContextDrawPath(ctx, kCGPathStroke);
+    
+    sPoints[0] = CGPointMake(size.width/5*3, size.height);
+    sPoints[1] = CGPointMake(size.width, size.height);
+    sPoints[2] = CGPointMake(size.width, size.height/5*3);
+    CGContextAddLines(ctx, sPoints, 3);//添加线
+    CGContextDrawPath(ctx, kCGPathStroke);
+    
+    
+    sPoints[0] = CGPointMake(size.width/5*3, 0);
+    sPoints[1] = CGPointMake(size.width, 0);
+    sPoints[2] = CGPointMake(size.width, size.height/5*2);
+    CGContextAddLines(ctx, sPoints, 3);//添加线
+    CGContextDrawPath(ctx, kCGPathStroke);
+    
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    //关闭图形上下文
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+- (UIImage *)getSureOrCancelCircularSize:(CGSize)size color:(UIColor *)color insideColor:(UIColor *)insideColor sure:(BOOL)sure{
+    
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    //获取颜色RGB
+    CGFloat red = 0.0;
+    CGFloat green = 0.0;
+    CGFloat blue = 0.0;
+    CGFloat alpha = 0.0;
+    
+    [color getRed:&red green:&green blue:&blue alpha:&alpha];
+    CGContextSetRGBStrokeColor(context,red,green,blue,1.0);//画笔线的颜色
+    CGContextSetLineWidth(context, 1.0);//线的宽度
+    
+    CGContextAddArc(context, size.width/2, size.height/2, size.width/2-1, 0, 2*M_PI, 0);
+    CGContextSetFillColorWithColor(context, color.CGColor);
+    CGContextDrawPath(context, kCGPathFill);//绘制填充
+    
+    [insideColor getRed:&red green:&green blue:&blue alpha:&alpha];
+    if (sure) {
+        CGContextRef  ctx= UIGraphicsGetCurrentContext();
+        CGPoint sPoints[3];
+        CGContextSetLineWidth(ctx, MIN(4, size.width/24*2.0));
+        CGContextSetRGBStrokeColor(ctx,red,green,blue,1.0);//画笔线的颜色
+        sPoints[0] = CGPointMake(size.width/7*2, size.height/2);
+        sPoints[1] = CGPointMake(size.width/2-size.width/12, size.height/3*2);
+        sPoints[2] = CGPointMake(size.width-size.width/7*2, size.height/3);
+        CGContextAddLines(ctx, sPoints, 3);//添加线
+        CGContextDrawPath(ctx, kCGPathStroke); //绘制路径
+    }else{
+        CGContextRef  ctx= UIGraphicsGetCurrentContext();
+        CGPoint sPoints[5];
+        CGContextSetLineWidth(ctx, MIN(4, size.width/24*2.0));
+        CGContextSetRGBStrokeColor(ctx,red,green,blue,1.0);//画笔线的颜色
+        sPoints[0] = CGPointMake(size.width/3, size.height/3);
+        sPoints[1] = CGPointMake(size.width/3*2, size.height/3*2);
+        sPoints[2] = CGPointMake(size.width/2, size.height/2);
+        sPoints[3] = CGPointMake(size.width/3*2, size.height/3);
+        sPoints[4] = CGPointMake(size.width/3, size.height/3*2);
+        CGContextAddLines(ctx, sPoints, 5);//添加线
+        CGContextDrawPath(ctx, kCGPathStroke); //绘制路径
+    }
+    
+    
+    
+    
+    
+    
+    
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    //关闭图形上下文
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+
 @end

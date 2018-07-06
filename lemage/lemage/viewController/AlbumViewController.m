@@ -19,6 +19,7 @@
 #import "DrawingSingle.h"
 #import "Lemage.h"
 #import "LemageUsageText.h"
+#import "ProgressHUD.h"
 @interface AlbumViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 /**
  @brief 当前显示照片的UICollectionView
@@ -89,6 +90,7 @@
  @brief 当前选择的类型
  */
 @property (nonatomic, assign) NSInteger nowMediaType;
+@property (nonatomic, strong) ProgressHUD * progressHUD;
 
 @end
 
@@ -97,7 +99,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-
+    
     
     self.view.backgroundColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = false;
@@ -110,6 +112,11 @@
     [self createTitleBar];
     [self createFunctionView];
     [self createNoImgLabel];
+    
+    self.progressHUD = [[ProgressHUD alloc] initWithHudColor:[UIColor whiteColor] backgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.7]];
+    [self.view addSubview:self.progressHUD];
+    [self.view bringSubviewToFront:self.progressHUD];
+    [self.progressHUD progressHUDStart];
 }
 -(void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
@@ -131,12 +138,23 @@
         weakSelf.mediaAssetArray = [NSMutableArray arrayWithArray:allAlbumArray];
         if (weakSelf.allAlbumArray) {
             [weakSelf.allAlbumArray insertObject:@{@"albumName":[Lemage getUsageText].allImages,@"assetArr":weakSelf.mediaAssetArray} atIndex:0];
+            
         }
         for (MediaAssetModel *tempModel in weakSelf.mediaAssetArray) {
             [weakSelf.localIdentifierArr addObject:[NSString stringWithFormat:@"lemage://album/%@",tempModel.localIdentifier]];
         }
+        
         dispatch_sync(dispatch_get_main_queue(), ^{
+            if (weakSelf.mediaAssetArray.count <= 0) {
+                [weakSelf.view addSubview:weakSelf.noImgLabel];
+                
+            }else{
+                [weakSelf.noImgLabel removeFromSuperview];
+            }
             [weakSelf.collection reloadData];
+            if (weakSelf.allAlbumArray) {
+                [weakSelf.progressHUD progressHUDStop];
+            }
         });
     }];
     
@@ -147,7 +165,16 @@
             [weakSelf.allAlbumArray insertObject:@{@"albumName":[Lemage getUsageText].allImages,@"assetArr":weakSelf.mediaAssetArray} atIndex:0];
         }
         dispatch_sync(dispatch_get_main_queue(), ^{
+            if (weakSelf.mediaAssetArray.count <= 0) {
+                [weakSelf.view addSubview:weakSelf.noImgLabel];
+                
+            }else{
+                [weakSelf.noImgLabel removeFromSuperview];
+            }
             [weakSelf.albumCollection reloadData];
+            if (weakSelf.mediaAssetArray) {
+                [weakSelf.progressHUD progressHUDStop];
+            }
         });
     }];
 

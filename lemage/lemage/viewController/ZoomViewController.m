@@ -146,9 +146,7 @@
     self.scrollView.contentSize = CGSizeMake(picWidth, picHeight);
     self.scrollView.center = self.view.center;
     self.scrollView.userInteractionEnabled = NO;
-//    [self.playerLayer removeFromSuperlayer];
-    self.playerLayer.frame = self.imageView.frame;
-//    NSLog(@"%@",self.imageView.layer.sublayers);
+    self.playerLayer.frame = self.view.frame;
     [self matchImageViewCenter];
     self.playBtn.center = self.tapGestureView.center;
 }

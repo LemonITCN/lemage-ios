@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "LemageURLProtocol.h"
+#import "Lemage.h"
 #import "NSUrlProtocol+Lemage.h"
 @interface AppDelegate ()
 
@@ -60,6 +61,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [Lemage expiredTmpTermUrl];
 }
 
 

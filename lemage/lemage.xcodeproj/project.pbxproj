@@ -40,8 +40,16 @@
 		571487B120D102CF009C2069 /* AlbumCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 571487AD20D102CF009C2069 /* AlbumCell.h */; };
 		571487B220D102CF009C2069 /* ImageSelectedCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 571487AE20D102CF009C2069 /* ImageSelectedCell.h */; };
 		571487B320D102CF009C2069 /* AlbumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 571487AF20D102CF009C2069 /* AlbumCell.m */; };
+		573C610C20EF0A41008C1CDC /* CameraViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 573C610A20EF0A40008C1CDC /* CameraViewController.h */; };
+		573C610D20EF0A41008C1CDC /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 573C610B20EF0A41008C1CDC /* CameraViewController.m */; };
+		573C611220EF0A5B008C1CDC /* HProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 573C610E20EF0A5B008C1CDC /* HProgressView.m */; };
+		573C611320EF0A5B008C1CDC /* HAVPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 573C610F20EF0A5B008C1CDC /* HAVPlayer.h */; };
+		573C611420EF0A5B008C1CDC /* HAVPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 573C611020EF0A5B008C1CDC /* HAVPlayer.m */; };
+		573C611520EF0A5B008C1CDC /* HProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = 573C611120EF0A5B008C1CDC /* HProgressView.h */; };
 		5743BDD720E6071100E13869 /* MediaProgressBar.h in Headers */ = {isa = PBXBuildFile; fileRef = 5743BDD520E6071100E13869 /* MediaProgressBar.h */; };
 		5743BDD820E6071100E13869 /* MediaProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5743BDD620E6071100E13869 /* MediaProgressBar.m */; };
+		57A4D05820EB73A800447A07 /* ProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = 57A4D05620EB73A800447A07 /* ProgressHUD.h */; };
+		57A4D05920EB73A800447A07 /* ProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 57A4D05720EB73A800447A07 /* ProgressHUD.m */; };
 		57A5435A20D8DB5F002647CB /* lemage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; };
 		57A5435B20D8DB5F002647CB /* lemage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -109,8 +117,16 @@
 		571487AD20D102CF009C2069 /* AlbumCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlbumCell.h; sourceTree = "<group>"; };
 		571487AE20D102CF009C2069 /* ImageSelectedCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageSelectedCell.h; sourceTree = "<group>"; };
 		571487AF20D102CF009C2069 /* AlbumCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AlbumCell.m; sourceTree = "<group>"; };
+		573C610A20EF0A40008C1CDC /* CameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraViewController.h; sourceTree = "<group>"; };
+		573C610B20EF0A41008C1CDC /* CameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraViewController.m; sourceTree = "<group>"; };
+		573C610E20EF0A5B008C1CDC /* HProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HProgressView.m; sourceTree = "<group>"; };
+		573C610F20EF0A5B008C1CDC /* HAVPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HAVPlayer.h; sourceTree = "<group>"; };
+		573C611020EF0A5B008C1CDC /* HAVPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HAVPlayer.m; sourceTree = "<group>"; };
+		573C611120EF0A5B008C1CDC /* HProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HProgressView.h; sourceTree = "<group>"; };
 		5743BDD520E6071100E13869 /* MediaProgressBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MediaProgressBar.h; sourceTree = "<group>"; };
 		5743BDD620E6071100E13869 /* MediaProgressBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MediaProgressBar.m; sourceTree = "<group>"; };
+		57A4D05620EB73A800447A07 /* ProgressHUD.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ProgressHUD.h; sourceTree = "<group>"; };
+		57A4D05720EB73A800447A07 /* ProgressHUD.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ProgressHUD.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,6 +242,8 @@
 		5714878F20D102A9009C2069 /* viewController */ = {
 			isa = PBXGroup;
 			children = (
+				573C610A20EF0A40008C1CDC /* CameraViewController.h */,
+				573C610B20EF0A41008C1CDC /* CameraViewController.m */,
 				5714879320D102AA009C2069 /* BrowseImageController.h */,
 				5714879020D102AA009C2069 /* BrowseImageController.m */,
 				5714879120D102AA009C2069 /* ZoomViewController.h */,
@@ -277,8 +295,14 @@
 		5743BDD420E606F400E13869 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				573C610F20EF0A5B008C1CDC /* HAVPlayer.h */,
+				573C611020EF0A5B008C1CDC /* HAVPlayer.m */,
+				573C611120EF0A5B008C1CDC /* HProgressView.h */,
+				573C610E20EF0A5B008C1CDC /* HProgressView.m */,
 				5743BDD520E6071100E13869 /* MediaProgressBar.h */,
 				5743BDD620E6071100E13869 /* MediaProgressBar.m */,
+				57A4D05620EB73A800447A07 /* ProgressHUD.h */,
+				57A4D05720EB73A800447A07 /* ProgressHUD.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -291,10 +315,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				5743BDD720E6071100E13869 /* MediaProgressBar.h in Headers */,
+				573C610C20EF0A41008C1CDC /* CameraViewController.h in Headers */,
 				5714879920D102AA009C2069 /* BrowseImageController.h in Headers */,
+				573C611320EF0A5B008C1CDC /* HAVPlayer.h in Headers */,
 				52287B8D20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h in Headers */,
 				52287B9220D0C2B200B3C841 /* LemageURLProtocol.h in Headers */,
 				571487A520D102BF009C2069 /* DrawingSingle.h in Headers */,
+				573C611520EF0A5B008C1CDC /* HProgressView.h in Headers */,
 				571487A020D102B4009C2069 /* CameraImgManagerTool.h in Headers */,
 				571487B220D102CF009C2069 /* ImageSelectedCell.h in Headers */,
 				52BDF45D20CE10130072FEF1 /* Lemage.h in Headers */,
@@ -302,6 +329,7 @@
 				5714879720D102AA009C2069 /* ZoomViewController.h in Headers */,
 				571487B120D102CF009C2069 /* AlbumCell.h in Headers */,
 				571487AA20D102C6009C2069 /* MediaAssetModel.h in Headers */,
+				57A4D05820EB73A800447A07 /* ProgressHUD.h in Headers */,
 				5714879B20D102AA009C2069 /* AlbumViewController.h in Headers */,
 				526B044A20DB9E0E00DC9FED /* LemageUsageText.h in Headers */,
 			);
@@ -421,15 +449,19 @@
 				5714879F20D102B4009C2069 /* CameraImgManagerTool.m in Sources */,
 				52287B9820D0E04100B3C841 /* LemageUrlInfo.m in Sources */,
 				571487B020D102CF009C2069 /* ImageSelectedCell.m in Sources */,
+				573C611220EF0A5B008C1CDC /* HProgressView.m in Sources */,
 				5743BDD820E6071100E13869 /* MediaProgressBar.m in Sources */,
 				52287B8420D0AB6800B3C841 /* Lemage.m in Sources */,
 				571487A920D102C6009C2069 /* MediaAssetModel.m in Sources */,
+				573C610D20EF0A41008C1CDC /* CameraViewController.m in Sources */,
 				571487A420D102BF009C2069 /* DrawingSingle.m in Sources */,
 				5714879820D102AA009C2069 /* AlbumViewController.m in Sources */,
+				573C611420EF0A5B008C1CDC /* HAVPlayer.m in Sources */,
 				5714879620D102AA009C2069 /* BrowseImageController.m in Sources */,
 				526B044B20DB9E0E00DC9FED /* LemageUsageText.m in Sources */,
 				5714879A20D102AA009C2069 /* ZoomViewController.m in Sources */,
 				52287B9320D0C2B200B3C841 /* LemageURLProtocol.m in Sources */,
+				57A4D05920EB73A800447A07 /* ProgressHUD.m in Sources */,
 				52287B8E20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.m in Sources */,
 				571487B320D102CF009C2069 /* AlbumCell.m in Sources */,
 			);
