@@ -106,6 +106,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     self.labelTipTitle.center = CGPointMake(SCREEN_WIDTH/2, SCREEN_HEIGHT-66-75-7);
     self.labelTipTitle.textAlignment = NSTextAlignmentCenter;
     self.labelTipTitle.text = @"轻按拍照,按住摄像";
+    self.labelTipTitle.font = [UIFont systemFontOfSize:13];
     [self.view addSubview:self.labelTipTitle];
     [self performSelector:@selector(hiddenTipsLabel) withObject:nil afterDelay:2];
     
@@ -312,7 +313,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
         }
     } else {
         //照片
-        UIImageWriteToSavedPhotosAlbum(self.takeImage, self, nil, nil);
+        
         if (self.takeBlock) {
             self.takeBlock(self.takeImage);
         }
