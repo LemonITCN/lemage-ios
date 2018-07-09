@@ -494,10 +494,12 @@
                 if (image) {
                     imageView.image = image;
                 }
+                assetModel.mediaType = 1;
                 [viewController setImageFrame];
                 
             }else{
                 imageView.image = nil;
+                assetModel.mediaType = 2;
                 [viewController setVideoFrame];
                 viewController.playerItem = [[AVPlayerItem alloc] initWithURL:[NSURL fileURLWithPath:fileNameDic[@"fileName"]]];
                 viewController.player = [[AVPlayer alloc] initWithPlayerItem:viewController.playerItem];
@@ -555,6 +557,7 @@
         
         if ([urlInfo.type isEqualToString:@"localVideo"]) {
             imageView.image = nil;
+            assetModel.mediaType = 2;
             [viewController setVideoFrame];
             viewController.playerLayer = [[AVPlayerLayer alloc] init];
             viewController.playerLayer.frame = viewController.imageView.frame;
@@ -578,6 +581,7 @@
                         if (image) {
                             imageView.image = image;
                         }
+                        assetModel.mediaType = 1;
                         [viewController setImageFrame];
                     }
                     if (viewController == weakSelf.tempPageVC.viewControllers[0]) {
@@ -591,14 +595,6 @@
             
         }
     }
-    
-    
-    
-    
-    
-    
-    
-
 }
 
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
@@ -731,7 +727,7 @@
     MediaAssetModel *tempModel =self.mediaAssetArray[_showIndex];
     if(_selectedImgArr.count<=self.restrictNumber){
         if (!([self.styleType isEqualToString:@"unique"]?(self.nowMediaType>0?(tempModel.mediaType == self.nowMediaType?YES:NO):YES):YES)) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:@"类型不统一" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"" message:[Lemage getUsageText].selectedType preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *iKnow = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleCancel handler:nil];
             [alert addAction:iKnow];
             [self presentViewController:alert animated:YES completion:nil];
@@ -914,7 +910,6 @@
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    NSLog(@"scrollViewDidEndDecelerating  -   End of Scrolling.");
     ZoomViewController *tempView = _tempPageVC.viewControllers[0];
     if ([tempView.imageView.image isEqual:[UIImage imageNamed:@"placeholder"]] && tempView.playerItem == nil ) {
         [self.progressHUD progressHUDStart];

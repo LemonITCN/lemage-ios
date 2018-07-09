@@ -113,6 +113,7 @@
 }
 
 - (void)progressHUDStop{
+
     self.alpha = 0;
     self.activityIndicator.hidesWhenStopped = YES;
     [self.activityIndicator stopAnimating];

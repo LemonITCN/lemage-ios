@@ -18,6 +18,8 @@
 @property NSString *allImages;
 @property NSString *noImages;
 @property NSString *tipSelectedCount;
+@property NSString *selectedType;
+@property NSString *photoTip;
 + (LemageUsageText *)cnText;
 + (LemageUsageText *)enText;
 

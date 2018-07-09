@@ -254,28 +254,42 @@
     //开启图形上下文
     UIGraphicsBeginImageContextWithOptions(size, NO, 0);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
-    CGContextSetLineWidth(ctx, MIN(MAX(size.height/40, 1), 4));
+//    CGContextSetLineWidth(ctx, MIN(MAX(size.height/40, 1), 2));
     
     // 系统贝塞尔曲线
     [[UIColor whiteColor] setStroke];
     CGContextMoveToPoint(ctx, size.width/5*2,size.height/5);
     CGContextAddQuadCurveToPoint(ctx, -size.width/6, size.height/8*5, size.width/5*2, size.height/8*5);
     
-    CGContextMoveToPoint(ctx, size.width/5*2,size.height/5);
-    //    CGContextAddQuadCurveToPoint(ctx, -size.width/5*2, size.height/5*3, size.width/5*2, size.height/5*4);
+    CGContextMoveToPoint(ctx, size.width/5*2, size.height/8*7);
     //三次曲线函数
-    CGContextAddCurveToPoint(ctx,-size.width/8, size.height/4, -size.width/8, size.height/8*7, size.width/5*2, size.height/8*7);//设置贝塞尔曲线的控制点坐标和控制点坐标终点坐标
+    CGContextAddCurveToPoint(ctx, -size.width/8, size.height/8*7,-size.width/8, size.height/4, size.width/5*2,size.height/5);//设置贝塞尔曲线的控制点坐标和控制点坐标终点坐标
+    CGPoint tempPoints[2];
+    tempPoints[0] = CGPointMake(size.width/5*2,size.height/8*7);
+    tempPoints[1] = CGPointMake(size.width/5*2,size.height/8*5);
+    CGContextAddLines(ctx, tempPoints, 2);//添加线
+    CGContextClosePath(ctx);//封起来
+    CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
+    CGContextDrawPath(ctx, kCGPathFillStroke);
     
     
     
     CGContextMoveToPoint(ctx, size.width/5*3,size.height/5*4);
     CGContextAddQuadCurveToPoint(ctx, size.width+size.width/6, size.height/8*3, size.width/5*3, size.height/8*3);
     
-    CGContextMoveToPoint(ctx, size.width/5*3,size.height/5*4);
+    CGContextMoveToPoint(ctx, size.width/5*3, size.height/8);
     //    CGContextAddQuadCurveToPoint(ctx, size.width+size.width/5*2, size.height/5*2, size.width/5*3, size.height/5*1);
-    CGContextAddCurveToPoint(ctx,size.width+size.width/8, size.height/4*3, size.width+size.width/8, size.height/8, size.width/5*3, size.height/8);
-    CGContextDrawPath(ctx, kCGPathStroke);
+    CGContextAddCurveToPoint(ctx, size.width+size.width/8, size.height/8, size.width+size.width/8, size.height/4*3,size.width/5*3,size.height/5*4);
     
+    
+    tempPoints[0] = CGPointMake(size.width/5*3, size.height/8);
+    tempPoints[1] = CGPointMake(size.width/5*3, size.height/8*3);
+    
+    CGContextAddLines(ctx, tempPoints, 2);//添加线
+    CGContextClosePath(ctx);//封起来
+    //    CGContextDrawPath(ctx, kCGPathStroke);
+    CGContextSetFillColorWithColor(ctx, [UIColor whiteColor].CGColor);
+    CGContextDrawPath(ctx, kCGPathFillStroke);
     
     CGContextSetLineWidth(ctx,0);
     CGPoint sPoints[3];//坐标点

@@ -16,7 +16,8 @@
 #import <Foundation/Foundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import "DrawingSingle.h"
-
+#import "Lemage.h"
+#import "LemageUsageText.h"
 typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 @interface CameraViewController ()<AVCaptureFileOutputRecordingDelegate>
 //轻触拍照，按住摄像
@@ -105,7 +106,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     self.labelTipTitle.textColor = [UIColor whiteColor];
     self.labelTipTitle.center = CGPointMake(SCREEN_WIDTH/2, SCREEN_HEIGHT-66-75-7);
     self.labelTipTitle.textAlignment = NSTextAlignmentCenter;
-    self.labelTipTitle.text = @"轻按拍照,按住摄像";
+    self.labelTipTitle.text = [Lemage getUsageText].photoTip;
     self.labelTipTitle.font = [UIFont systemFontOfSize:13];
     [self.view addSubview:self.labelTipTitle];
     [self performSelector:@selector(hiddenTipsLabel) withObject:nil afterDelay:2];
