@@ -18,6 +18,7 @@
 #import "DrawingSingle.h"
 #import "Lemage.h"
 #import "LemageUsageText.h"
+#import "Lemage.h"
 typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 @interface CameraViewController ()<AVCaptureFileOutputRecordingDelegate>
 //轻触拍照，按住摄像
@@ -188,6 +189,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
+    [[NSFileManager defaultManager] removeItemAtURL:self.saveVideoUrl error:nil];
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
@@ -287,8 +289,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     if ([[touches anyObject] view] == self.progressView) {
         NSLog(@"结束触摸");
         if (!self.isVideo) {
-            //            [self performSelector:@selector(endRecord) withObject:nil afterDelay:0.3];
-            [self endRecord];
+            [self performSelector:@selector(endRecord) withObject:nil afterDelay:0.3];
         } else {
             [self endRecord];
         }
@@ -310,17 +311,19 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     NSLog(@"确定 这里进行保存或者发送出去");
     if (self.saveVideoUrl) {
         if (self.takeBlock) {
-            self.takeBlock(self.saveVideoUrl);
+            self.takeBlock([Lemage generateLemageUrl:[self.saveVideoUrl absoluteString] Suffix:@"mov"]);
         }
     } else {
         //照片
         
         if (self.takeBlock) {
-            self.takeBlock(self.takeImage);
+            
+            self.takeBlock([Lemage generateLemageUrl:self.takeImage longTerm:NO]);
         }
         
-        [self onCancelAction:nil];
+        
     }
+    [self onCancelAction:nil];
 }
 
 //前后摄像头的切换
@@ -385,7 +388,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     [self changeLayout];
     if (self.isVideo) {
         NSLog(@"%f",self.HSeconds- self.seconds);
-        if (self.HSeconds- self.seconds<1) {
+        if (self.HSeconds - self.seconds<1) {
             self.saveVideoUrl = nil;
             [self videoHandlePhoto:outputFileURL];
         }else{
@@ -412,7 +415,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     AVAssetImageGenerator *imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:urlSet];
     imageGenerator.appliesPreferredTrackTransform = YES;    // 截图的时候调整到正确的方向
     NSError *error = nil;
-    CMTime time = CMTimeMake(0,30);//缩略图创建时间 CMTime是表示电影时间信息的结构体，第一个参数表示是视频第几秒，第二个参数表示每秒帧数.(如果要获取某一秒的第几帧可以使用CMTimeMake方法)
+    CMTime time = CMTimeMake(0,2);//缩略图创建时间 CMTime是表示电影时间信息的结构体，第一个参数表示是视频第几秒，第二个参数表示每秒帧数.(如果要获取某一秒的第几帧可以使用CMTimeMake方法)
     CMTime actucalTime; //缩略图实际生成的时间
     CGImageRef cgImage = [imageGenerator copyCGImageAtTime:time actualTime:&actucalTime error:&error];
     if (error) {
@@ -435,10 +438,12 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     
     if (!self.takeImageView) {
         self.takeImageView = [[UIImageView alloc] initWithFrame:self.view.frame];
+        self.takeImageView.backgroundColor = [UIColor redColor];
         [self.bgView addSubview:self.takeImageView];
     }
     self.takeImageView.hidden = NO;
     self.takeImageView.image = self.takeImage;
+    NSLog(@"%@",self.takeImage);
 }
 //注册通知
 - (void)setupObservers

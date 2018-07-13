@@ -485,7 +485,7 @@
     NSURL *url = [NSURL URLWithString:_localIdentifierArr[index]];
     MediaAssetModel *assetModel = _mediaAssetArray[index];
 
-    if([@[@"http",@"https"] containsObject:url.scheme]){
+    if([@[@"http",@"https"] containsObject:url.scheme]||[urlInfo.type isEqualToString:@"ShortVideo"]){
         imageView.image = [UIImage imageNamed:@"placeholder"];
         NSDictionary *fileNameDic = [Lemage queryContainsFileForUrl:url];
         if((((NSString *)fileNameDic[@"fileName"]).length>0)){

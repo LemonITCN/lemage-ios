@@ -51,7 +51,14 @@ typedef void (^ LEMAGE_CAMERA_BLOCK)(id item);
  */
 + (NSString *)generateLemageUrl: (UIImage *)image
                        longTerm: (BOOL)longTerm;
-
+/**
+ 将拍摄的视频生成LemageURL字符串
+ 原理：将视频存储到沙盒中的文件，然后生成指向沙盒中二进制文件的Lemage格式的URL
+ @param AtPath 当前的目录
+ @param suffix 视频的后缀
+ @return 生成的LemageURL
+ */
++ (NSString *)generateLemageUrl: (NSString *)AtPath Suffix:(NSString *)suffix;
 /**
  根据LemageURL加载对应的图片的NSData数据，如果用户传入的LemageURL有误或已过期，会返回nil
  注意：此方法并不会处理图片的缩放参数，即LemageURL中的width参数和height参数会被忽略，若需要请调用[Lemage loadImageByLemageUrl]方法

@@ -123,6 +123,8 @@
 - (void)takeCamera:(UIButton *)btn{
     [Lemage startCameraWithVideoSeconds:5 themeColor:[UIColor cyanColor] cameraReturn:^(id  _Nonnull item) {
         NSLog(@"%@",item);
+        self.imgArr = @[item];
+        self.tempTextView.text = item;
     }];
 }
 

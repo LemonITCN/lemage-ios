@@ -52,6 +52,24 @@
     return nil;
 }
 
+
++ (NSString *)generateLemageUrl: (NSString *)AtPath Suffix:(NSString *)suffix{
+
+    NSString *key = [self randomStringWithLength:16];
+    NSString *toPath = [NSString  stringWithFormat:@"/private/%@/ShortVideo/",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject];
+    if ([self creatFileWithPath:toPath]) {
+        NSError * error = nil;
+        [[NSFileManager defaultManager] moveItemAtPath:[AtPath stringByReplacingOccurrencesOfString:@"file://" withString:@""]  toPath:[NSString stringWithFormat:@"%@%@.%@",toPath,key,suffix] error:&error];
+        if (error){
+            NSLog(@"重命名失败：%@",[error localizedDescription]);
+            return nil;
+        }
+    }
+    return [NSString stringWithFormat:@"lemage://sandbox/ShortVideo/%@",key];
+}
+
+
+
 /**
  根据LemageURL加载对应的图片的NSData数据，如果用户传入的LemageURL有误或已过期，会返回nil
  注意：此方法并不会处理图片的缩放参数，即LemageURL中的width参数和height参数会被忽略，若需要请调用[Lemage loadImageDataByLemageUrl]方法
@@ -416,6 +434,21 @@ static LemageUsageText *_usageText;
             }
         }
     }
+    strPath = [NSString  stringWithFormat:@"/private/%@/ShortVideo",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject];
+    myDirectoryEnumerator=  [fileManager enumeratorAtPath:strPath];
+    
+    LemageUrlInfo *urlInfo = [[LemageUrlInfo alloc] initWithLemageUrl:[url absoluteString]];
+    
+    while (strPath = [myDirectoryEnumerator nextObject]) {
+        
+        for (NSString * namePath in strPath.pathComponents) {
+            
+            if ([namePath containsString:urlInfo.tag]) {
+                
+                return @{@"fileName":[NSString stringWithFormat:@"/private/%@/ShortVideo/%@",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject,namePath],@"type":@"video"};
+            }
+        }
+    }
     return @{@"fileName":@""};
 }
 +(NSInteger ) isFileExist:(NSString *)fileName{
@@ -475,6 +508,9 @@ static LemageUsageText *_usageText;
     NSString *filePath = [NSString  stringWithFormat:@"/private/%@/tmp",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject];
     NSFileManager *fileManager = [NSFileManager defaultManager];
     [fileManager removeItemAtPath:filePath error:nil];
+    filePath = [NSString  stringWithFormat:@"/private/%@/ShortVideo",NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES).firstObject];
+    [fileManager removeItemAtPath:filePath error:nil];
+    [fileManager removeItemAtURL:[NSURL fileURLWithPath:[NSTemporaryDirectory() stringByAppendingString:@"myMovie.mov"]] error:nil];
 }
 
 + (NSString *) md5:(NSString *) input {
