@@ -11,7 +11,16 @@ typedef void(^TakeOperationSureBlock)(id item);
 @interface CameraViewController : UIViewController
 
 
+/**
+ @brief 确定图片或者视频后回调(url)
+ */
 @property (copy, nonatomic) TakeOperationSureBlock takeBlock;
+/**
+ @brief 主题色
+ */
 @property (nonatomic, strong) UIColor *themeColor;
+/**
+ 视频长度
+ */
 @property (assign, nonatomic) CGFloat HSeconds;
 @end

@@ -664,22 +664,18 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 
 }
 - (void)viewWillLayoutSubviews{
-    
     self.bgView.frame = self.view.frame;
     self.previewLayer.frame = self.view.bounds;
 }
 
 
 - (BOOL)shouldAutorotate{
-    
     return NO;
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations{
-    
     return UIInterfaceOrientationMaskPortrait;
     //只支持这一个方向(正常的方向)
-    
 }
 /*
 #pragma mark - Navigation
