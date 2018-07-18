@@ -48,6 +48,9 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 @property (strong, nonatomic)  UIButton *ensureBtn;
 //摄像头切换
 @property (strong, nonatomic)  UIButton *cameraChangeBtn;
+//闪光灯打开关闭
+@property (strong, nonatomic)  UIButton *flashLampBtn;
+
 
 @property (strong, nonatomic)  UIImageView *bgView;
 //记录录制的时间 默认最大60秒
@@ -140,10 +143,18 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     
     
     self.cameraChangeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.cameraChangeBtn.frame = CGRectMake(SCREEN_WIDTH-50, 20, 30, 25);
-    [self.cameraChangeBtn setImage:[[DrawingSingle shareDrawingSingle] getCameraChangeSize:self.cameraChangeBtn.frame.size] forState:UIControlStateNormal];
+    self.cameraChangeBtn.frame = CGRectMake(SCREEN_WIDTH-50, 20, 42.5, 29);
+    self.cameraChangeBtn.center = CGPointMake(72.5, self.progressView.center.y);
+    [self.cameraChangeBtn setImage:[[DrawingSingle shareDrawingSingle] getCameraChangeSize:CGSizeMake(35, 29)] forState:UIControlStateNormal];
     [self.cameraChangeBtn addTarget:self action:@selector(onCameraAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.cameraChangeBtn];
+    
+    self.flashLampBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.flashLampBtn.frame = CGRectMake(SCREEN_WIDTH-50, 20, 21, 42);
+    self.flashLampBtn.center = CGPointMake(self.progressView.center.x, self.progressView.center.y-30-42);
+    [self.flashLampBtn setImage:[[DrawingSingle shareDrawingSingle] getFlashLampSize:self.flashLampBtn.frame.size color:[UIColor whiteColor]] forState:UIControlStateNormal];
+    [self.flashLampBtn addTarget:self action:@selector(onFlashLampAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.flashLampBtn];
     
     self.focusCursor = [[UIImageView alloc] init];
     self.focusCursor.frame = CGRectMake(100, 100, 100, 100);
@@ -341,7 +352,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     [self addNotificationToCaptureDevice:toChangeDevice];
     //获得要调整的设备输入对象
     AVCaptureDeviceInput *toChangeDeviceInput=[[AVCaptureDeviceInput alloc]initWithDevice:toChangeDevice error:nil];
-    
+
     //改变会话的配置前一定要先开启配置，配置完成后提交配置改变
     [self.session beginConfiguration];
     //移除原有输入对象
@@ -353,6 +364,23 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     }
     //提交会话配置
     [self.session commitConfiguration];
+}
+
+- (void)onFlashLampAction:(UIButton *)sender{
+    NSError *error = nil;
+    AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    [captureDevice lockForConfiguration:&error];
+    
+    if (captureDevice.torchMode == AVCaptureTorchModeOff) {
+        sender.selected = YES;
+        [captureDevice setTorchMode:AVCaptureTorchModeOn];
+        [self.flashLampBtn setImage:[[DrawingSingle shareDrawingSingle] getFlashLampSize:self.flashLampBtn.frame.size color:_themeColor] forState:UIControlStateNormal];
+    }else{
+        sender.selected = NO;
+        [captureDevice setTorchMode:AVCaptureTorchModeOff];
+        [self.flashLampBtn setImage:[[DrawingSingle shareDrawingSingle] getFlashLampSize:self.flashLampBtn.frame.size color:[UIColor whiteColor]] forState:UIControlStateNormal];
+    }
+    [captureDevice unlockForConfiguration];
 }
 - (void)onStartTranscribe:(NSURL *)fileURL {
     if ([self.captureMovieFileOutput isRecording]) {
@@ -366,6 +394,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
             if (!self.isVideo) {
                 self.cameraChangeBtn.hidden = YES;
                 self.backBtn.hidden = YES;
+                self.flashLampBtn.hidden = YES;
                 self.isVideo = YES;//长按时间超过TimeMax 表示是视频录制
                 self.progressView.timeMax = self.seconds;
             }
@@ -622,6 +651,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     self.ensureBtn.hidden = NO;
     self.backBtn.hidden = YES;
     self.progressView.hidden = YES;
+    self.flashLampBtn.hidden = YES;
     if (self.isVideo) {
         [self.progressView clearProgress];
     }
@@ -653,10 +683,22 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     self.afreshBtn.hidden = YES;
     self.ensureBtn.hidden = YES;
     self.backBtn.hidden = NO;
+    self.flashLampBtn.hidden = NO;
     [self.progressView showPorgress];
     [UIView animateWithDuration:0.25 animations:^{
         [self.view layoutIfNeeded];
     }];
+    
+    NSError *error = nil;
+    AVCaptureDevice *captureDevice = [AVCaptureDevice defaultDeviceWithMediaType:AVMediaTypeVideo];
+    [captureDevice lockForConfiguration:&error];
+    
+    if (self.flashLampBtn.selected) {
+        [captureDevice setTorchMode:AVCaptureTorchModeOn];
+    }else{
+        [captureDevice setTorchMode:AVCaptureTorchModeOff];
+    }
+    [captureDevice unlockForConfiguration];
 }
 
 -(void)dealloc{

@@ -65,15 +65,43 @@
  获得拍照取消按钮图片
  
  @param size 图片大小
- @param color 北京颜色
+ @param color 背景颜色
  @param insideColor X颜色
  @param sure 对号还是叉号
  @return 图片
  */
 - (UIImage *)getSureOrCancelCircularSize:(CGSize)size color:(UIColor *)color insideColor:(UIColor *)insideColor sure:(BOOL)sure;
+/**
+ 获得向下返回箭头
+
+ @param size 图片大小
+ @param color 箭头颜色
+ @return 图片
+ */
 - (UIImage *)getDownArrow:(CGSize)size color:(UIColor *)color;
 
+/**
+ 获取前后摄像头摄像头更换图片
+
+ @param size 图片大小
+ @return 图片
+ */
 - (UIImage *)getCameraChangeSize:(CGSize)size;
 
+/**
+ 获得聚焦图片
+
+ @param size 大小
+ @param color 图片颜色
+ @return 图片
+ */
 - (UIImage *)getFoucusImageSize:(CGSize)size themeColor:(UIColor *)color;
+/**
+ 获取闪光灯图片
+
+ @param size 大小
+ @param color 手电筒颜色
+ @return 图片
+ */
+- (UIImage *)getFlashLampSize:(CGSize)size color:(UIColor *)color;
 @end
