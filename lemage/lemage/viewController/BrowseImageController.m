@@ -567,7 +567,10 @@
                 viewController.player = [AVPlayer playerWithPlayerItem:playerItem];
                 viewController.playerLayer.player = viewController.player;
                 if (viewController == weakSelf.tempPageVC.viewControllers[0]) {
-                    [self.progressHUD progressHUDStop];
+                    dispatch_sync(dispatch_get_main_queue(), ^{
+                    
+                        [self.progressHUD progressHUDStop];
+                    });
                 }
             }];
             viewController.tapGestureView.alpha = 1;

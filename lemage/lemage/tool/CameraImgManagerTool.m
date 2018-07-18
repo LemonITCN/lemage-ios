@@ -117,13 +117,15 @@
     
     // 获取系统设置的相册信息(没有<照片流>等)
     PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
-    
+    NSInteger i = 0;
     for (PHAssetCollection *collection in smartAlbums) {
+        if (i == 2) {
+            i++;
+            continue;
+        }
         PHFetchResult *results = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
-
         NSMutableArray *tempPHF = [NSMutableArray new];
         for (PHAsset *tempAsset in results) {
-
             if ([type isEqualToString:@"image"]) {
                 if (tempAsset.mediaType == 1) {
                     [tempPHF addObject:tempAsset];
@@ -140,6 +142,7 @@
         [assetArr addObject:tempPHF];//存储assets's内容
         [nameAndAssetArr addObject:@{@"albumName":collection.localizedTitle,@"assetArr":tempPHF}];
         [statusArr addObject:tempPHF.count>0?@"0":@"1"];
+        i++;
     }
     
     //  用户自定义的资源
@@ -177,7 +180,7 @@
         for (NSInteger j = 0; j<tempArr.count; j++) {
             PHAsset *asset = tempArr[j];
             NSString *jindex = [NSString stringWithFormat:@"%ld",j];
-            
+            NSLog(@"%@",asset.localIdentifier);
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(100, 100) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                 
                 if (asset.mediaType == 2) {
