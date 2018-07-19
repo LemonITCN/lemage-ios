@@ -180,7 +180,6 @@
         for (NSInteger j = 0; j<tempArr.count; j++) {
             PHAsset *asset = tempArr[j];
             NSString *jindex = [NSString stringWithFormat:@"%ld",j];
-            NSLog(@"%@",asset.localIdentifier);
             [[PHImageManager defaultManager] requestImageForAsset:asset targetSize:CGSizeMake(100, 100) contentMode:PHImageContentModeAspectFit options:nil resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
                 
                 if (asset.mediaType == 2) {

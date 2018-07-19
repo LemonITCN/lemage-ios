@@ -40,7 +40,6 @@
     [self.view addSubview:previewBtn];
     [previewBtn addTarget:self action:@selector(previewImg:) forControlEvents:UIControlEventTouchUpInside];
     
-    NSLog(@"%f",sin(30));
     
     
     [CameraImgManagerTool requestPhotosLibraryAuthorization:nil];
