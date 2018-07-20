@@ -18,7 +18,7 @@
 #import "DrawingSingle.h"
 #import "Lemage.h"
 #import "LemageUsageText.h"
-#import "Lemage.h"
+
 typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 @interface CameraViewController ()<AVCaptureFileOutputRecordingDelegate>
 //轻触拍照，按住摄像
@@ -64,7 +64,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 
 //视频播放
 @property (strong, nonatomic) HAVPlayer *player;
-
+//等待框
 @property (strong, nonatomic)  HProgressView *progressView;
 
 //是否是摄像 YES 代表是录制  NO 表示拍照
