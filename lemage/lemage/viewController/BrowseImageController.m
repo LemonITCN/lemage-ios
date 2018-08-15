@@ -519,7 +519,7 @@
             NSURLSessionDownloadTask *tempSessionDownloadTask = [session downloadTaskWithURL:url completionHandler:^(NSURL * _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
                 NSLog(@"%@",error);
                 if (!error) {
-                    dispatch_sync(dispatch_get_main_queue(), ^{
+                    dispatch_async(dispatch_get_main_queue(), ^{
                         if (viewController == weakSelf.tempPageVC.viewControllers[0]) {
                             [self.progressHUD progressHUDStop];
                         }
@@ -567,7 +567,7 @@
                 viewController.player = [AVPlayer playerWithPlayerItem:playerItem];
                 viewController.playerLayer.player = viewController.player;
                 if (viewController == weakSelf.tempPageVC.viewControllers[0]) {
-                    dispatch_sync(dispatch_get_main_queue(), ^{
+                    dispatch_async(dispatch_get_main_queue(), ^{
                     
                         [self.progressHUD progressHUDStop];
                     });
@@ -578,7 +578,7 @@
             imageView.image = [UIImage imageNamed:@"placeholder"];
             NSURLSession *session = [NSURLSession sharedSession];
             NSURLSessionDataTask *tempSessionDataTask = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                dispatch_sync(dispatch_get_main_queue(), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
                     if([response.MIMEType isEqualToString:@"lemage/png"]){
                         UIImage *image = [UIImage imageWithData:data];
                         if (image) {
