@@ -144,7 +144,7 @@
             [weakSelf.localIdentifierArr addObject:[NSString stringWithFormat:@"lemage://album/%@",tempModel.localIdentifier]];
         }
         
-        dispatch_sync(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             if (weakSelf.mediaAssetArray.count <= 0) {
                 [weakSelf.view addSubview:weakSelf.noImgLabel];
                 
@@ -164,7 +164,7 @@
             
             [weakSelf.allAlbumArray insertObject:@{@"albumName":[Lemage getUsageText].allImages,@"assetArr":weakSelf.mediaAssetArray} atIndex:0];
         }
-        dispatch_sync(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
             if (weakSelf.mediaAssetArray.count <= 0) {
                 [weakSelf.view addSubview:weakSelf.noImgLabel];
                 
