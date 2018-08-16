@@ -15,7 +15,8 @@
     if (self) {
         _imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, self.frame.size.width)];
         _imageView.contentMode = UIViewContentModeScaleAspectFill;
-        _imageView.backgroundColor = [UIColor blueColor];
+//        _imageView.backgroundColor = [UIColor blueColor];
+        _imageView.image = [UIImage imageNamed:@"placeholder"];
         _imageView.layer.masksToBounds = true;
         [self.contentView addSubview:_imageView];
     }
@@ -38,7 +39,7 @@
     }else{
         _assetModel = assetModel;
         self.selectButton.selected = NO;
-        self.imageView.image = [UIImage imageNamed:@"message_oeuvre_btn_normal"];
+        self.imageView.image = [UIImage imageNamed:@"placeholder.png"];
     }
 }
 

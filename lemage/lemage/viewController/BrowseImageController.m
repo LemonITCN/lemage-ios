@@ -578,18 +578,33 @@
             imageView.image = [UIImage imageNamed:@"placeholder"];
             NSURLSession *session = [NSURLSession sharedSession];
             NSURLSessionDataTask *tempSessionDataTask = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if([response.MIMEType isEqualToString:@"lemage/png"]){
-                        UIImage *image = [UIImage imageWithData:data];
-                        if (image) {
-                            imageView.image = image;
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    if([response.MIMEType isEqualToString:@"lemage/png"]){
+//                        UIImage *image = [UIImage imageWithData:data];
+//                        if (image) {
+//                            imageView.image = image;
+//                        }
+//                        assetModel.mediaType = 1;
+//                        [viewController setImageFrame];
+//                    }
+//                    if (viewController == weakSelf.tempPageVC.viewControllers[0]) {
+//                        [self.progressHUD progressHUDStop];
+//                    }
+//                });
+                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                    UIImage *image = [UIImage imageWithData:data];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if([response.MIMEType isEqualToString:@"lemage/png"]){
+                            if (image) {
+                                imageView.image = image;
+                            }
+                            assetModel.mediaType = 1;
+                            [viewController setImageFrame];
                         }
-                        assetModel.mediaType = 1;
-                        [viewController setImageFrame];
-                    }
-                    if (viewController == weakSelf.tempPageVC.viewControllers[0]) {
-                        [self.progressHUD progressHUDStop];
-                    }
+                        if (viewController == weakSelf.tempPageVC.viewControllers[0]) {
+                            [self.progressHUD progressHUDStop];
+                        }
+                    });
                 });
                 self.mediaAssetArray[index] = assetModel;
             }];
