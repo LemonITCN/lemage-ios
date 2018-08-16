@@ -20,6 +20,7 @@
 @property NSString *tipSelectedCount;
 @property NSString *selectedType;
 @property NSString *photoTip;
+@property NSString *onlyVideo;
 + (LemageUsageText *)cnText;
 + (LemageUsageText *)enText;
 

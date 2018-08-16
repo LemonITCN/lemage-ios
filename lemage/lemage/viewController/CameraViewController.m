@@ -383,7 +383,14 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     [captureDevice unlockForConfiguration];
 }
 - (void)onStartTranscribe:(NSURL *)fileURL {
+    
     if ([self.captureMovieFileOutput isRecording]) {
+        if ([self.cameraStatus isEqualToString:@"1"]) {
+            if ([self.captureMovieFileOutput isRecording]) {
+                [self.captureMovieFileOutput stopRecording];
+            }
+            return;
+        }
         if (self.seconds == self.HSeconds) {
             self.seconds = self.seconds - 0.5;
         }else{
@@ -414,10 +421,18 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 }
 -(void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error{
     NSLog(@"视频录制完成.");
-    [self changeLayout];
+    
+    
+   
     if (self.isVideo) {
         NSLog(@"%f",self.HSeconds- self.seconds);
         if (self.HSeconds - self.seconds<1) {
+            if ([self.cameraStatus isEqualToString:@"2"]) {
+                self.labelTipTitle.text = [Lemage getUsageText].onlyVideo;
+                self.labelTipTitle.hidden = NO;
+                [self performSelector:@selector(hiddenTipsLabel) withObject:nil afterDelay:2];
+                return;
+            }
             self.saveVideoUrl = nil;
             [self videoHandlePhoto:outputFileURL];
         }else{
@@ -434,10 +449,16 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
         
     } else {
         //照片
+        if ([self.cameraStatus isEqualToString:@"2"]) {
+            self.labelTipTitle.text = [Lemage getUsageText].onlyVideo;
+            self.labelTipTitle.hidden = NO;
+            [self performSelector:@selector(hiddenTipsLabel) withObject:nil afterDelay:2];
+            return;
+        }
         self.saveVideoUrl = nil;
         [self videoHandlePhoto:outputFileURL];
     }
-    
+     [self changeLayout];
 }
 - (void)videoHandlePhoto:(NSURL *)url {
     AVURLAsset *urlSet = [AVURLAsset assetWithURL:url];

@@ -25,6 +25,7 @@
     
 }
 
+
 - (instancetype)init{
     if (self = [super init]) {
         self.scrollView = [[UIScrollView alloc] initWithFrame:self.view.frame];
@@ -57,7 +58,9 @@
     }
     return self;
 }
-
+- (void)viewDidAppear:(BOOL)animated{
+    
+}
 - (void)monitoringPlayback:(AVPlayerItem *)item {
     __weak typeof(self)WeakSelf = self;
     // 观察间隔, CMTime 为30分之一秒

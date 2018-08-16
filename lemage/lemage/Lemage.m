@@ -484,9 +484,12 @@ static LemageUsageText *_usageText;
 
 +(void)startCameraWithVideoSeconds:(CGFloat)seconds
                         themeColor: (UIColor *)themeColor
+                      cameraStatus:(nullable NSString *)cameraStatus
                       cameraReturn:(LEMAGE_CAMERA_BLOCK)cameraReturn{
     CameraViewController *VC = [[CameraViewController alloc] init];
     VC.HSeconds = seconds;
+    
+    VC.cameraStatus = [@[@"1",@"2"] containsObject:cameraStatus]?cameraStatus:@"3";;
     VC.themeColor = themeColor;
     VC.takeBlock = ^(id item) {
         cameraReturn(item);

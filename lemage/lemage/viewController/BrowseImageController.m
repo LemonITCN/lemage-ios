@@ -591,19 +591,42 @@
 //                        [self.progressHUD progressHUDStop];
 //                    }
 //                });
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+                dispatch_async(dispatch_queue_create("imageDownloadQueue", NULL), ^{
+                    NSLog(@"1111111111111111111");
                     UIImage *image = [UIImage imageWithData:data];
+                    NSLog(@"%f",image.size.width*image.size.height);
+//                    NSInteger i = 1;
+//                    if (image.size.width*image.size.height > 10000000) {
+//                        while (1) {
+//                            i++;
+//                            if (image.size.width*image.size.height/i <= 10000000) {
+//                                image = [self reSizeImage:image toSize:CGSizeMake(image.size.width/sqrt(i),image.size.height/sqrt(i))];
+//                                break;
+//                            }
+//
+//
+//                        }
+//                    }
+                    if (image.size.width*image.size.height > 10000000) {
+                        image = [self reSizeImage:image toSize:CGSizeMake(image.size.width/2,image.size.height/2)];
+                    }
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if([response.MIMEType isEqualToString:@"lemage/png"]){
-                            if (image) {
-                                imageView.image = image;
-                            }
-                            assetModel.mediaType = 1;
-                            [viewController setImageFrame];
-                        }
                         if (viewController == weakSelf.tempPageVC.viewControllers[0]) {
                             [self.progressHUD progressHUDStop];
                         }
+                        if([response.MIMEType isEqualToString:@"lemage/png"]){
+                            
+                            
+                            if (image) {
+                                NSLog(@"%@",image);
+                                imageView.image = image;
+                            }
+                            
+                            assetModel.mediaType = 1;
+                            [viewController setImageFrame];
+                        }
+                        
                     });
                 });
                 self.mediaAssetArray[index] = assetModel;
@@ -614,7 +637,21 @@
         }
     }
 }
-
+- (UIImage *)reSizeImage:(UIImage *)image toSize:(CGSize)reSize{
+    if (CGSizeEqualToSize(image.size, reSize)) {
+        return image;
+    }
+    UIGraphicsBeginImageContext(CGSizeMake(reSize.width, reSize.height));
+    
+    [image drawInRect:CGRectMake(0, 0, reSize.width, reSize.height)];
+    
+    UIImage *reSizeImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    UIGraphicsEndImageContext();
+    
+    return reSizeImage;
+    
+}
 - (UIViewController *)pageViewController:(UIPageViewController *)pageViewController viewControllerAfterViewController:(UIViewController *)viewController {
     ZoomViewController * tempVC  = (ZoomViewController *)viewController;
     _showIndex = tempVC.showIndex;

@@ -135,47 +135,54 @@
      [self.view addSubview:self.collection];
     __block typeof(self) weakSelf = self;
     [CameraImgManagerTool getAllImagesType:self.selectedType complete:^(NSArray<MediaAssetModel *> *allAlbumArray) {
-        weakSelf.mediaAssetArray = [NSMutableArray arrayWithArray:allAlbumArray];
-        if (weakSelf.allAlbumArray) {
-            [weakSelf.allAlbumArray insertObject:@{@"albumName":[Lemage getUsageText].allImages,@"assetArr":weakSelf.mediaAssetArray} atIndex:0];
-            
-        }
-        for (MediaAssetModel *tempModel in weakSelf.mediaAssetArray) {
-            [weakSelf.localIdentifierArr addObject:[NSString stringWithFormat:@"lemage://album/%@",tempModel.localIdentifier]];
-        }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (weakSelf.mediaAssetArray.count <= 0) {
-                [weakSelf.view addSubview:weakSelf.noImgLabel];
-                
-            }else{
-                [weakSelf.noImgLabel removeFromSuperview];
-            }
-            [weakSelf.collection reloadData];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            weakSelf.mediaAssetArray = [NSMutableArray arrayWithArray:allAlbumArray];
             if (weakSelf.allAlbumArray) {
-                [weakSelf.progressHUD progressHUDStop];
+                [weakSelf.allAlbumArray insertObject:@{@"albumName":[Lemage getUsageText].allImages,@"assetArr":weakSelf.mediaAssetArray} atIndex:0];
+                
             }
+            for (MediaAssetModel *tempModel in weakSelf.mediaAssetArray) {
+                [weakSelf.localIdentifierArr addObject:[NSString stringWithFormat:@"lemage://album/%@",tempModel.localIdentifier]];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (weakSelf.mediaAssetArray.count <= 0) {
+                    [weakSelf.view addSubview:weakSelf.noImgLabel];
+                    
+                }else{
+                    [weakSelf.noImgLabel removeFromSuperview];
+                }
+                [weakSelf.collection reloadData];
+                if (weakSelf.allAlbumArray) {
+                    [weakSelf.progressHUD progressHUDStop];
+                }
+            });
         });
+        
     }];
     
     [CameraImgManagerTool getAllAlbum:self.selectedType complete:^(NSArray<MediaAssetModel *> *allAlbumArray) {
-        weakSelf.allAlbumArray = [NSMutableArray arrayWithArray:allAlbumArray];
-        if (weakSelf.mediaAssetArray) {
-            
-            [weakSelf.allAlbumArray insertObject:@{@"albumName":[Lemage getUsageText].allImages,@"assetArr":weakSelf.mediaAssetArray} atIndex:0];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (weakSelf.mediaAssetArray.count <= 0) {
-                [weakSelf.view addSubview:weakSelf.noImgLabel];
-                
-            }else{
-                [weakSelf.noImgLabel removeFromSuperview];
-            }
-            [weakSelf.albumCollection reloadData];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            weakSelf.allAlbumArray = [NSMutableArray arrayWithArray:allAlbumArray];
             if (weakSelf.mediaAssetArray) {
-                [weakSelf.progressHUD progressHUDStop];
+                
+                [weakSelf.allAlbumArray insertObject:@{@"albumName":[Lemage getUsageText].allImages,@"assetArr":weakSelf.mediaAssetArray} atIndex:0];
             }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (weakSelf.mediaAssetArray.count <= 0) {
+                    [weakSelf.view addSubview:weakSelf.noImgLabel];
+                    
+                }else{
+                    [weakSelf.noImgLabel removeFromSuperview];
+                }
+                [weakSelf.albumCollection reloadData];
+                if (weakSelf.mediaAssetArray) {
+                    [weakSelf.progressHUD progressHUDStop];
+                }
+            });
         });
+        
     }];
 
     [self.view addSubview:self.albumCollection];

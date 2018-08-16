@@ -26,6 +26,7 @@ static LemageUsageText *EN_TEXT;
         CN_TEXT.tipSelectedCount = @"最多只能选择%ld张";
         CN_TEXT.selectedType = @"类型不统一";
         CN_TEXT.photoTip = @"轻触拍照,按住摄像";
+        CN_TEXT.onlyVideo = @"按住摄像";
     }
     return CN_TEXT;
 }
@@ -43,6 +44,7 @@ static LemageUsageText *EN_TEXT;
         EN_TEXT.tipSelectedCount = @"Select a maximum of %ld images";
         EN_TEXT.selectedType = @"Type disunity";
         EN_TEXT.photoTip = @"Tap to take photot and hold to record video";
+        EN_TEXT.onlyVideo = @"hold to record video";
     }
     return EN_TEXT;
 }

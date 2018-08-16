@@ -10,7 +10,10 @@
 typedef void(^TakeOperationSureBlock)(id item);
 @interface CameraViewController : UIViewController
 
-
+/**
+ @brief 1:只拍照;2:只录像;3:都可以
+ */
+@property (nonatomic, strong) NSString *cameraStatus;
 /**
  @brief 确定图片或者视频后回调(url)
  */

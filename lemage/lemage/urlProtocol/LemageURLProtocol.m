@@ -34,13 +34,18 @@
     [NSURLProtocol setProperty:@YES forKey: LEMAGE inRequest:request];
     __block typeof(self) weakSelf = self;
     if ([request.URL.scheme caseInsensitiveCompare: LEMAGE] == NSOrderedSame) {
+        NSLog(@"--------------------------");
         
         [Lemage loadImageDataByLemageUrl:request.URL.absoluteString complete:^(NSData * _Nonnull imageData) {
-            NSData *data = imageData;
-            NSURLResponse* response = [[NSURLResponse alloc] initWithURL:weakSelf.request.URL MIMEType:@"lemage/png" expectedContentLength:data.length textEncodingName:nil];
-            [weakSelf.client URLProtocol:weakSelf didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageAllowed];
-            [weakSelf.client URLProtocol:weakSelf didLoadData:data];
-            [weakSelf.client URLProtocolDidFinishLoading:weakSelf];
+            dispatch_async(dispatch_queue_create("imageDownloadQueueeee", NULL), ^{
+                NSLog(@"--------------------------");
+                NSData *data = imageData;
+                NSURLResponse* response = [[NSURLResponse alloc] initWithURL:weakSelf.request.URL MIMEType:@"lemage/png" expectedContentLength:data.length textEncodingName:nil];
+                [weakSelf.client URLProtocol:weakSelf didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageAllowed];
+                [weakSelf.client URLProtocol:weakSelf didLoadData:data];
+                [weakSelf.client URLProtocolDidFinishLoading:weakSelf];
+            });
+            
         }];
     }
 }
