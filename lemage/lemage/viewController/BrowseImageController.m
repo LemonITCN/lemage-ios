@@ -593,7 +593,6 @@
 //                });
                 
                 dispatch_async(dispatch_queue_create("imageDownloadQueue", NULL), ^{
-                    NSLog(@"1111111111111111111");
                     UIImage *image = [UIImage imageWithData:data];
                     NSLog(@"%f",image.size.width*image.size.height);
 //                    NSInteger i = 1;

@@ -405,7 +405,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
                 self.isVideo = YES;//长按时间超过TimeMax 表示是视频录制
                 self.progressView.timeMax = self.seconds;
             }
-            [self performSelector:@selector(onStartTranscribe:) withObject:fileURL afterDelay:0.1];
+            [self performSelector:@selector(onStartTranscribe:) withObject:fileURL afterDelay:0.2];
         } else {
             if ([self.captureMovieFileOutput isRecording]) {
                 [self.captureMovieFileOutput stopRecording];
@@ -465,7 +465,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     AVAssetImageGenerator *imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:urlSet];
     imageGenerator.appliesPreferredTrackTransform = YES;    // 截图的时候调整到正确的方向
     NSError *error = nil;
-    CMTime time = CMTimeMake(0,2);//缩略图创建时间 CMTime是表示电影时间信息的结构体，第一个参数表示是视频第几秒，第二个参数表示每秒帧数.(如果要获取某一秒的第几帧可以使用CMTimeMake方法)
+    CMTime time = CMTimeMake(0,1);//缩略图创建时间 CMTime是表示电影时间信息的结构体，第一个参数表示是视频第几秒，第二个参数表示每秒帧数.(如果要获取某一秒的第几帧可以使用CMTimeMake方法)
     CMTime actucalTime; //缩略图实际生成的时间
     CGImageRef cgImage = [imageGenerator copyCGImageAtTime:time actualTime:&actucalTime error:&error];
     if (error) {
@@ -488,7 +488,6 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     
     if (!self.takeImageView) {
         self.takeImageView = [[UIImageView alloc] initWithFrame:self.view.frame];
-        self.takeImageView.backgroundColor = [UIColor redColor];
         [self.bgView addSubview:self.takeImageView];
     }
     self.takeImageView.hidden = NO;
