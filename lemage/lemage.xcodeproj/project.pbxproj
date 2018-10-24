@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		5208BDFE20CFA48500622D23 /* lemage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		52287B8420D0AB6800B3C841 /* Lemage.m in Sources */ = {isa = PBXBuildFile; fileRef = 52287B8320D0AB6800B3C841 /* Lemage.m */; };
 		52287B8D20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h in Headers */ = {isa = PBXBuildFile; fileRef = 52287B8B20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h */; };
 		52287B8E20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.m in Sources */ = {isa = PBXBuildFile; fileRef = 52287B8C20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.m */; };
@@ -40,6 +39,7 @@
 		571487B120D102CF009C2069 /* AlbumCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 571487AD20D102CF009C2069 /* AlbumCell.h */; };
 		571487B220D102CF009C2069 /* ImageSelectedCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 571487AE20D102CF009C2069 /* ImageSelectedCell.h */; };
 		571487B320D102CF009C2069 /* AlbumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 571487AF20D102CF009C2069 /* AlbumCell.m */; };
+		571F82D7218067EA00EC974D /* lemage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		573C610C20EF0A41008C1CDC /* CameraViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 573C610A20EF0A40008C1CDC /* CameraViewController.h */; };
 		573C610D20EF0A41008C1CDC /* CameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 573C610B20EF0A41008C1CDC /* CameraViewController.m */; };
 		573C611220EF0A5B008C1CDC /* HProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 573C610E20EF0A5B008C1CDC /* HProgressView.m */; };
@@ -50,19 +50,7 @@
 		5743BDD820E6071100E13869 /* MediaProgressBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 5743BDD620E6071100E13869 /* MediaProgressBar.m */; };
 		57A4D05820EB73A800447A07 /* ProgressHUD.h in Headers */ = {isa = PBXBuildFile; fileRef = 57A4D05620EB73A800447A07 /* ProgressHUD.h */; };
 		57A4D05920EB73A800447A07 /* ProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 57A4D05720EB73A800447A07 /* ProgressHUD.m */; };
-		57A5435A20D8DB5F002647CB /* lemage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; };
-		57A5435B20D8DB5F002647CB /* lemage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 52BDF45820CE10130072FEF1 /* lemage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		5208BDFF20CFA49E00622D23 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 52BDF44F20CE10130072FEF1 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 52BDF45720CE10130072FEF1;
-			remoteInfo = lemage;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		57A5435C20D8DB60002647CB /* Embed Frameworks */ = {
@@ -71,7 +59,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				57A5435B20D8DB5F002647CB /* lemage.framework in Embed Frameworks */,
+				571F82D7218067EA00EC974D /* lemage.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -134,8 +122,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5208BDFE20CFA48500622D23 /* lemage.framework in Frameworks */,
-				57A5435A20D8DB5F002647CB /* lemage.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,11 +301,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				5743BDD720E6071100E13869 /* MediaProgressBar.h in Headers */,
-				573C610C20EF0A41008C1CDC /* CameraViewController.h in Headers */,
 				5714879920D102AA009C2069 /* BrowseImageController.h in Headers */,
-				573C611320EF0A5B008C1CDC /* HAVPlayer.h in Headers */,
-				52287B8D20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h in Headers */,
 				52287B9220D0C2B200B3C841 /* LemageURLProtocol.h in Headers */,
+				573C610C20EF0A41008C1CDC /* CameraViewController.h in Headers */,
+				52287B8D20D0BB7F00B3C841 /* NSUrlProtocol+Lemage.h in Headers */,
+				573C611320EF0A5B008C1CDC /* HAVPlayer.h in Headers */,
 				571487A520D102BF009C2069 /* DrawingSingle.h in Headers */,
 				573C611520EF0A5B008C1CDC /* HProgressView.h in Headers */,
 				571487A020D102B4009C2069 /* CameraImgManagerTool.h in Headers */,
@@ -350,7 +336,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				5208BE0020CFA49E00622D23 /* PBXTargetDependency */,
 			);
 			name = "lemage-example";
 			productName = "lemage-example";
@@ -381,7 +366,7 @@
 		52BDF44F20CE10130072FEF1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = LemonIT.CN;
 				TargetAttributes = {
 					52B3C90920CF5B1400CA3977 = {
@@ -468,14 +453,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		5208BE0020CFA49E00622D23 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 52BDF45720CE10130072FEF1 /* lemage */;
-			targetProxy = 5208BDFF20CFA49E00622D23 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		52B3C91220CF5B1400CA3977 /* Main.storyboard */ = {
@@ -656,7 +633,7 @@
 		52BDF46120CE10130072FEF1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = M5P4CU52TD;
@@ -682,7 +659,7 @@
 		52BDF46220CE10130072FEF1 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = M5P4CU52TD;
