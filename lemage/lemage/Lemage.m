@@ -489,7 +489,7 @@ static LemageUsageText *_usageText;
     CameraViewController *VC = [[CameraViewController alloc] init];
     VC.HSeconds = seconds;
     
-    VC.cameraStatus = [@[@"1",@"2"] containsObject:cameraStatus]?cameraStatus:@"3";;
+    VC.cameraStatus = [@[@"photo",@"video"] containsObject:cameraStatus]?cameraStatus:@"all";;
     VC.themeColor = themeColor;
     VC.takeBlock = ^(id item) {
         cameraReturn(item);

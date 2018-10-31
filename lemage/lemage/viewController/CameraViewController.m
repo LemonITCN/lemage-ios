@@ -385,7 +385,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 - (void)onStartTranscribe:(NSURL *)fileURL {
     
     if ([self.captureMovieFileOutput isRecording]) {
-        if ([self.cameraStatus isEqualToString:@"1"]) {
+        if ([self.cameraStatus isEqualToString:@"photo"]) {
             if ([self.captureMovieFileOutput isRecording]) {
                 [self.captureMovieFileOutput stopRecording];
             }
@@ -427,7 +427,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     if (self.isVideo) {
         NSLog(@"%f",self.HSeconds- self.seconds);
         if (self.HSeconds - self.seconds<1) {
-            if ([self.cameraStatus isEqualToString:@"2"]) {
+            if ([self.cameraStatus isEqualToString:@"video"]) {
                 self.labelTipTitle.text = [Lemage getUsageText].onlyVideo;
                 self.labelTipTitle.hidden = NO;
                 [self performSelector:@selector(hiddenTipsLabel) withObject:nil afterDelay:2];
@@ -449,7 +449,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
         
     } else {
         //照片
-        if ([self.cameraStatus isEqualToString:@"2"]) {
+        if ([self.cameraStatus isEqualToString:@"video"]) {
             self.labelTipTitle.text = [Lemage getUsageText].onlyVideo;
             self.labelTipTitle.hidden = NO;
             [self performSelector:@selector(hiddenTipsLabel) withObject:nil afterDelay:2];
