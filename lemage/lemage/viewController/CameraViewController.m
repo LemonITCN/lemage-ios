@@ -347,6 +347,10 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     AVCaptureDevicePosition toChangePosition = AVCaptureDevicePositionFront;//前
     if (currentPosition == AVCaptureDevicePositionUnspecified || currentPosition == AVCaptureDevicePositionFront) {
         toChangePosition = AVCaptureDevicePositionBack;//后
+        self.flashLampBtn.hidden = NO;
+    }else{
+        self.flashLampBtn.hidden = YES;
+        [self.flashLampBtn setImage:[[DrawingSingle shareDrawingSingle] getFlashLampSize:self.flashLampBtn.frame.size color:[UIColor whiteColor]] forState:UIControlStateNormal];
     }
     toChangeDevice=[self getCameraDeviceWithPosition:toChangePosition];
     [self addNotificationToCaptureDevice:toChangeDevice];
