@@ -300,7 +300,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     if ([[touches anyObject] view] == self.progressView) {
         NSLog(@"结束触摸");
         if (!self.isVideo) {
-            [self performSelector:@selector(endRecord) withObject:nil afterDelay:0.3];
+            [self performSelector:@selector(endRecord) withObject:nil afterDelay:0.3你];
         } else {
             [self endRecord];
         }
@@ -390,9 +390,8 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     
     if ([self.captureMovieFileOutput isRecording]) {
         if ([self.cameraStatus isEqualToString:@"photo"]) {
-            if ([self.captureMovieFileOutput isRecording]) {
-                [self.captureMovieFileOutput stopRecording];
-            }
+            
+            [self.captureMovieFileOutput stopRecording];
             return;
         }
         if (self.seconds == self.HSeconds) {
@@ -409,11 +408,11 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
                 self.isVideo = YES;//长按时间超过TimeMax 表示是视频录制
                 self.progressView.timeMax = self.seconds;
             }
-            [self performSelector:@selector(onStartTranscribe:) withObject:fileURL afterDelay:0.2];
+            [self performSelector:@selector(onStartTranscribe:) withObject:fileURL afterDelay:0.1];
         } else {
-            if ([self.captureMovieFileOutput isRecording]) {
+            
                 [self.captureMovieFileOutput stopRecording];
-            }
+            
         }
     }
 }
@@ -425,9 +424,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 }
 -(void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error{
     NSLog(@"视频录制完成.");
-    
-    
-   
+
     if (self.isVideo) {
         NSLog(@"%f",self.HSeconds- self.seconds);
         if (self.HSeconds - self.seconds<1) {
