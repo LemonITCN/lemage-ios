@@ -300,7 +300,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     if ([[touches anyObject] view] == self.progressView) {
         NSLog(@"结束触摸");
         if (!self.isVideo) {
-            [self performSelector:@selector(endRecord) withObject:nil afterDelay:0.3你];
+            [self performSelector:@selector(endRecord) withObject:nil afterDelay:0.3];
         } else {
             [self endRecord];
         }
