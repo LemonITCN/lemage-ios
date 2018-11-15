@@ -7,7 +7,7 @@
 //
 
 
-#define KIsiPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
+#define KIsiPhoneX ([[UIDevice currentDevice].systemVersion integerValue] >= 11 ?([UIApplication sharedApplication].windows[0].safeAreaInsets.bottom>0) : NO)
 #import "AlbumViewController.h"
 #import <Photos/Photos.h>
 #import "ImageSelectedCell.h"

@@ -40,15 +40,18 @@
         if ([type isEqualToString:@"image"]) {
             if (asset.mediaType == 1) {
                 [tempAssetArr addObject:asset];
+                [mmediaAssetArray addObject:@"0"];
             }
         }else if ([type isEqualToString:@"video"]){
             if (asset.mediaType == 2) {
                 [tempAssetArr addObject:asset];
+                [mmediaAssetArray addObject:@"0"];
             }
         }else{
             [tempAssetArr addObject:asset];
+            [mmediaAssetArray addObject:@"0"];
         }
-        [mmediaAssetArray addObject:@"0"];
+        
     }
     
     for (NSInteger i = 0;i<tempAssetArr.count;i++) {
@@ -119,12 +122,14 @@
     PHFetchResult *smartAlbums = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeSmartAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
     NSInteger i = 0;
     for (PHAssetCollection *collection in smartAlbums) {
+        
         if (i == 2) {
             i++;
             continue;
         }
         PHFetchResult *results = [PHAsset fetchAssetsInAssetCollection:collection options:nil];
         NSMutableArray *tempPHF = [NSMutableArray new];
+        
         for (PHAsset *tempAsset in results) {
             if ([type isEqualToString:@"image"]) {
                 if (tempAsset.mediaType == 1) {
@@ -137,6 +142,9 @@
             }else{
                 [tempPHF addObject:tempAsset];
             }
+        }
+        if (tempPHF.count<=0) {
+            continue;
         }
         [nameArr addObject:collection.localizedTitle];//存储assets's名字
         [assetArr addObject:tempPHF];//存储assets's内容
@@ -163,6 +171,9 @@
             }else{
                 [tempPHF addObject:tempAsset];
             }
+        }
+        if (tempPHF.count<=0) {
+            continue;
         }
         [nameArr addObject:collection.localizedTitle];
         [nameAndAssetArr addObject:@{@"albumName":collection.localizedTitle,@"assetArr":tempPHF}];

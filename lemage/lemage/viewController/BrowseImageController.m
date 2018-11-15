@@ -5,7 +5,7 @@
 //  Created by 王炜光 on 2018/6/6.
 //  Copyright © 2018年 Ezrea1. All rights reserved.
 //
-#define KIsiPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
+#define KIsiPhoneX ([[UIDevice currentDevice].systemVersion integerValue] >= 11 ?([UIApplication sharedApplication].windows[0].safeAreaInsets.bottom>0) : NO)
 #import "BrowseImageController.h"
 #import "ZoomViewController.h"
 #import "MediaAssetModel.h"
@@ -960,7 +960,7 @@
     [_sessionDownloadTaskLeft cancel];
     [_sessionDownloadTaskMiddle cancel];
     [_sessionDownloadTaskRight cancel];
-    [Lemage expiredTmpTermUrl];
+//    [Lemage expiredTmpTermUrl];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
