@@ -102,7 +102,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     
     self.progressView.layer.cornerRadius = self.progressView.frame.size.width/2;
     
-    if (self.HSeconds == 0) {
+    if (self.HSeconds <= 3) {
         self.HSeconds = 10;
     }
     
