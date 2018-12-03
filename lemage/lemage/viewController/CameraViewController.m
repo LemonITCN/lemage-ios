@@ -97,12 +97,12 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     self.progressView.layer.masksToBounds = YES;
     self.progressView.backgroundColor = [self getNewColorWith:[UIColor grayColor]];
     [self.view addSubview:self.progressView];
-
+    
     
     
     self.progressView.layer.cornerRadius = self.progressView.frame.size.width/2;
     
-    if (self.HSeconds <= 3) {
+    if (self.HSeconds <= 5) {
         self.HSeconds = 10;
     }
     
@@ -264,7 +264,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 
 /**
  取消按钮
-
+ 
  @param btn button
  */
 - (void)onCancelAction:(UIButton *)btn {
@@ -296,11 +296,12 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
         }
     }
 }
+
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if ([[touches anyObject] view] == self.progressView) {
         NSLog(@"结束触摸");
         if (!self.isVideo) {
-            [self performSelector:@selector(endRecord) withObject:nil afterDelay:0.3];
+            [self performSelector:@selector(endRecord) withObject:nil afterDelay:0.8];
         } else {
             [self endRecord];
         }
@@ -311,7 +312,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 }
 /**
  重新录制视频或者拍照
-
+ 
  @param sender 重新录制btn
  */
 - (void)onAfreshAction:(UIButton *)sender {
@@ -356,7 +357,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     [self addNotificationToCaptureDevice:toChangeDevice];
     //获得要调整的设备输入对象
     AVCaptureDeviceInput *toChangeDeviceInput=[[AVCaptureDeviceInput alloc]initWithDevice:toChangeDevice error:nil];
-
+    
     //改变会话的配置前一定要先开启配置，配置完成后提交配置改变
     [self.session beginConfiguration];
     //移除原有输入对象
@@ -411,7 +412,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
             [self performSelector:@selector(onStartTranscribe:) withObject:fileURL afterDelay:0.1];
         } else {
             
-                [self.captureMovieFileOutput stopRecording];
+            [self.captureMovieFileOutput stopRecording];
             
         }
     }
@@ -424,7 +425,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 }
 -(void)captureOutput:(AVCaptureFileOutput *)captureOutput didFinishRecordingToOutputFileAtURL:(NSURL *)outputFileURL fromConnections:(NSArray *)connections error:(NSError *)error{
     NSLog(@"视频录制完成.");
-
+    
     if (self.isVideo) {
         NSLog(@"%f",self.HSeconds- self.seconds);
         if (self.HSeconds - self.seconds<1) {
@@ -459,7 +460,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
         self.saveVideoUrl = nil;
         [self videoHandlePhoto:outputFileURL];
     }
-     [self changeLayout];
+    [self changeLayout];
 }
 - (void)videoHandlePhoto:(NSURL *)url {
     AVURLAsset *urlSet = [AVURLAsset assetWithURL:url];
@@ -632,11 +633,11 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     [notificationCenter addObserver:self selector:@selector(sessionRuntimeError:) name:AVCaptureSessionRuntimeErrorNotification object:captureSession];
 }
 /*
-**
-*  设备连接成功
-*
-*  @param notification 通知对象
-*/
+ **
+ *  设备连接成功
+ *
+ *  @param notification 通知对象
+ */
 -(void)deviceConnected:(NSNotification *)notification{
     NSLog(@"设备已连接...");
 }
@@ -654,7 +655,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
  *  @param notification 通知对象
  */
 -(void)areaChange:(NSNotification *)notification{
-//    NSLog(@"捕获区域改变...");
+    //    NSLog(@"捕获区域改变...");
 }
 
 /**
@@ -724,7 +725,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
 
 -(void)dealloc{
     [self removeNotification];
-
+    
 }
 - (void)viewWillLayoutSubviews{
     self.bgView.frame = self.view.frame;
@@ -741,13 +742,13 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     //只支持这一个方向(正常的方向)
 }
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 @end
