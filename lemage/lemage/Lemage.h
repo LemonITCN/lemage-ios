@@ -188,7 +188,7 @@ typedef void (^ LEMAGE_CAMERA_BLOCK)(id item);
 
  @param seconds 视频的长度
  @param themeColor 主体颜色
- @param cameraStatus 1:只拍照;2:只录像;3:都可以(默认)
+ @param cameraStatus photo:只拍照;video:只录像;all:都可以(默认)
  @param cameraReturn 返回值(图片或者视频视频的话是url)
  */
 +(void)startCameraWithVideoSeconds:(CGFloat)seconds

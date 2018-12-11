@@ -220,7 +220,7 @@
                 weakSelf.funtionBGView.alpha = 1-weakSelf.titleBarBGView.alpha;
                 weakSelf.titleBarBGView.alpha = 1-weakSelf.titleBarBGView.alpha;
                 CGSize size = weakSelf.view.frame.size;
-                weakSelf.titleBarBGView.frame=CGRectMake(0, -(size.width>size.height?44:KIsiPhoneX?84:64)-weakSelf.titleBarBGView.frame.origin.y, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
+                weakSelf.titleBarBGView.frame=CGRectMake(0, -(size.width>size.height?44:KIsiPhoneX?88:64)-weakSelf.titleBarBGView.frame.origin.y, size.width,  size.width>size.height?44:KIsiPhoneX?88:64);
             }];
         }else{
             
@@ -230,7 +230,7 @@
                 [UIView animateWithDuration:0.2 animations:^{
                     weakSelf.titleBarBGView.alpha = 1;
                     CGSize size = weakSelf.view.frame.size;
-                    weakSelf.titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
+                    weakSelf.titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?88:64);
                     weakSelf.finishBtn.alpha = weakSelf.restrictNumber>0?weakSelf.selectedImgArr.count > 0?1:0.6:0;
                 }];
                 
@@ -277,7 +277,7 @@
                 weakSelf.funtionBGView.alpha = 1-weakSelf.titleBarBGView.alpha;
                 weakSelf.titleBarBGView.alpha = 1-weakSelf.titleBarBGView.alpha;
                 CGSize size = weakSelf.view.frame.size;
-                weakSelf.titleBarBGView.frame=CGRectMake(0, -(size.width>size.height?44:KIsiPhoneX?84:64)-weakSelf.titleBarBGView.frame.origin.y, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
+                weakSelf.titleBarBGView.frame=CGRectMake(0, -(size.width>size.height?44:KIsiPhoneX?88:64)-weakSelf.titleBarBGView.frame.origin.y, size.width,  size.width>size.height?44:KIsiPhoneX?88:64);
             }];
         }else{
             
@@ -287,7 +287,7 @@
                 [UIView animateWithDuration:0.2 animations:^{
                     weakSelf.titleBarBGView.alpha = 1;
                     CGSize size = weakSelf.view.frame.size;
-                    weakSelf.titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
+                    weakSelf.titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?88:64);
                     weakSelf.finishBtn.alpha = weakSelf.restrictNumber>0?weakSelf.selectedImgArr.count > 0?1:0.6:0;
                 }];
                 
@@ -330,7 +330,7 @@
                 weakSelf.funtionBGView.alpha = 1-weakSelf.titleBarBGView.alpha;
                 weakSelf.titleBarBGView.alpha = 1-weakSelf.titleBarBGView.alpha;
                 CGSize size = weakSelf.view.frame.size;
-                weakSelf.titleBarBGView.frame=CGRectMake(0, -(size.width>size.height?44:KIsiPhoneX?84:64)-weakSelf.titleBarBGView.frame.origin.y, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
+                weakSelf.titleBarBGView.frame=CGRectMake(0, -(size.width>size.height?44:KIsiPhoneX?88:64)-weakSelf.titleBarBGView.frame.origin.y, size.width,  size.width>size.height?44:KIsiPhoneX?88:64);
             }];
         }else{
             
@@ -340,7 +340,7 @@
                 [UIView animateWithDuration:0.2 animations:^{
                     weakSelf.titleBarBGView.alpha = 1;
                     CGSize size = weakSelf.view.frame.size;
-                    weakSelf.titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
+                    weakSelf.titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?88:64);
                     weakSelf.finishBtn.alpha = weakSelf.restrictNumber>0?weakSelf.selectedImgArr.count > 0?1:0.6:0;
                 }];
                 
@@ -378,7 +378,7 @@
             weakSelf.funtionBGView.alpha = 0;
             weakSelf.titleBarBGView.alpha = 1;
             CGSize size = self.view.frame.size;
-            weakSelf.titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
+            weakSelf.titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?88:64);
             weakSelf.finishBtn.alpha = weakSelf.restrictNumber>0?weakSelf.selectedImgArr.count > 0?1:0.6:0;
         } completion:^(BOOL finished) {
             weakSelf.isAnimate = NO;
@@ -409,7 +409,7 @@
         [UIView animateWithDuration:0.2 animations:^{
             weakSelf.titleBarBGView.alpha = 1-weakSelf.titleBarBGView.alpha;
             CGSize size = self.view.frame.size;
-            weakSelf.titleBarBGView.frame=CGRectMake(0, -(size.width>size.height?44:KIsiPhoneX?84:64)-weakSelf.titleBarBGView.frame.origin.y, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
+            weakSelf.titleBarBGView.frame=CGRectMake(0, -(size.width>size.height?44:KIsiPhoneX?88:64)-weakSelf.titleBarBGView.frame.origin.y, size.width,  size.width>size.height?44:KIsiPhoneX?88:64);
             weakSelf.finishBtn.alpha = weakSelf.restrictNumber>0?weakSelf.finishBtn.alpha>0?0:(weakSelf.selectedImgArr.count > 0?1:0.6):0;
         } completion:^(BOOL finished) {
             weakSelf.isAnimate = NO;
@@ -707,7 +707,7 @@
 }
 
 - (void)createTitleBar{
-    _titleBarBGView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, KIsiPhoneX?84:64)];
+    _titleBarBGView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, KIsiPhoneX?88:64)];
     _titleBarBGView.backgroundColor = [UIColor colorWithRed:53/255.0 green:53/255.0 blue:53/255.0 alpha:0.8];
     [self.view addSubview:_titleBarBGView];
     [self.view bringSubviewToFront:_titleBarBGView];
@@ -825,7 +825,7 @@
     if (!_isAnimate) {
         
         CGSize size = self.view.frame.size;
-        _titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?84:64);
+        _titleBarBGView.frame=CGRectMake(0, 0, size.width,  size.width>size.height?44:KIsiPhoneX?88:64);
         _titleBarBGView.alpha = 1;
         _selectButton.center = CGPointMake( _titleBarBGView.frame.size.width-28, _titleBarBGView.frame.size.height-22);
         _titleLabel.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);

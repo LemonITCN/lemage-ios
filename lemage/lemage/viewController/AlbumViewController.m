@@ -407,7 +407,7 @@
 }
 
 - (void)createTitleBar{
-    _titleBarBGView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, KIsiPhoneX?84:64)];
+    _titleBarBGView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, KIsiPhoneX?88:64)];
     _titleBarBGView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.8];
     [self.view addSubview:_titleBarBGView];
     [self.view bringSubviewToFront:_titleBarBGView];
@@ -669,7 +669,7 @@
     
     if (!_isAnimate) {
         CGSize size = self.view.frame.size;
-        _titleBarBGView.frame = CGRectMake(0, 0, size.width, size.width>size.height?44:KIsiPhoneX?84:64);
+        _titleBarBGView.frame = CGRectMake(0, 0, size.width, size.width>size.height?44:KIsiPhoneX?88:64);
         _cancelBtn.frame = CGRectMake(_titleBarBGView.frame.size.width-80, _titleBarBGView.frame.size.height-34, 64, 24);
         _titleBtn.frame = CGRectMake(80, _titleBarBGView.frame.size.height-34, size.width-160, 24);
         _collection.frame = CGRectMake(0, 0, size.width, size.height);
