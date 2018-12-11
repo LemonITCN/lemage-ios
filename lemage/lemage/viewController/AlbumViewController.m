@@ -113,7 +113,7 @@
     [self createFunctionView];
     [self createNoImgLabel];
     
-    self.progressHUD = [[ProgressHUD alloc] initWithHudColor:[UIColor whiteColor] backgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.7]];
+    self.progressHUD = [[ProgressHUD alloc] initWithHudColor:[UIColor whiteColor] backgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.7] loadingStr:@"加载中"];
     [self.view addSubview:self.progressHUD];
     [self.view bringSubviewToFront:self.progressHUD];
     [self.progressHUD progressHUDStart];
