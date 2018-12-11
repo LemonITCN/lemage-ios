@@ -607,14 +607,22 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
  *  @param point 聚焦点
  */
 -(void)focusWithMode:(AVCaptureFocusMode)focusMode exposureMode:(AVCaptureExposureMode)exposureMode atPoint:(CGPoint)point{
-    [self changeDeviceProperty:^(AVCaptureDevice *captureDevice) {
-        if ([captureDevice isExposureModeSupported:exposureMode]) {
-            [captureDevice setExposureMode:exposureMode];
+//    [self changeDeviceProperty:^(AVCaptureDevice *captureDevice) {
+//        if ([captureDevice isExposureModeSupported:exposureMode]) {
+//            [captureDevice setExposureMode:exposureMode];
+//        }
+//        if ([captureDevice isFocusModeSupported:focusMode]) {
+//            [captureDevice setFocusMode:focusMode];
+//        }
+//    }];
+    AVCaptureDevice *captureDevice= [self.captureDeviceInput device];
+    if ([captureDevice lockForConfiguration:nil]) {
+        if ([captureDevice isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+            [captureDevice setFocusPointOfInterest:point];
+            [captureDevice setFocusMode:AVCaptureFocusModeAutoFocus];
         }
-        if ([captureDevice isFocusModeSupported:focusMode]) {
-            [captureDevice setFocusMode:focusMode];
-        }
-    }];
+        [captureDevice unlockForConfiguration];
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

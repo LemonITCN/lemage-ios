@@ -15,14 +15,14 @@
 @implementation ProgressHUD
 
 /*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
-- (instancetype)initWithHudColor:(UIColor *)hudColor backgroundColor:(UIColor *)backgroundColor{
-
+ // Only override drawRect: if you perform custom drawing.
+ // An empty implementation adversely affects performance during animation.
+ - (void)drawRect:(CGRect)rect {
+ // Drawing code
+ }
+ */
+- (instancetype)initWithHudColor:(UIColor *)hudColor backgroundColor:(UIColor *)backgroundColor loadingStr:(NSString *)loadingStr{
+    
     CGRect frame = [UIApplication sharedApplication].keyWindow.frame;
     if (self = [super initWithFrame:frame]) {
         
@@ -55,7 +55,7 @@
         self.textLabel.font = [UIFont systemFontOfSize:14];
         self.textLabel.textColor = hudColor;
         self.textLabel.textAlignment = NSTextAlignmentCenter;
-        self.textLabel.text = @"loading";
+        self.textLabel.text = loadingStr?loadingStr:@"loading";
         [bgView addSubview:self.textLabel];
         
         
@@ -65,7 +65,7 @@
     return self;
 }
 
-- (instancetype)initWithNotAllHudColor:(UIColor *)hudColor backgroundColor:(UIColor *)backgroundColor{
+- (instancetype)initWithNotAllHudColor:(UIColor *)hudColor backgroundColor:(UIColor *)backgroundColor loadingStr:(NSString *)loadingStr{
     CGRect frame = CGRectMake(0, 0, [UIApplication sharedApplication].keyWindow.frame.size.width/3, [UIApplication sharedApplication].keyWindow.frame.size.width/3);
     if (self = [super initWithFrame:frame]) {
         
@@ -94,7 +94,7 @@
         self.textLabel.font = [UIFont systemFontOfSize:14];
         self.textLabel.textColor = hudColor;
         self.textLabel.textAlignment = NSTextAlignmentCenter;
-        self.textLabel.text = @"loading";
+        self.textLabel.text = loadingStr?loadingStr:@"loading";
         [self addSubview:self.textLabel];
         
         
@@ -105,7 +105,7 @@
 }
 
 - (void)progressHUDStart{
-
+    
     [[self superview]  bringSubviewToFront:self.shadowView];
     self.activityIndicator.hidesWhenStopped = NO;
     [self.activityIndicator startAnimating];
@@ -113,7 +113,7 @@
 }
 
 - (void)progressHUDStop{
-
+    
     self.alpha = 0;
     self.activityIndicator.hidesWhenStopped = YES;
     [self.activityIndicator stopAnimating];

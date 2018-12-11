@@ -12,18 +12,18 @@
 
 /**
  初始化等待框
-
+ 
  @param hudColor 小菊花菊花颜色
  @param backgroundColor 背景颜色
  */
-- (instancetype)initWithHudColor:(UIColor *)hudColor backgroundColor:(UIColor *)backgroundColor;
+- (instancetype)initWithHudColor:(UIColor *)hudColor backgroundColor:(UIColor *)backgroundColor loadingStr:(NSString *)loadingStr;
 /**
  初始化等待框(背景遮挡)
  
  @param hudColor 小菊花菊花颜色
  @param backgroundColor 背景颜色
  */
-- (instancetype)initWithNotAllHudColor:(UIColor *)hudColor backgroundColor:(UIColor *)backgroundColor;
+- (instancetype)initWithNotAllHudColor:(UIColor *)hudColor backgroundColor:(UIColor *)backgroundColor loadingStr:(NSString *)loadingStr;
 /**
  开始
  */
