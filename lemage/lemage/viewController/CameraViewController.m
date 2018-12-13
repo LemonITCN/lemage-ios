@@ -158,7 +158,7 @@ typedef void(^PropertyChangeBlock)(AVCaptureDevice *captureDevice);
     
     self.focusCursor = [[UIImageView alloc] init];
     self.focusCursor.frame = CGRectMake(100, 100, 100, 100);
-    self.focusCursor.image = [[DrawingSingle shareDrawingSingle] getFoucusImageSize:self.focusCursor.frame.size themeColor:_themeColor];
+    self.focusCursor.image = [[DrawingSingle shareDrawingSingle] getFoucusImageSize:self.focusCursor.frame.size themeColor:_themeColor lineWidth:3.0];
     self.focusCursor.alpha = 0;
     [self.view addSubview:self.focusCursor];
     

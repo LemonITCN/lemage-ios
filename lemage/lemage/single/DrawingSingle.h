@@ -95,7 +95,7 @@
  @param color 图片颜色
  @return 图片
  */
-- (UIImage *)getFoucusImageSize:(CGSize)size themeColor:(UIColor *)color;
+- (UIImage *)getFoucusImageSize:(CGSize)size themeColor:(UIColor *)color lineWidth:(CGFloat)lineWidth;
 /**
  获取闪光灯图片
 
@@ -104,4 +104,12 @@
  @return 图片
  */
 - (UIImage *)getFlashLampSize:(CGSize)size color:(UIColor *)color;
+/**
+ 获取扫描横线图片
+
+ @param size 横线大小
+ @param color 横线颜色
+ @return 图片
+ */
+- (UIImage *)getLineSize:(CGSize)size color:(UIColor *)color;
 @end
