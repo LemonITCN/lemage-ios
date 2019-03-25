@@ -93,7 +93,7 @@
 }
 
 - (void)selectedImg:(UIButton *)btn{
-    [Lemage startChooserWithMaxChooseCount:5 needShowOriginalButton:YES themeColor:[UIColor redColor] selectedType:@"image" styleType:@"unique" willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
+    [Lemage startChooserWithMaxChooseCount:5 needShowOriginalButton:YES themeColor:[UIColor redColor] selectedType:@"mix" styleType:@"unique" willClose:^(NSArray<NSString *> * _Nonnull imageUrlList, BOOL isOriginal) {
         NSLog(@"willClose = %@",imageUrlList);
         self.imgArr = [NSArray arrayWithArray:imageUrlList];
         self.tempTextView.text = [self.imgArr componentsJoinedByString:@","];

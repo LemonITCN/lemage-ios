@@ -111,7 +111,7 @@
     [self initViews];
     [self createTitleBar];
     [self createFunctionView];
-    [self createNoImgLabel];
+    
     
     self.progressHUD = [[ProgressHUD alloc] initWithHudColor:[UIColor whiteColor] backgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.7] loadingStr:@"加载中"];
     [self.view addSubview:self.progressHUD];
@@ -134,9 +134,9 @@
      [self.navigationController setNavigationBarHidden:YES animated:YES];
      [self.view addSubview:self.collection];
     __block typeof(self) weakSelf = self;
-    [CameraImgManagerTool getAllImagesType:self.selectedType complete:^(NSArray<MediaAssetModel *> *allAlbumArray) {
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [CameraImgManagerTool getAllImagesType:self.selectedType complete:^(NSArray<MediaAssetModel *> *allAlbumArray) {
+            
             weakSelf.mediaAssetArray = [NSMutableArray arrayWithArray:allAlbumArray];
             if (weakSelf.allAlbumArray) {
                 [weakSelf.allAlbumArray insertObject:@{@"albumName":[Lemage getUsageText].allImages,@"assetArr":weakSelf.mediaAssetArray} atIndex:0];
@@ -158,12 +158,12 @@
                     [weakSelf.progressHUD progressHUDStop];
                 }
             });
-        });
-        
-    }];
+            
+        }];
+    });
     
-    [CameraImgManagerTool getAllAlbum:self.selectedType complete:^(NSArray<MediaAssetModel *> *allAlbumArray) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [CameraImgManagerTool getAllAlbum:self.selectedType complete:^(NSArray<MediaAssetModel *> *allAlbumArray) {
             weakSelf.allAlbumArray = [NSMutableArray arrayWithArray:allAlbumArray];
             if (weakSelf.mediaAssetArray) {
                 
@@ -181,9 +181,9 @@
                     [weakSelf.progressHUD progressHUDStop];
                 }
             });
-        });
-        
-    }];
+            
+        }];
+    });
 
     [self.view addSubview:self.albumCollection];
 }
@@ -194,12 +194,6 @@
     _noImgLabel.font = [UIFont systemFontOfSize:30];
     _noImgLabel.center = self.view.center;
     _noImgLabel.textAlignment = NSTextAlignmentCenter;
-    if (_mediaAssetArray.count <= 0) {
-        [self.view addSubview:_noImgLabel];
-        
-    }else{
-        [_noImgLabel removeFromSuperview];
-    }
 }
 
 - (UICollectionView *)collection {
